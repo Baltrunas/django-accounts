@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load thumbnail %}
+{% load static %}
+
+{% block content %}
+
+<h1>{% trans "Order" %}</h1>
+<p class="b-bucket_total">
+	{% trans "Total price" %}:
+	<b class="b-bucket_total_price">{{ bucket_total_price|floatformat:0 }}</b>
+</p>
+
+{% if status == 'ok' %}
+	<h2>Спасибо, заказ оформлен!</h2>
+	<p>Наш менеджер свяжется с вами в ближайшее время для уточнения деталей заказа!</p>
+{% else %}
+	<form class='b-form m-order' method='POST' action=''>
+		{% csrf_token %}
+
+		{% for field in form %}
+			<ul class='b-field
+				m-field_{{ field.name }}
+				{% if field.errors %}m-field_error{% endif %}
+				{% if field.field.required %}m-field_required{% endif %}
+			'>
+				<li class='b-field__label'>{{ field.label_tag }}</li>
+				{% if field.errors %}
+					<li class='b-field__errors'>
+						{% for error in field.errors %}
+							{{ error|safe }}
+						{% endfor %}
+					</li>
+				{% endif %}
+
+				<li class='b-field__element'>{{ field }}</li>
+			</ul><!-- b-field -->
+		{% endfor %}
+
+		<a href="{% url "bucket" %}" class='m-go_bucket b-button'>Вернуться в корзину</a>
+		<input class='b-button' type='submit' value='{% trans "Order" %}'>
+	</form>
+{% endif %}
+
+
+{% endblock content %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load thumbnail %}
+{% load static %}
+
+{% block content %}
+
+<h1>{% trans "Bucket" %}</h1>
+
+{% if cookies_bucket %}
+	{% if request.user.is_authenticated %}
+		<h3>До того как вы вошли вы добавили следующие товары:</h3>
+		Вы можете их <a href='{% url "bucket_sync" %}'>синхронизировать</a> или <a href='{% url "bucket_clear" %}'>удалить!</a>
+		<br> Если вы не проведете синхронизацию, то товары добавленные до входа не будут включенны в ваш заказ!
+	{% endif %}
+
+	<h2>Товары добавленные до входа:</h2>
+	<table class='b-bucket'>
+		{% for item in cookies_bucket %}
+			<tr class='b-bucket-item'>
+				<td>
+					{% thumbnail item.content_object.cover "100x100" crop="center" as im %}
+						<img class='b-bucket-item__cover' src='{{ im.url }}' alt='{{ item.content_object.name }}'>
+					{% empty %}
+						<img class='b-bucket-item__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ item.content_object.name }}'>
+					{% endthumbnail %}
+				</td>
+				<td>
+					<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name'>{{ item.content_object.name }}</a>
+				</td>
+				<td class='b-bucket-item__price'>
+					{{ item.content_object.retail_price_with_discount|floatformat:0 }} *
+				</td>
+				<td class='b-bucket-item__count'><input class='b-bucket_count' type='number' value='{{ item.count }}' min='1' max='{{ item.content_object.warehouse_quantity }}' data-id='{{ item.id }}' data-csrf='{{ csrf_token }}'></td>
+				<td class = 'b-bucket-item__total_price'>
+					{{ item.get_total_retail_price_with_discount|floatformat:0 }}
+				</td>
+				<td class='b-bucket-item__delete'
+					data-id='{{ item.id }}'
+					data-csrf='{{ csrf_token }}'
+				>x</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endif %}
+
+
+{% if server_bucket %}
+	<h2>Товары в корзине:</h2>
+	<table class='b-bucket'>
+		{% for item in server_bucket %}
+			<tr class='b-bucket-item'>
+				<td>
+					{% thumbnail item.content_object.cover "100x100" crop="center" as im %}
+						<img class='b-bucket-item__cover' src='{{ im.url }}' alt='{{ item.content_object.name }}'>
+					{% empty %}
+						<img class='b-bucket-item__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ item.content_object.name }}'>
+					{% endthumbnail %}
+				</td>
+				<td>
+					<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name'>{{ item.content_object.name }}</a>
+				</td>
+				<td class='b-bucket-item__price'>
+					{{ item.content_object.retail_price_with_discount|floatformat:0 }} *
+				</td>
+				<td class='b-bucket-item__count'><input class='b-bucket_count' type='number' value='{{ item.count }}' min='1' max='{{ item.content_object.warehouse_quantity }}' data-id='{{ item.id }}' data-csrf='{{ csrf_token }}'></td>
+				<td class = 'b-bucket-item__total_price'>
+					{{ item.get_total_retail_price_with_discount|floatformat:0 }}
+				</td>
+				<td class='b-bucket-item__delete'
+					data-id='{{ item.id }}'
+					data-csrf='{{ csrf_token }}'
+				>x</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endif %}
+
+
+<div class="b-bucket_total">
+	{% trans "Total price" %}:
+	<b class="b-bucket_total_price">{{ bucket_total_price|floatformat:0 }}</b>
+	<a href='{% url "order" %}' class='b-button'>Перейти к оформлению заказа</a>
+</div>
+
+
+
+{% endblock content %}

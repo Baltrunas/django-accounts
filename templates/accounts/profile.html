@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1>{% trans "History" %}</h1>
+
+<style type="text/css">
+.b-orders {
+	width: 100%;
+}
+
+.b-order td {
+	border: 1px solid #eee;
+	padding: 5px;
+}
+</style>
+
+
+<table class="b-orders">
+	<tr>
+		<th>{% trans "Name" %}</th>
+		<th>{% trans "E-Mail" %}</th>
+		<th>{% trans "Phone" %}</th>
+		<th>{% trans "Comment" %}</th>
+		<th>{% trans "Price" %}</th>
+		<th>{% trans "Status" %}</th>
+		<th>{% trans "Created at" %}</th>
+	</tr>
+	{% for order in orders %}
+		<tr class="b-order">
+			<td>{{ order.name }}</td>
+			<td>{{ order.email }}</td>
+			<td>{{ order.phone }}</td>
+			<td>{{ order.comment }}</td>
+			<td>{{ order.retail_price }}</td>
+			<td>{{ order.get_status_display }}</td>
+			<td>{{ order.created_at }}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+
+{% endblock content %}
