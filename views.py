@@ -18,6 +18,7 @@ from django.http import HttpResponse
 
 def singup(request):
 	context = {}
+	context['title'] = _('Register')
 	context['form'] = SingUpForm(request.POST or None)
 
 	if request.POST and context['form'].is_valid():
@@ -112,7 +113,31 @@ def bucket_add(request):
 				order_item.save()
 				cookies_bucket.append(order_item.id)
 
-		response = HttpResponse(json.dumps({'status': 'ok', 'count': order_item.count}), content_type="application/json")
+
+		if request.user.is_authenticated():
+			bucket = OrderItem.objects.filter(user=request.user.id, order=None)
+		else:
+			bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
+
+		bucket_total = Decimal('0')
+		for item in bucket:
+			bucket_total += item.get_total_retail_price_with_discount()
+
+		bucket_count = bucket.aggregate(Sum('count'))
+
+
+		item_total_price = order_item.content_object.retail_price_with_discount * order_item.count
+
+		context = {
+			'status': 'ok',
+			'item_count': order_item.count,
+			'item_total_price': '%s' % item_total_price,
+
+			'bucket_total_count': bucket_count['count__sum'],
+			'bucket_total_price': '%s' % bucket_total
+		}
+
+		response = HttpResponse(json.dumps(context), content_type="application/json")
 		if not request.user.is_authenticated():
 			response.set_cookie('cookies_bucket', value=json.dumps(cookies_bucket), path='/')
 	else:
@@ -132,6 +157,8 @@ def bucket_delete(request):
 			cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
 		except:
 			cookies_bucket = []
+	else:
+		cookies_bucket = []
 
 	if id in cookies_bucket:
 		OrderItem.objects.filter(user=None, order=None, id=id).delete()
@@ -172,6 +199,8 @@ def bucket_edit(request):
 				cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
 			except:
 				cookies_bucket = []
+		else:
+			cookies_bucket = []
 
 		if id in cookies_bucket:
 			order_item = OrderItem.objects.get(id=id, user=None, order=None)
@@ -285,8 +314,9 @@ def order(request):
 		bucket = OrderItem.objects.filter(user=request.user.id, order=None)
 		initial = {
 			'user': request.user,
-			'name': request.user.username,
+			'name': request.user.first_name + ' ' + request.user.last_name,
 			'email': request.user.email,
+			'address': request.user.address,
 			'phone': request.user.phone
 		}
 	else:
@@ -317,13 +347,13 @@ def order(request):
 		context['new_order'] = new_order
 		order_email_from = settings.ORDER_EMAIL_FROM
 		subject = _('We recive your order!')
-		template = 'e-mail/order'
+		template = 'accounts/e-mail/order'
 
-		mail(subject, context, template, [new_order.email], order_email_from)
+		mail(subject, context, template, order_email_from, [new_order.email])
 
 
 		context['status'] = 'ok'
 
 	context['form'] = form
 
-	return render(request, 'e-mail/order.html', context)
+	return render(request, 'accounts/order.html', context)

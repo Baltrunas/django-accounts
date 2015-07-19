@@ -1,0 +1,61 @@
+/**
+ **************************
+ Bucket
+ **************************
+*/
+.b-bucket {
+	width: 100%;
+}
+
+.b-bucket-item {
+	background: #fff;
+}
+
+.b-bucket-item:nth-of-type(2n) {
+	background: #f6f6f6;
+}
+
+.b-bucket-item:hover {
+	background: #eff;
+}
+
+.b-bucket-item td {
+	padding: 5px;
+	background: fff;
+}
+
+.b-bucket-item__info {
+	vertical-align: middle;
+}
+
+.b-bucket-item__name {
+	font-size: 18px;
+}
+
+.b-bucket-item__cover {
+	float: left;
+	width: 50px;
+	height: 50px;
+}
+
+.b-bucket-item__price {
+	text-align: right;
+}
+
+.b-bucket-item__count,
+.b-bucket-item__count input {
+	text-align: center;
+}
+
+.b-bucket-item__total_price:before {
+	content: '= ';
+}
+
+.b-bucket-item__delete {
+	cursor: pointer;
+	color: red;
+}
+
+.b-bucket-item__delete:hover {
+	text-shadow: 0 0 2px red;
+}

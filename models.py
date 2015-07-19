@@ -32,6 +32,7 @@ class Order (models.Model):
 
 	name = models.CharField(_('Name'), max_length=100)
 	email = models.EmailField(_('E-Mail'), max_length=100)
+	address = models.CharField(_('Address'), max_length=300)
 	phone = models.CharField(_('Phone'), max_length=100)
 	comment = models.TextField(_('Comment'), null=True, blank=True)
 
@@ -46,6 +47,10 @@ class Order (models.Model):
 		('success', _('Success')),
 	)
 	status = models.CharField(_('Status'), choices=STATUS_CHOICES, default='created', max_length=32)
+
+	created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
+	updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
+
 	def save(self, sort=True, *args, **kwargs):
 		for item in self.items.all():
 			self.retail_price += item.get_total_retail_price()
@@ -70,6 +75,9 @@ class OrderItem (models.Model):
 	retail_price_with_discount = models.DecimalField(_('Retail Price With Discount'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
 
 	count = models.IntegerField(_('Count'), null=True, blank=True, default=0)
+
+	created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
+	updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
 
 	def get_total_retail_price(self):
 		return self.retail_price * self.count

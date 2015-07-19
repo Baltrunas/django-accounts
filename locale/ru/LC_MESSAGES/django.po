@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-14 09:00+0000\n"
+"POT-Creation-Date: 2015-07-19 16:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr "Это имя пользователя уже используется. 
 msgid ""
 "This email address is already in use. Please supply a different email "
 "address."
-msgstr ""
+msgstr "Этот E-Mail уже используется. Пожалуйста, укажите другое имя."
 
 #: forms.py:26 forms.py:51
 msgid "Passwords do not match!"
@@ -53,84 +53,96 @@ msgstr "Новый пароль"
 msgid "New password (again)"
 msgstr "Новый пароль (еще раз)"
 
-#: models.py:16 models.py:35 templates/accounts/profile.html:25
+#: models.py:16 models.py:36 templates/accounts/e-mail/order.html:25
+#: templates/accounts/e-mail/order.txt:11 templates/accounts/profile.html:25
 msgid "Phone"
 msgstr "Телефон"
 
-#: models.py:17
+#: models.py:17 models.py:35
 msgid "Address"
 msgstr "Адрес"
 
-#: models.py:33 templates/accounts/profile.html:23
+#: models.py:33 templates/accounts/e-mail/order.html:17
+#: templates/accounts/e-mail/order.txt:9 templates/accounts/profile.html:23
 msgid "Name"
 msgstr "Имя"
 
-#: models.py:34 templates/accounts/profile.html:24
+#: models.py:34 templates/accounts/e-mail/order.html:21
+#: templates/accounts/e-mail/order.txt:10 templates/accounts/profile.html:24
 msgid "E-Mail"
 msgstr ""
 
-#: models.py:36 templates/accounts/profile.html:26
+#: models.py:37 templates/accounts/e-mail/order.html:29
+#: templates/accounts/e-mail/order.txt:12 templates/accounts/profile.html:26
 msgid "Comment"
 msgstr "Комментарий"
 
-#: models.py:38 models.py:69
+#: models.py:39 models.py:73
 msgid "Retail Price"
 msgstr "Старая цена"
 
-#: models.py:39 models.py:70
+#: models.py:40 models.py:74
 msgid "Wholesale Price"
 msgstr "Цена склада"
 
-#: models.py:40 models.py:71
+#: models.py:41 models.py:75
 msgid "Retail Price With Discount"
 msgstr "Цена"
 
-#: models.py:43
+#: models.py:44
 msgid "Created"
 msgstr "Создан"
 
-#: models.py:44
+#: models.py:45
 msgid "Processed"
 msgstr "В процессе"
 
-#: models.py:45
+#: models.py:46
 msgid "Canceled"
 msgstr "Отменён"
 
-#: models.py:46
+#: models.py:47
 msgid "Success"
 msgstr "Принят"
 
-#: models.py:48 templates/accounts/profile.html:28
+#: models.py:49 templates/accounts/profile.html:28
 msgid "Status"
 msgstr "Статус"
 
-#: models.py:62
-msgid "User"
-msgstr "Юзер"
+#: models.py:51 models.py:79 templates/accounts/profile.html:29
+msgid "Created at"
+msgstr "Создано"
 
-#: models.py:63 templates/accounts/order.html:9
-#: templates/accounts/order.html.py:42 views.py:275
+#: models.py:52 models.py:80
+msgid "Updated at"
+msgstr "Изменено"
+
+#: models.py:66
+msgid "User"
+msgstr "Пользователь"
+
+#: models.py:67 templates/accounts/order.html:9
+#: templates/accounts/order.html.py:42 views.py:310
 msgid "Order"
 msgstr "Заказать"
 
-#: models.py:65
+#: models.py:69
 msgid "Content Type"
 msgstr ""
 
-#: models.py:66
+#: models.py:70
 msgid "Object ID"
 msgstr ""
 
-#: models.py:73
+#: models.py:77
 msgid "Count"
 msgstr "Количество"
 
-#: templates/accounts/bucket.html:9 views.py:253
+#: templates/accounts/bucket.html:9 views.py:281
 msgid "Bucket"
 msgstr "Корзина"
 
-#: templates/accounts/bucket.html:86 templates/accounts/order.html:11
+#: templates/accounts/bucket.html:82 templates/accounts/order.html:11
 msgid "Total price"
 msgstr "Итого"
 
@@ -143,8 +155,34 @@ msgstr "Изменить пароль"
 msgid "Password successfully received"
 msgstr "Пароль успешно принят"
 
-#: templates/accounts/login.html:6 templates/accounts/login.html.py:38
+#: templates/accounts/e-mail/order.html:10
+#: templates/accounts/e-mail/order.txt:4
+msgid "We have received your order"
+msgstr "Мы получили Ваш заказ"
+
+#: templates/accounts/e-mail/order.html:12
+#: templates/accounts/e-mail/order.txt:6
+msgid "Hello"
+msgstr "Здравствуйте"
+
+#: templates/accounts/e-mail/order.html:33
+#: templates/accounts/e-mail/order.txt:13
+#, fuzzy
+#| msgid "Total price"
+msgid "Total"
+msgstr "Итого"
+
+#: templates/accounts/e-mail/order.html:40
+#: templates/accounts/e-mail/order.txt:15
+msgid "Content of order"
+msgstr "Содержимое заказа"
+
+#: templates/accounts/login.html:8
 msgid "Log in"
+msgstr "Войти"
+
+#: templates/accounts/login.html:35 urls.py:14
+msgid "Login"
 msgstr "Войти"
 
 #: templates/accounts/profile.html:7 views.py:36
@@ -155,76 +193,14 @@ msgstr "История"
 msgid "Price"
 msgstr "Цена"
 
-#: templates/accounts/profile.html:29
-msgid "Created at"
-msgstr "Создано"
+#: templates/accounts/singup.html:8
+msgid "Register"
+msgstr "Регистрация"
 
-#: templates/accounts/singup.html:6 templates/accounts/singup.html.py:38
-msgid "Sign Up"
+#: templates/accounts/singup.html:35
+msgid "Sign up"
 msgstr "Зарегистрироваться"
 
-#~ msgid "Fail"
-#~ msgstr "Неудачен"
-
-#~ msgid "Error"
-#~ msgstr "Ошибка"
-
-#~ msgid "Direct payment"
-#~ msgstr "Прямой платёж"
-
-#~ msgid "Bonus"
-#~ msgstr "Бонус!"
-
-#~ msgid "Robokassa"
-#~ msgstr "Робокасса"
-
-#~ msgid "Mobilnik.kg"
-#~ msgstr "Мобильник.КГ"
-
-#~ msgid "Elsom"
-#~ msgstr "ЭЛСОМ"
-
-#~ msgid "Moneyback"
-#~ msgstr "Возврат средств"
-
-#~ msgid "Service"
-#~ msgstr "Сервис"
-
-#~ msgid "Payment method"
-#~ msgstr "Способ оплаты"
-
-#~ msgid "Created At"
-#~ msgstr "Создано"
-
-#~ msgid "date"
-#~ msgstr "дата"
-
-#~ msgid "Transaction"
-#~ msgstr "Транзакция"
-
-#~ msgid "Transactions"
-#~ msgstr "Транзакции"
-
-#~ msgid "Balance"
-#~ msgstr "Баланс"
-
-#~ msgid "Pay"
-#~ msgstr "Оплата"
-
-#~ msgid "New users"
-#~ msgstr "Новые пользователи"
-
-#~ msgid "Low balance"
-#~ msgstr "Низкий баланс лицевого счёта!"
-
-#~ msgid "enough for %(days)s day"
-#~ msgid_plural "enough for %(days)s days"
-#~ msgstr[0] "хватит на %(days)s день"
-#~ msgstr[1] "хватит на %(days)s дня"
-#~ msgstr[2] "хватит на %(days)s дней"
-
-#~ msgid "New Password (repeat)"
-#~ msgstr "Новый пароль (повтор)"
-
-#~ msgid "Изменить пароль"
-#~ msgstr "Изменить пароль"
+#: views.py:348
+msgid "We recive your order!"
+msgstr "Мы получили Ваш заказ!"

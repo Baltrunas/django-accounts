@@ -81,7 +81,10 @@
 <div class="b-bucket_total">
 	{% trans "Total price" %}:
 	<b class="b-bucket_total_price">{{ bucket_total_price|floatformat:0 }}</b>
-	<a href='{% url "order" %}' class='b-button'>Перейти к оформлению заказа</a>
+
+	{% if bucket_total_count %}
+		<a href='{% url "order" %}' class='b-button'>Перейти к оформлению заказа</a>
+	{% endif %}
 </div>
 
 

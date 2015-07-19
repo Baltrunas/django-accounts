@@ -1,0 +1,20 @@
+{% load i18n %}
+{% load object_dict %}
+
+{% trans "We have received your order" %}
+
+{% trans "Hello" %} {{ new_order.name }}
+
+
+{% trans "Name" %}: {{ new_order.name }}
+{% trans "E-Mail" %}: {{ new_order.email }}
+{% trans "Phone" %}: {{ new_order.phone }}
+{% trans "Comment" %}: {{ new_order.comment }}
+{% trans "Total" %}: {{ new_order.retail_price_with_discount|floatformat:-0 }}
+
+{% trans "Content of order" %}
+
+{% for item in new_order.items.all %}
+{{ item.content_object.name }} {{ item.content_object.retail_price_with_discount|floatformat:0 }} * {{ item.count }} = {{ item.get_total_retail_price_with_discount|floatformat:0 }}
+{% endfor %}
+

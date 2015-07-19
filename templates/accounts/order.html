@@ -9,7 +9,7 @@
 <h1>{% trans "Order" %}</h1>
 <p class="b-bucket_total">
 	{% trans "Total price" %}:
-	<b class="b-bucket_total_price">{{ bucket_total_price|floatformat:0 }}</b>
+	<b class="b-bucket_total_price">{{ new_order.retail_price_with_discount|floatformat:0 }}</b>
 </p>
 
 {% if status == 'ok' %}

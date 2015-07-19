@@ -1,0 +1,69 @@
+{% extends "e-mail/base.html" %}
+
+{% load i18n %}
+{% load object_dict %}
+{% load abs_puth %}
+{% load thumbnail %}
+
+{% block content %}
+
+<h1>{% trans "We have received your order" %}</h1>
+
+<h2>{% trans "Hello" %} <b>{{ new_order.name }}</b>.</h2>
+
+<table class="b-table">
+	<tbody>
+		<tr>
+			<td class="b-table_key">{% trans "Name" %}</td>
+			<td class="b-table_value">{{ new_order.name }}</td>
+		</tr>
+		<tr>
+			<td class="b-table_key">{% trans "E-Mail" %}</td>
+			<td class="b-table_value">{{ new_order.email }}</td>
+		</tr>
+		<tr>
+			<td class="b-table_key">{% trans "Phone" %}</td>
+			<td class="b-table_value">{{ new_order.phone }}</td>
+		</tr>
+		<tr>
+			<td class="b-table_key">{% trans "Comment" %}</td>
+			<td class="b-table_value">{{ new_order.comment }}</td>
+		</tr>
+		<tr>
+			<td class="b-table_key">{% trans "Total" %}</td>
+			<td class="b-table_value">{{ new_order.retail_price_with_discount|floatformat:-0 }}</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<h3>{% trans "Content of order" %}</h3>
+
+<table class='b-bucket'>
+	{% for item in new_order.items.all %}
+		<tr class='b-bucket-item'>
+			<td>
+				{% if item.content_object.cover %}
+					{% thumbnail item.content_object.cover "100x100" crop="center" as im %}
+						<img class='b-bucket-item__cover' src='{% abs_puth "media" im.name %}' alt='{{ item.content_object.name }}'>
+					{% endthumbnail %}
+				{% else %}
+					<img class='b-bucket-item__cover' src='{% abs_puth "static" "catalog/img/cover-picture.png" %}' alt='{{ item.content_object.name }}'>
+				{% endif %}
+			</td>
+			<td>
+				<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name'>{{ item.content_object.name }}</a>
+			</td>
+			<td class='b-bucket-item__price'>
+				{{ item.content_object.retail_price_with_discount|floatformat:0 }} *
+			</td>
+			<td class='b-bucket-item__count'>{{ item.count }}</td>
+			<td class = 'b-bucket-item__total_price'>
+				= {{ item.get_total_retail_price_with_discount|floatformat:0 }}
+			</td>
+		</tr>
+	{% endfor %}
+</table>
+
+
+{% endblock content %}
