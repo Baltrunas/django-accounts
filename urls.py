@@ -21,6 +21,8 @@ urlpatterns = [
 	url(r'^profile/$', views.profile, name='profile'),
 	url(r'^profile/edit/$', views.edit, name='accounts_edit'),
 
+	url(r'^bucket/update/$', views.bucket_update, name='bucket_update'),
+
 	url(r'^bucket/delete/$', views.bucket_delete, name='bucket_delete'),
 	url(r'^bucket/add/$', views.bucket_add, name='bucket_add'),
 	url(r'^bucket/edit/$', views.bucket_edit, name='bucket_edit'),

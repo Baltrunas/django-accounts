@@ -66,12 +66,93 @@ def change_password(request):
 
 
 
-def bucket_add(request):
+
+def bucket_update(request):
 	if request.POST:
 		content_type = ContentType.objects.get(id=int(request.POST.get('content_type', None)))
 		object_id = int(request.POST.get('object_id', None))
 		count = int(request.POST.get('count', None))
 
+		if request.user.is_authenticated():
+			order_item, created = OrderItem.objects.get_or_create(
+				user=request.user,
+				order=None,
+				content_type=content_type,
+				object_id=object_id
+			)
+			order_item.count = count
+			order_item.save()
+		else:
+			if 'cookies_bucket' in request.COOKIES:
+				try:
+					cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
+				except:
+					cookies_bucket = []
+			else:
+				cookies_bucket = []
+
+			order_items = OrderItem.objects.filter(
+				id__in=cookies_bucket,
+				user=None,
+				order=None,
+				content_type=content_type,
+				object_id=object_id
+			)
+
+			if order_items:
+				order_item = order_items[0]
+				order_item.count = count
+				order_item.save()
+			else:
+				order_item = OrderItem(
+					content_type=content_type,
+					object_id=object_id,
+					count=count
+				)
+				order_item.save()
+				cookies_bucket.append(order_item.id)
+
+		if request.user.is_authenticated():
+			bucket = OrderItem.objects.filter(user=request.user.id, order=None)
+		else:
+			bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
+
+		bucket_total = Decimal('0')
+		for item in bucket:
+			bucket_total += item.get_total_retail_price_with_discount()
+
+		bucket_count = bucket.aggregate(Sum('count'))
+
+		if count:
+			item_count = order_item.count
+			item_total_price = order_item.content_object.retail_price_with_discount * order_item.count
+		else:
+			item_count = 0
+			item_total_price = 0
+
+		context = {
+			'status': 'ok',
+			'item_count': item_count,
+			'item_total_price': '%s' % item_total_price,
+
+			'bucket_total_count': bucket_count['count__sum'],
+			'bucket_total_price': '%s' % bucket_total
+		}
+
+		response = HttpResponse(json.dumps(context), content_type="application/json")
+		if not request.user.is_authenticated():
+			response.set_cookie('cookies_bucket', value=json.dumps(cookies_bucket), path='/')
+	else:
+		response = HttpResponse(json.dumps({'status': 'error'}), content_type="application/json")
+	return response
+
+
+
+def bucket_add(request):
+	if request.POST:
+		content_type = ContentType.objects.get(id=int(request.POST.get('content_type', None)))
+		object_id = int(request.POST.get('object_id', None))
+		count = int(request.POST.get('count', None))
 
 		if request.user.is_authenticated():
 			order_item, created = OrderItem.objects.get_or_create(
@@ -239,6 +320,7 @@ def bucket_edit(request):
 	else:
 		response = HttpResponse(json.dumps({'status': 'error'}), content_type="application/json")
 	return response
+
 
 
 def bucket_sync(request):
