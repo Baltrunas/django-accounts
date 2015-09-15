@@ -31,7 +31,7 @@ class Order (models.Model):
 	user = models.ForeignKey(User, null=True, blank=True)
 
 	name = models.CharField(_('Name'), max_length=100)
-	email = models.EmailField(_('E-Mail'), max_length=100)
+	email = models.EmailField(_('E-Mail'), max_length=100, null=True, blank=True)
 	address = models.CharField(_('Address'), max_length=300)
 	phone = models.CharField(_('Phone'), max_length=100)
 	comment = models.TextField(_('Comment'), null=True, blank=True)

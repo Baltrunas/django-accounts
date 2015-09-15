@@ -1,0 +1,18 @@
+{% load bucket %}
+{% in_bucket obj as products_in_bucked %}
+
+<div class="b-bucket-widget {% if products_in_bucked %}m-in-bucket_True{% endif %}
+	m-widget-{{ obj.id }}
+"
+	data-csrf='{{ csrf_token }}'
+	data-content_type='{{ obj.get_content_type.id }}'
+	data-object_id='{{ obj.id }}'
+	data-count='{{ products_in_bucked }}'
+>
+	<span class="b-bucket-widget__add" data-widget='{{ obj.id }}'>В корзину</span>
+	<div class="b-bucket-widget_counter">
+		<button class="b-bucket-widget__down" data-widget='{{ obj.id }}'>–</button>
+		<span class='b-bucket-widget__count' data-widget='{{ obj.id }}' contenteditable='true'>{{ products_in_bucked }}</span>
+		<button class="b-bucket-widget__up" data-widget='{{ obj.id }}'>+</button>
+	</div>
+</div>

@@ -6,16 +6,19 @@
 
 {% block content %}
 
-<h1>{% trans "Order" %}</h1>
-<p class="b-bucket_total">
-	{% trans "Total price" %}:
-	<b class="b-bucket_total_price">{{ new_order.retail_price_with_discount|floatformat:0 }}</b>
-</p>
+<div class='m-app_accounts m-template_order'>
 
 {% if status == 'ok' %}
-	<h2>Спасибо, заказ оформлен!</h2>
+	<h1>Спасибо, заказ оформлен!</h1>
 	<p>Наш менеджер свяжется с вами в ближайшее время для уточнения деталей заказа!</p>
 {% else %}
+	<h1>{% trans "Order" %}</h1>
+	<p class="b-bucket_total">
+		{% trans "Total price" %}:
+		<b class="b-bucket_total_price">{{ new_order.retail_price_with_discount|floatformat:0 }}</b>
+	</p>
+
+
 	<form class='b-form m-order' method='POST' action=''>
 		{% csrf_token %}
 
@@ -43,5 +46,5 @@
 	</form>
 {% endif %}
 
-
+</div>
 {% endblock content %}

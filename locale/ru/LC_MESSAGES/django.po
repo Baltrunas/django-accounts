@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-19 16:04+0000\n"
+"POT-Creation-Date: 2015-08-06 13:46+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,7 +122,7 @@ msgid "User"
 msgstr "Пользователь"
 
 #: models.py:67 templates/accounts/order.html:9
-#: templates/accounts/order.html.py:42 views.py:310
+#: templates/accounts/order.html.py:42 views.py:393
 msgid "Order"
 msgstr "Заказать"
 
@@ -138,11 +138,11 @@ msgstr ""
 msgid "Count"
 msgstr "Количество"
 
-#: templates/accounts/bucket.html:9 views.py:281
+#: templates/accounts/bucket.html:7 views.py:364
 msgid "Bucket"
 msgstr "Корзина"
 
-#: templates/accounts/bucket.html:82 templates/accounts/order.html:11
+#: templates/accounts/bucket.html:36 templates/accounts/order.html:11
 msgid "Total price"
 msgstr "Итого"
 
@@ -185,7 +185,7 @@ msgstr "Войти"
 msgid "Login"
 msgstr "Войти"
 
-#: templates/accounts/profile.html:7 views.py:36
+#: templates/accounts/profile.html:7 views.py:37
 msgid "History"
 msgstr "История"
 
@@ -193,7 +193,7 @@ msgstr "История"
 msgid "Price"
 msgstr "Цена"
 
-#: templates/accounts/singup.html:8
+#: templates/accounts/singup.html:8 views.py:21
 msgid "Register"
 msgstr "Регистрация"
 
@@ -201,6 +201,6 @@ msgstr "Регистрация"
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
-#: views.py:348
+#: views.py:431
 msgid "We recive your order!"
 msgstr "Мы получили Ваш заказ!"
