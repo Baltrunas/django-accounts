@@ -224,7 +224,7 @@ def bucket(request):
 		response = render(request, 'accounts/bucket.html', context)
 		response.delete_cookie('cookies_bucket')
 
-	elif 'cookies_bucket' in request.COOKIES:
+	else:
 		try:
 			cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
 		except:

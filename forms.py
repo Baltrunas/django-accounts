@@ -6,6 +6,12 @@ from .models import Order
 from .models import User
 
 
+from django.contrib.auth.forms import AuthenticationForm
+
+class EmailAuthenticationForm(AuthenticationForm):
+	username = forms.CharField(label=_('Login or E-Mail'))
+
+
 class SingUpForm(forms.ModelForm):
 	password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'required'}, render_value=False), label=_('Password'))
 	password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'required'}, render_value=False), label=_('Password (again)'))

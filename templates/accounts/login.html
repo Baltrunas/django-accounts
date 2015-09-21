@@ -3,36 +3,48 @@
 
 {% block content %}
 
-<div class="b-wrapper m-app_accounts m-template_login">
+<div class='b-wrapper m-app_accounts m-template_login'>
 
 <h1>{% trans 'Log in' %}</h1>
 
-{% for error in form.non_field_errors %}
-	<span class='b-error'>{{ error|safe }}</span>
-{% endfor %}
-
-<form class='b-form m-contacts' method='POST' action='{% url "login" %}'>
-	{% csrf_token %}
-
-	{% for field in form %}
-		<ul class='b-field
-			{% if field.errors %}m-field_error{% endif %}
-			{% if field.field.required %}m-field_required{% endif %}
-		'>
-			<li class='b-field__label'>{{ field.label_tag }}</li>
-			{% if field.errors %}
-				<li class='b-field__errors'>
-					{% for error in field.errors %}
-						{{ error|safe }}
-					{% endfor %}
-				</li>
-			{% endif %}
-
-			<li class='b-field__element'>{{ field }}</li>
-		</ul><!-- b-field -->
+	{% for error in form.non_field_errors %}
+		<span class='b-error'>{{ error|safe }}</span>
 	{% endfor %}
 
-	<input class='b-button' type='submit' value='{% trans "Login" %}'>
-</form>
+	<form class='b-form m-contacts m-login_form' method='POST' action='{% url "login" %}'>
+		{% csrf_token %}
+
+		{% for field in form %}
+			<ul class='b-field
+				{% if field.errors %}m-field_error{% endif %}
+				{% if field.field.required %}m-field_required{% endif %}
+			'>
+				<li class='b-field__label'>{{ field.label_tag }}</li>
+				{% if field.errors %}
+					<li class='b-field__errors'>
+						{% for error in field.errors %}
+							{{ error|safe }}
+						{% endfor %}
+					</li>
+				{% endif %}
+
+				<li class='b-field__element'>{{ field }}</li>
+			</ul><!-- b-field -->
+		{% endfor %}
+
+		<input class='b-button' type='submit' value='{% trans "Login" %}'>
+		<img src="/templates/img/icons/login_icon3.png" alt="" class="b-login__social___img">
+		<a  class="b-login_social_link b-social-link__twitter" href="{% url 'socialauth_begin' 'twitter' %}">Войти через Twitter</a>
+		<img src="/templates/img/icons/login_icon4.png" alt="" class="b-login__social___img">
+		<a  class="b-login_social_link" href="{% url 'socialauth_begin' 'facebook' %}">Войти через Facebook</a>
+		<img src="/templates/img/icons/login_icon1.png" alt="" class="b-login__social___img">
+		<a  class="b-login_social_link " href="{% url 'socialauth_begin' 'google-oauth2' %}">Войти через Google</a>
+		<img src="/templates/img/icons/login_icon5.png" alt="" class="b-login__social___img">
+		<a  class="b-login_social_link" href="{% url 'socialauth_begin' 'vk-oauth' %}">Войти через VK</a>
+		<img src="/templates/img/icons/login_icon2.png" alt="" class="b-login__social___img">
+		<a  class="b-login_social_link b-social-link__ok " href="{% url 'socialauth_begin' 'odnoklassniki' %}">Войти через Odnoklassniki</a>
+	</form>
+
+</div><!-- b-wrapper m-app_accounts m-template_login -->
 
 {% endblock %}
