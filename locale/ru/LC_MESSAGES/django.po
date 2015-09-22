@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-17 15:15+0600\n"
+"POT-Creation-Date: 2015-09-22 10:12+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,15 +150,6 @@ msgstr "Корзина"
 msgid "Total price"
 msgstr "Итого"
 
-#: templates/accounts/change_password.html:6
-#: templates/accounts/change_password.html:41
-msgid "Change your password"
-msgstr "Изменить пароль"
-
-#: templates/accounts/change_password.html:8
-msgid "Password successfully received"
-msgstr "Пароль успешно принят"
-
 #: templates/accounts/e-mail/order.html:10
 #: templates/accounts/e-mail/order.txt:4
 msgid "We have received your order"
@@ -171,8 +162,6 @@ msgstr "Здравствуйте"
 
 #: templates/accounts/e-mail/order.html:33
 #: templates/accounts/e-mail/order.txt:13
-#, fuzzy
-#| msgid "Total price"
 msgid "Total"
 msgstr "Итого"
 
@@ -182,12 +171,86 @@ msgid "Content of order"
 msgstr "Содержимое заказа"
 
 #: templates/accounts/login.html:8
+#: templates/accounts/password_reset_complete.html:10
 msgid "Log in"
 msgstr "Войти"
 
-#: templates/accounts/login.html:35 urls.py:16
+#: templates/accounts/login.html:35 urls.py:17
 msgid "Login"
 msgstr "Войти"
+
+#: templates/accounts/password_change.html:6
+#: templates/accounts/password_change.html:42
+msgid "Change your password"
+msgstr "Изменить пароль"
+
+#: templates/accounts/password_change.html:8
+msgid "Password successfully received"
+msgstr "Пароль успешно принят"
+
+#: templates/accounts/password_reset.html:8
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+
+#: templates/accounts/password_reset.html:14
+#, fuzzy
+#| msgid "Address"
+msgid "Email address"
+msgstr "Адрес"
+
+#: templates/accounts/password_reset.html:16
+#, fuzzy
+#| msgid "New password"
+msgid "Reset my password"
+msgstr "Новый пароль"
+
+#: templates/accounts/password_reset_complete.html:8
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:10
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: templates/accounts/password_reset_confirm.html:14
+#, fuzzy
+#| msgid "New password"
+msgid "New password:"
+msgstr "Новый пароль"
+
+#: templates/accounts/password_reset_confirm.html:16
+#, fuzzy
+#| msgid "Change your password"
+msgid "Confirm password:"
+msgstr "Изменить пароль"
+
+#: templates/accounts/password_reset_confirm.html:17
+#, fuzzy
+#| msgid "Change your password"
+msgid "Change my password"
+msgstr "Изменить пароль"
+
+#: templates/accounts/password_reset_confirm.html:22
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:8
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+
+#: templates/accounts/password_reset_done.html:10
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
 
 #: templates/accounts/profile.html:7 views.py:37
 msgid "History"
@@ -204,6 +267,12 @@ msgstr "Регистрация"
 #: templates/accounts/singup.html:35
 msgid "Sign up"
 msgstr "Зарегистрироваться"
+
+#: urls.py:30 urls.py:40
+#, fuzzy
+#| msgid "Change your password"
+msgid "Change password"
+msgstr "Изменить пароль"
 
 #: views.py:287
 msgid "We recive your order!"
