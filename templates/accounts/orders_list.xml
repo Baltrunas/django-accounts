@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+	<meta>
+		<status>SUCCESS</status>
+		<message>OK</message>
+	</meta>
+	<data>
+		<orders>
+			{% for order in orders %}
+			<order id="{{ order.id }}" guid="{{ order.guid }}" hash="{{ order.id }}" table="" person="" status="1" name="{{ order.name }}" address="{{ order.address }}" phone="{{ order.phone }}">
+				<comment>{{ order.comment }}</comment>
+				<items>
+					{% for item in order.items.all %}
+						<item guid="{{ item.content_object.guid }}" id="{{ item.id }}" qty="{{ item.count }}"/>
+					{% endfor %}
+				</items>
+			</order>
+			{% endfor %}
+		</orders>
+	</data>
+</response>

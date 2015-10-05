@@ -29,6 +29,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 class Order (models.Model):
 	user = models.ForeignKey(User, null=True, blank=True)
+	guid = models.CharField(_('GUID'), max_length=37, null=True, blank=True, editable=False)
 
 	name = models.CharField(_('Name'), max_length=100)
 	email = models.EmailField(_('E-Mail'), max_length=100, null=True, blank=True)

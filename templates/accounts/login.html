@@ -31,18 +31,19 @@
 				<li class='b-field__element'>{{ field }}</li>
 			</ul><!-- b-field -->
 		{% endfor %}
-
-		<input class='b-button' type='submit' value='{% trans "Login" %}'>
-		<img src="/templates/img/icons/login_icon3.png" alt="" class="b-login__social___img">
-		<a  class="b-login_social_link b-social-link__twitter" href="{% url 'socialauth_begin' 'twitter' %}">Войти через Twitter</a>
-		<img src="/templates/img/icons/login_icon4.png" alt="" class="b-login__social___img">
-		<a  class="b-login_social_link" href="{% url 'socialauth_begin' 'facebook' %}">Войти через Facebook</a>
-		<img src="/templates/img/icons/login_icon1.png" alt="" class="b-login__social___img">
-		<a  class="b-login_social_link " href="{% url 'socialauth_begin' 'google-oauth2' %}">Войти через Google</a>
-		<img src="/templates/img/icons/login_icon5.png" alt="" class="b-login__social___img">
-		<a  class="b-login_social_link" href="{% url 'socialauth_begin' 'vk-oauth' %}">Войти через VK</a>
-		<img src="/templates/img/icons/login_icon2.png" alt="" class="b-login__social___img">
-		<a  class="b-login_social_link b-social-link__ok " href="{% url 'socialauth_begin' 'odnoklassniki' %}">Войти через Odnoklassniki</a>
+			<input class='b-button' type='submit' value='{% trans "Login" %}'>
+			<div class="b-login_social__wrapper">
+			<img src="/templates/img/icons/login_icon3.png" alt="" class="b-login__social___img">
+			<a  class="b-login_social_link b-social-link__twitter" href="{% url 'socialauth_begin' 'twitter' %}">Войти через Twitter</a>
+			<img src="/templates/img/icons/login_icon4.png" alt="" class="b-login__social___img">
+			<a  class="b-login_social_link" href="{% url 'socialauth_begin' 'facebook' %}">Войти через Facebook</a>
+			<img src="/templates/img/icons/login_icon1.png" alt="" class="b-login__social___img">
+			<a  class="b-login_social_link " href="{% url 'socialauth_begin' 'google-oauth2' %}">Войти через Google</a>
+			<img src="/templates/img/icons/login_icon5.png" alt="" class="b-login__social___img">
+			<a  class="b-login_social_link" href="{% url 'socialauth_begin' 'vk-oauth' %}">Войти через VK</a>
+			<img src="/templates/img/icons/login_icon2.png" alt="" class="b-login__social___img">
+			<a  class="b-login_social_link b-social-link__ok " href="{% url 'socialauth_begin' 'odnoklassniki' %}">Войти через Odnoklassniki</a>
+		</div>
 	</form>
 
 </div><!-- b-wrapper m-app_accounts m-template_login -->

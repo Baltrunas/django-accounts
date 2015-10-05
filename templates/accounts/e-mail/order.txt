@@ -9,6 +9,7 @@
 {% trans "Name" %}: {{ new_order.name }}
 {% trans "E-Mail" %}: {{ new_order.email }}
 {% trans "Phone" %}: {{ new_order.phone }}
+{% trans "Address" %}: {{ new_order.address }}
 {% trans "Comment" %}: {{ new_order.comment }}
 {% trans "Total" %}: {{ new_order.retail_price_with_discount|floatformat:-0 }}
 

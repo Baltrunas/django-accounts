@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div class='m-app_accounts m-template_order'>
+<div class='m-app_accounts m-template_order {% if status == "ok" %}m-status_ok{% endif %}'>
 
 {% if status == 'ok' %}
 	<h1>Спасибо, заказ оформлен!</h1>

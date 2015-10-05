@@ -239,6 +239,7 @@ from .forms import OrderForm
 
 
 
+import uuid
 
 from apps.useful.easy_email import mail
 
@@ -274,13 +275,17 @@ def order(request):
 	if request.POST and form.is_valid():
 		new_order = form.save()
 
+		new_order.guid = uuid.uuid1()
+
 		if request.user.is_authenticated():
 			new_order.user = request.user
 
 		for item in bucket:
 			item.order = new_order
 			item.save()
-		new_order = form.save()
+
+		# new_order = form.save()
+		new_order.save()
 
 		context['new_order'] = new_order
 		order_email_from = settings.ORDER_EMAIL_FROM
@@ -295,3 +300,30 @@ def order(request):
 	context['form'] = form
 
 	return render(request, 'accounts/order.html', context)
+
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def orders_list(request):
+	context = {}
+	context['orders'] = Order.objects.filter(status='created')
+	context['orders'] = Order.objects.all()
+	return render(request, 'accounts/orders_list.xml', context, content_type="application/xhtml+xml")
+
+import xmltodict
+
+@csrf_exempt
+def orders_confirm(request):
+	xml_requst = xmltodict.parse(request.body)
+	orders = xml_requst['hashs']['hash']
+
+	# for order_data in orders:
+	# 	guid = order_data['@guid']
+	# 	try:
+	# 		order = Order.objects.get(guid=guid)
+	# 		order.status = 'success'
+	# 		order.save()
+	# 	except:
+	# 		pass
+	return render(request, 'accounts/orders_confirm.xml', {}, content_type="application/xhtml+xml")

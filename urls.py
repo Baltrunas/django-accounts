@@ -84,4 +84,7 @@ urlpatterns = [
 
 	url(r'^order/$', views.order, name='order'),
 
+	url(r'^orders_list$', views.orders_list, name='orders_list'),
+	# url(r'^orders_update$', views.orders_update, name='orders_update'),
+	url(r'^orders_confirm$', views.orders_confirm, name='orders_confirm'),
 ]
