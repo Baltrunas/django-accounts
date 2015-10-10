@@ -1,45 +1,58 @@
 {% extends "base.html" %}
+{% load thumbnail %}
+{% load static %}
 
 {% load i18n %}
 
 {% block content %}
+<div class='m-app_accounts m-template_profile'>
 
 <h1>{% trans "History" %}</h1>
-
-<style type="text/css">
-.b-orders {
-	width: 100%;
-}
-
-.b-order td {
-	border: 1px solid #eee;
-	padding: 5px;
-}
-</style>
-
-
-<table class="b-orders">
-	<tr>
-		<th>{% trans "Name" %}</th>
-		<th>{% trans "E-Mail" %}</th>
-		<th>{% trans "Phone" %}</th>
-		<th>{% trans "Comment" %}</th>
-		<th>{% trans "Price" %}</th>
-		<th>{% trans "Status" %}</th>
-		<th>{% trans "Created at" %}</th>
-	</tr>
+<div class='b-orders'>
 	{% for order in orders %}
-		<tr class="b-order">
-			<td>{{ order.name }}</td>
-			<td>{{ order.email }}</td>
-			<td>{{ order.phone }}</td>
-			<td>{{ order.comment }}</td>
-			<td>{{ order.retail_price }}</td>
-			<td>{{ order.get_status_display }}</td>
-			<td>{{ order.created_at }}</td>
-		</tr>
+		<div class='b-order m-order_{{ order.status }}'>
+
+			<div class="b-order__up">
+				<div class="b-order__id">{{ order.id }}</div>
+				<div class='b-order__created'>{{ order.created_at }}</div>
+				<div class='b-order__name'>{{ order.name }}</div>
+				<div class='b-order__phone'>{{ order.phone }}</div>
+				<div class='b-order__email'>{{ order.email }}</div>
+				<div class='b-order__status'>{{ order.get_status_display }}</div>
+			</div>
+			<div class="b-order__middle">
+				{% for item in order.items.all %}
+					<div class="b-order__full">
+						<div class="b-order__full__left">
+							<div class="b-order__full__img">
+								{% thumbnail item.content_object.cover "160x120" crop="center" as im %}
+									<img src="{{ im.url }}" alt="" class="b-order__img">
+								{% empty %}
+									<img class='b-order__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'>
+								{% endthumbnail %}
+							</div>
+							<div class="b-order__full__name">
+								{{ item.content_object.name }}
+								<br>
+								<span>{{ item.count }} шт. по {{ item.retail_price_with_discount }} сом</span>
+							</div>
+						</div>
+						<div class="b-order__full__right">
+							<div class="b-order__full__price">
+								итого: {{ item.get_total_retail_price_with_discount }}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			<div class="b-order__down">
+				<div class='b-order__comment'>{{ order.comment }}</div>
+				<div class='b-order__price'>{{ order.retail_price }}</div>
+			</div>
+		</div>
 	{% endfor %}
-</table>
+</div>
 
 
+</div><!-- m-app_accounts m-template_profile -->
 {% endblock content %}

@@ -42,12 +42,18 @@ class Order (models.Model):
 	retail_price_with_discount = models.DecimalField(_('Retail Price With Discount'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
 
 	STATUS_CHOICES = (
-		('created', _('Created')),
-		('processed', _('Processed')),
-		('canceled', _('Canceled')),
+		('new', _('New')),
+		('accept', _('Accept by:')),
+		('processed', _('Processed (1c)')),
+		('paid', _('Paid')),
 		('success', _('Success')),
+		('canceled', _('Canceled')),
 	)
-	status = models.CharField(_('Status'), choices=STATUS_CHOICES, default='created', max_length=32)
+
+	status = models.CharField(_('Status'), choices=STATUS_CHOICES, default='new', max_length=32)
+	accounting = models.BooleanField(verbose_name=_('Accounting'), default=False)
+
+	acceptor = models.ForeignKey(User, null=True, blank=True, related_name='acceptors')
 
 	created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
 	updated_at = models.DateTimeField(_('Updated at'), auto_now=True)

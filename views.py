@@ -1,4 +1,6 @@
-# from django.utils.translation import ugettext as _
+# -*- coding: utf-8 -*-
+import json
+
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
@@ -7,13 +9,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import redirect
 from django.shortcuts import render
 
-from .forms import SingUpForm
-from .forms import ChangePasswordForm
-from .models import Order
-from .models import OrderItem
-import json
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
+
+from .forms import SingUpForm
+from .forms import ChangePasswordForm
+
+from .models import User
+from .models import Order
+from .models import OrderItem
 
 
 def singup(request):
@@ -50,21 +54,6 @@ def edit(request):
 			request.user.save()
 			context['ok'] = True
 	return render(request, 'accounts/edit.html', context)
-
-
-@login_required
-def change_password(request):
-	context = {}
-	context['ok'] = False
-	context['form'] = ChangePasswordForm(request.POST or None)
-	if context['form'].is_valid():
-		if authenticate(username=request.user, password=context['form'].cleaned_data["old_password"]):
-			request.user.set_password(context['form'].cleaned_data['new_password'])
-			request.user.save()
-			context['ok'] = True
-	return render(request, 'accounts/change_password.html', context)
-
-
 
 
 def bucket_update(request):
@@ -147,45 +136,8 @@ def bucket_update(request):
 	return response
 
 
-
 from django.db.models import Sum
 from decimal import Decimal
-
-
-# def bucket_sync(request):
-# 	if 'cookies_bucket' in request.COOKIES:
-# 		try:
-# 			cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
-# 		except:
-# 			cookies_bucket = []
-
-# 	cookies_bucket = OrderItem.objects.filter(id__in=cookies_bucket)
-# 	server_bucket = OrderItem.objects.filter(user=request.user.id, order=None)
-
-# 	for item in cookies_bucket:
-# 		if server_bucket.filter(user=request.user, order=None, content_type=item.content_type, object_id=item.object_id):
-# 			server_item = server_bucket.get(
-# 				user=request.user,
-# 				order=None,
-# 				content_type=item.content_type,
-# 				object_id=item.object_id
-# 			)
-# 			server_item.count += item.count
-# 			server_item.save()
-# 			item.delete()
-# 		else:
-# 			item.user = request.user
-# 			item.save()
-
-# 	response = redirect('bucket')
-# 	response.delete_cookie('cookies_bucket')
-# 	return response
-
-
-# def bucket_clear(request):
-# 	response = redirect('bucket')
-# 	response.delete_cookie('cookies_bucket')
-# 	return response
 
 
 def bucket(request):
@@ -236,9 +188,6 @@ def bucket(request):
 	return response
 
 from .forms import OrderForm
-
-
-
 import uuid
 
 from apps.useful.easy_email import mail
@@ -284,7 +233,6 @@ def order(request):
 			item.order = new_order
 			item.save()
 
-		# new_order = form.save()
 		new_order.save()
 
 		context['new_order'] = new_order
@@ -303,27 +251,175 @@ def order(request):
 
 
 from django.views.decorators.csrf import csrf_exempt
+import xmltodict
 
 @csrf_exempt
 def orders_list(request):
 	context = {}
-	context['orders'] = Order.objects.filter(status='created')
-	context['orders'] = Order.objects.all()
+	if settings.DIRECT_TO_1C:
+		context['orders'] = Order.objects.filter(accounting=False)
+	else:
+		context['orders'] = Order.objects.filter(status='accept', accounting=False)
+
 	return render(request, 'accounts/orders_list.xml', context, content_type="application/xhtml+xml")
 
-import xmltodict
+
+@csrf_exempt
+def orders_update(request):
+	context = {}
+	return render(request, 'accounts/orders_update.xml', context, content_type="application/xhtml+xml")
+
 
 @csrf_exempt
 def orders_confirm(request):
 	xml_requst = xmltodict.parse(request.body)
 	orders = xml_requst['hashs']['hash']
 
-	# for order_data in orders:
-	# 	guid = order_data['@guid']
-	# 	try:
-	# 		order = Order.objects.get(guid=guid)
-	# 		order.status = 'success'
-	# 		order.save()
-	# 	except:
-	# 		pass
+	for order_data in orders:
+		guid = order_data['@guid']
+		try:
+			order = Order.objects.get(guid=guid)
+			order.accounting = True
+			order.save()
+		except:
+			pass
 	return render(request, 'accounts/orders_confirm.xml', {}, content_type="application/xhtml+xml")
+
+############
+# API JSON #
+############
+
+def auth_check(view):
+	def wrapped(request, *args, **kwargs):
+		# username = request.POST.get('username', None)
+		# password = request.POST.get('password', None)
+		# try:
+		# 	user = User.objects.get(username=username)
+		# 	status = user.check_password(password)
+		# except:
+		# 	return HttpResponse(json.dumps({'auth': False}), content_type='application/json')
+		return view(request, *args, **kwargs)
+	return wrapped
+
+
+@csrf_exempt
+@auth_check
+def json_check(request):
+	return HttpResponse(json.dumps({'auth': True}), content_type='application/json')
+
+
+@csrf_exempt
+@auth_check
+def json_order_list(request, status):
+	context = {}
+	context['auth'] = True
+
+	if status == 'new':
+		status_in = ['new']
+	elif status == 'my':
+		status_in = ['accept', 'processed', 'paid']
+	elif status == 'history':
+		status_in = ['success', 'canceled']
+
+	orders = []
+	for order in Order.objects.filter(status__in=status_in):
+		order_items = []
+		for order_item in order.items.all():
+			order_item_dict = {
+				"id": order_item.id,
+				"name": u'%s' % order_item.content_object,
+				"price": '%s' % order_item.retail_price_with_discount,
+				"count": order_item.count
+			}
+			order_items.append(order_item_dict)
+
+		order_dict = {
+			"id": order.id,
+			"name": order.name,
+			"phone": order.phone,
+			"status": order.status,
+			"address": order.address,
+			"comment": order.comment,
+			"accounting": order.accounting,
+			"total": '%s' % order.retail_price_with_discount,
+			"created_at": order.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+			"order_items": order_items
+		}
+		orders.append(order_dict)
+	context['orders'] = orders
+	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
+
+
+@csrf_exempt
+def json_order_accept(request, id):
+	context = {}
+	id = 3
+
+	order = Order.objects.get(id=id)
+	if order.status == 'new':
+		order.status = 'accept'
+		order.acceptor = request.user
+		order.save()
+		context['status'] = 'ok'
+	else:
+		context['status'] = order.status
+		context['acceptor'] = '%s' % order.acceptor
+	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
+
+
+@csrf_exempt
+def json_order_update(request, id):
+	id = 3
+	# имя
+	# адрес
+	# телефон
+	# коментарий
+
+	order = Order.objects.get(id=id, acceptor=request.user, accounting=False)
+	context = {}
+
+
+@csrf_exempt
+def json_order_accounting(request, id):
+	context = {}
+	order = Order.objects.get(id=id, acceptor=request.user, accounting=False)
+	order.accounting = True
+	order.save()
+	context['status'] = 'ok'
+	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
+
+
+@csrf_exempt
+def json_order_status(request, status, id):
+	context = {}
+	order = Order.objects.get(id=order_id, acceptor=request.user, accounting=False)
+	order.status = status
+	order.save()
+
+	context['status'] = 'ok'
+	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
+
+# new		my				canceled		success
+		# processed
+		# paid
+
+# new
+# accept
+
+
+# http://www.dominopizza.kg/api/json/order/list/new/ (новые)
+# http://www.dominopizza.kg/api/json/order/list/my/ (мои)
+# http://www.dominopizza.kg/api/json/order/list/history/ (история)
+
+
+# новые
+	# принять
+# мои
+	# изменить
+	# отправить в 1с
+	# установить стаус
+		# в процессе processed
+		# оплачен paid
+		# выполнен success
+# история
+
