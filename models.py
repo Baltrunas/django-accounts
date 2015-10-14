@@ -110,3 +110,17 @@ class OrderItem (models.Model):
 			self.wholesale_price = self.content_object.wholesale_price
 			self.retail_price_with_discount = self.content_object.retail_price_with_discount
 		super(OrderItem, self).save(*args, **kwargs)
+
+
+class Valute (models.Model):
+	name = models.CharField(verbose_name=_('Name'), max_length=128)
+	slug = models.SlugField(verbose_name=_('Slug'), max_length=128, help_text=_('A slug is the part of a URL which identifies a page using human-readable keywords'))
+	rate = models.DecimalField(_('Currency rate'), max_digits=16, decimal_places=4, default=Decimal('0.0000'))
+
+	class Meta:
+		ordering = ['name']
+		verbose_name = _('Currency rate')
+		verbose_name_plural = _('Currency rates')
+
+	def __unicode__(self):
+		return '%s (%s)' % (self.name, self.rate)

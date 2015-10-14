@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import User
 from .models import Order
 from .models import OrderItem
+from .models import Valute
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -30,3 +31,9 @@ class OrderItemAdmin(admin.ModelAdmin):
 	list_filter = ['user', 'order', 'count']
 
 admin.site.register(OrderItem, OrderItemAdmin)
+
+
+class ValuteAdmin(admin.ModelAdmin):
+	list_display = ['name', 'slug', 'rate']
+
+admin.site.register(Valute, ValuteAdmin)
