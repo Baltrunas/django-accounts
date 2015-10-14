@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load thumbnail %}
+{% load static %}
+
+{% block content %}
+<div class="b-wrapper m-app_accounts m-template_pay">
+	<h1>Оплата</h1>
+
+		<div class='b-order m-order_{{ order.status }}'>
+
+			<div class="b-order__up">
+				<div class="b-order__id">{{ order.id }}</div>
+				<div class='b-order__created'>{{ order.created_at }}</div>
+				<div class='b-order__name'>{{ order.name }}</div>
+				<div class='b-order__phone'>{{ order.phone }}</div>
+				<div class='b-order__email'>{{ order.email }}</div>
+				<div class='b-order__status'>{{ order.get_status_display }}</div>
+			</div>
+			<div class="b-order__middle">
+				{% for item in order.items.all %}
+					<div class="b-order__full">
+						<div class="b-order__full__left">
+							<div class="b-order__full__img">
+								{% thumbnail item.content_object.cover "160x120" crop="center" as im %}
+									<img src="{{ im.url }}" alt="" class="b-order__img">
+								{% empty %}
+									<img class='b-order__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'>
+								{% endthumbnail %}
+							</div>
+							<div class="b-order__full__name">
+								{{ item.content_object.name }}
+								<br>
+								<span>{{ item.count }} шт. по {{ item.retail_price_with_discount }} сом</span>
+							</div>
+						</div>
+						<div class="b-order__full__right">
+							<div class="b-order__full__price">
+								итого: {{ item.get_total_retail_price_with_discount }}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			<div class="b-order__down">
+				<div class='b-order__comment'>{{ order.comment }}</div>
+				<div class='b-order__price'>{{ order.retail_price }}</div>
+			</div>
+		</div>
+
+	<!-- <h3 class="panel-title">В терминале</h3>
+	
+	<label class='b-money'>
+		<input type="radio" value="mobilnik" name='IncCurrLabel'>
+		<img class='b-money__img' src='https://wallet.mobilnik.kg/static/img/logo.png'>
+	</label> -->
+
+		<div class="b-electro_wrapper">
+			<h3 class="panel-title">Электронным кошельком</h3>
+			<div class="b-electronic_money">
+				<label class='b-money'>
+					<input type="radio" value="YandexMerchantR" name='IncCurrLabel'>
+					<img class='b-money__img' src='https://auth.robokassa.ru/Merchant/Content/Images/Currencies/Big/YandexMerchant.gif' title='Яндекс.Деньги' alt='Яндекс.Деньги'>
+				</label>
+				<label class='b-money'>
+					<input type="radio" value="WMRM" name='IncCurrLabel'>
+					<img class='b-money__img' src='https://auth.robokassa.ru/Merchant/Content/Images/Currencies/Big/WMRM.gif' title="WMR" alt="WMR">
+				</label>
+				<label class='b-money'>
+					<input type="radio" value="Qiwi30OceanR" name='IncCurrLabel'>
+					<img class='b-money__img' src='https://auth.robokassa.ru/Merchant/Content/Images/Currencies/Big/Qiwi.gif' title='QIWI Кошелек' alt='QIWI Кошелек'>
+				</label>
+				<label class='b-money'>
+					<input type="radio" value="ElecsnetWalletR" name='IncCurrLabel'>
+					<img class='b-money__img' src='https://auth.robokassa.ru/Merchant/Content/Images/Currencies/Big/ElecsnetWalletR.png' title='Кошелек Элекснет' alt='Кошелек Элекснет'>
+				</label>
+				<label class='b-money'>
+					<input type="radio" value="WMZM" name='IncCurrLabel'>
+					<img class='b-money__img' src='https://auth.robokassa.ru/Merchant/Content/Images/Currencies/Big/WMZM.gif' title='WMZ' alt='WMZ'>
+				</label>
+				<label class='b-money'>
+					<input type="radio" value="W1OceanR" name='IncCurrLabel'>
+					<img class='b-money__img' src='https://auth.robokassa.ru/Merchant/Content/Images/Currencies/Big/W1R.gif' title='RUR Единый кошелек' alt='RUR Единый кошелек'>
+				</label>
+				<label class='b-money'>
+					<input type="radio" value="W1UniMoneyOceanR" name='IncCurrLabel'>
+					<img class='b-money__img' src='https://auth.robokassa.ru/Merchant/Content/Images/Currencies/Big/W1UniMoneyOceanR.gif' title='RUR Единый кошелек' alt='RUR Единый кошелек'>
+				</label>
+				<label class='b-money'>
+					<input type="radio" value="WMEM" name='IncCurrLabel'>
+					<img class='b-money__img' src='https://auth.robokassa.ru/Merchant/Content/Images/Currencies/Big/WMEM.gif' title='WME' alt='WME'>
+				</label>
+			</div>
+		</div>
+
+		<div class="b-bank_wrapper">
+			<h3 class="panel-title">Банковской картой</h3>
+			<div class="b-bank">
+				<label class='b-money'>
+					<input type="radio" value="BANKOCEAN2R" name='IncCurrLabel'>
+					<img class='b-money__img' src='https://auth.robokassa.ru/Merchant/Content/Images/Currencies/Huge/BankCard.png'>
+				</label>
+			</div>
+		</div>
+
+	<form action='{{ form.target }}' method='POST'>
+		{% for field in form %}
+			{{ field }}
+		{% endfor %}
+
+		<button type='submit' value='Send' class='btn btn-primary b-form_submit col-md-2' id='robo_pay'>Оплатить</button>
+	</form>
+</div>
+
+
+
+{% endblock %}

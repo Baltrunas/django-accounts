@@ -31,7 +31,9 @@ def bucket(request):
 		bucket_total += item.get_total_retail_price_with_discount()
 
 
+
 	return {
 		'bucket_total_count': bucket_total_count,
 		'bucket_total_price': '%s' % bucket_total,
+		'current_valute': request.COOKIES.get('valute', 'kgs')
 	}

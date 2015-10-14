@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="b-page">
+
+{% if ok %}
+	<h1>Спасибо!</h1>
+	<p>Мы получили Ваше уведомление о платеже, как только мы его проверим, вам будет зачислен платёж!</p>
+
+	<p>Обычно мы проверяем платежи в течении суток, исключение составляют выходные и праздничные дни.</p>
+
+	<p>Сумма пополнения варьируется от курса доллара и актуальна на момент проведения платежа.</p>
+
+	<p><b>Курс доллара на сегодня: 68.70</b></p>
+
+	<h3><a href="/diesel-up/">Список тем</a></h3>
+	<h3><a href="/diesel-up/add/">Добавить тему</a></h3>
+{% else %}
+	<h1>Пополнение баланса через «MOBILNIK.KG»</h1>
+
+	<p>Пополнить лицевой счет Вы сможете в 
+		<a href='https://mobilnik.kg/terminal-maps' target='_blank' title='Адреса териминалов'>любом из терминалов</a>
+	 платёжной сети «МОБИЛЬНИК» для этого Вам необходимо:</p>
+
+	<ol>
+		<li>Выберать услугу «MOBILNIK.KG»</li>
+		<li>Ввести лицевой счет: <strong>2339996</strong></li>
+		<li>Убедиться в правильности введённых данных.</li>
+		<li>Внесите купюры.</li>
+		<li>Нажмите кнопку далее и получите чек.</li>
+		<li>Сохраняйте чек до зачисления платежа!</li>
+		<li>Уведомите нас о Вашем переводе, для зачисления платежа.</li>
+	</ol>
+
+
+	<form action='/pay/mobilnik/' method='POST'>
+		{% csrf_token %} 
+		<div class='form-group col-sm-12'>
+			<div class='col-sm-4'>
+				<label for='id_username' class='control-label label_field'>
+					Дата и время платежа
+				</label>
+				<span class='help-text'>Указанна на чеке</span>
+			</div>
+			<div class='col-sm-5'>
+				<input name='datetime' type='text' class='form-control'>
+			</div>
+		{# </div> #}
+		{# <div class='form-group col-sm-10'> #}
+			<div class='text-center col-sm-3'>
+				<button type='submit' value='Send' class='btn btn-primary b-form_submit col-md-12'>Уведомить</button>
+			</div>
+		</div>
+	</form>
+
+	<div class="col-md-12">
+		<a href='https://mobilnik.kg/terminal-maps' target='_blank' title='Адреса териминалов'>Адреса териминалов</a>
+	</div>
+
+{% endif %}
+
+
+
+</div>
+{% endblock %}

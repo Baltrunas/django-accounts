@@ -32,6 +32,7 @@
 			</ul><!-- b-field -->
 		{% endfor %}
 			<input class='b-button' type='submit' value='{% trans "Login" %}'>
+			{% comment %}
 			<div class="b-login_social__wrapper">
 			<img src="/templates/img/icons/login_icon3.png" alt="" class="b-login__social___img">
 			<a  class="b-login_social_link b-social-link__twitter" href="{% url 'socialauth_begin' 'twitter' %}">Войти через Twitter</a>
@@ -43,6 +44,7 @@
 			<a  class="b-login_social_link" href="{% url 'socialauth_begin' 'vk-oauth' %}">Войти через VK</a>
 			<img src="/templates/img/icons/login_icon2.png" alt="" class="b-login__social___img">
 			<a  class="b-login_social_link b-social-link__ok " href="{% url 'socialauth_begin' 'odnoklassniki' %}">Войти через Odnoklassniki</a>
+			{% endcomment %}
 		</div>
 	</form>
 
