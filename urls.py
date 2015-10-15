@@ -26,13 +26,18 @@ urlpatterns = [
 
 	url(r'^order/$', views.base.order, name='order'),
 
+	# PAY
+	url(r'^pay/(?P<id>\d+)/$', views.pay.pay, name="pay"),
+	url(r'^pay/mobilnik/$', views.pay.pay_mobilnik, name="pay_mobilnik"),
+	url(r'^pay/robokassa/', include('robokassa.urls')),
+
+	# API XML
 	url(r'^api/xml/orders/list/$', views.api_xml.orders_list, name='orders_list'),
 	url(r'^api/xml/orders/update/$', views.api_xml.orders_update, name='orders_update'),
 	url(r'^api/xml/orders/confirm/$', views.api_xml.orders_confirm, name='orders_confirm'),
 
-
+	# API JSON
 	url(r'^api/json/check/$', views.api_json.json_check, name='json_check'),
-
 	url(r'^api/json/order/list/(?P<status>new|my|history)/$', views.api_json.json_order_list, name='json_order_list'),
 	url(r'^api/json/order/accept/(?P<id>[0-9]+)/$', views.api_json.json_order_accept, name='json_order_accept'),
 	url(r'^api/json/order/accounting/(?P<id>[0-9]+)/$', views.api_json.json_order_accounting, name='json_order_accounting'),
@@ -41,17 +46,4 @@ urlpatterns = [
 
 	# url(r'^api/json/order/item/update/$id/$', views.json_order_update, name='json_order_update'),
 	# url(r'^api/json/order/item/add/$', views.json_order_update, name='json_order_update'),
-
-
-
-
-	# 
-	# api/json/orders/confirm
-
-	url(r'^pay/(?P<id>\d+)/$', views.pay.pay, name="pay"),
-	url(r'^pay/mobilnik/$', views.pay.pay_mobilnik, name="pay_mobilnik"),
-
-	url(r'^pay/robokassa/', include('robokassa.urls')),
-
-
 ]
