@@ -1,10 +1,14 @@
+from decimal import Decimal
+
 from django.db import models
 
 from django.utils.translation import ugettext_lazy as _
 
-
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager
+
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 AbstractUser._meta.get_field('email')._unique = False
@@ -20,11 +24,6 @@ class User(AbstractUser):
 
 	def __unicode__(self):
 		return self.username
-
-
-from decimal import Decimal
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 class Order (models.Model):
@@ -51,6 +50,27 @@ class Order (models.Model):
 	)
 
 	status = models.CharField(_('Status'), choices=STATUS_CHOICES, default='new', max_length=32)
+
+	PAYMENT_STATUS_CHOICES = (
+		('created', _('Created')),
+		('failed', _('Failed')),
+		('processed', _('Processed')),
+		('success', _('Success')),
+		('canceled', _('Canceled')),
+		('error', _('Error')),
+	)
+	payment_status = models.CharField(_('Payment status'), choices=PAYMENT_STATUS_CHOICES, default='created', max_length=32)
+
+	PAYMENT_METHOD_CHOICES = (
+		('cacshe', _('Cache')),
+		('courier', _('Courier')),
+		('bonus', _('Bonus')),
+		('robokassa', _('Robokassa')),
+		('mobilnik.kg', _('Mobilnik.kg')),
+		('elsom', _('Elsom')),
+	)
+	payment_method = models.CharField(verbose_name=_('Payment method'), max_length='64', choices=PAYMENT_METHOD_CHOICES, default='cacshe')
+
 	accounting = models.BooleanField(verbose_name=_('Accounting'), default=False)
 
 	acceptor = models.ForeignKey(User, null=True, blank=True, related_name='acceptors')
@@ -68,6 +88,7 @@ class Order (models.Model):
 	def __unicode__(self):
 		string = '%s #%s = [%s]' % (self.user, self.id, self.retail_price_with_discount)
 		return string
+
 
 class OrderItem (models.Model):
 	user = models.ForeignKey(User, verbose_name=_('User'), null=True, blank=True)
