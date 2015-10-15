@@ -22,10 +22,12 @@ from ..forms import OrderForm
 import uuid
 
 from apps.useful.easy_email import mail
+from apps.useful.sms import send_sms
+
+from django.db.models import Sum
+from decimal import Decimal
 
 from django.conf import settings
-
-
 
 
 def singup(request):
@@ -144,10 +146,6 @@ def bucket_update(request):
 	return response
 
 
-from django.db.models import Sum
-from decimal import Decimal
-
-
 def bucket(request):
 	context = {}
 	context['title'] = _('Bucket')
@@ -238,14 +236,23 @@ def order(request):
 		new_order.save()
 
 		context['new_order'] = new_order
-		order_email_from = settings.ORDER_EMAIL_FROM
-		subject = _('We recive your order!')
-		template = 'accounts/e-mail/order'
 
-		mail(subject, context, template, order_email_from, [new_order.email, order_email_from])
+		try:
+			order_email_from = settings.ORDER_EMAIL_FROM
+			subject = _('We recive your order!')
+			template = 'accounts/e-mail/order'
+			mail(subject, context, template, order_email_from, [new_order.email, order_email_from])
+		except:
+			pass
+
+		if settings.SMS_SEND:
+			send_sms('New order: %s\n%s\n%s' % (new_order.id, new_order.name, new_order.phone))
 
 
 		context['status'] = 'ok'
+
+		if new_order.payment_method in ['robokassa', 'mobilnik.kg', 'elsom']:
+			return redirect ('/pay/%s/' % new_order.id)
 
 	context['form'] = form
 

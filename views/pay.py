@@ -19,8 +19,13 @@ def pay(request, id):
 	order = Order.objects.get(id=id)
 	context['order'] = order
 
-	valute = Valute.objects.get(slug=settings.ROBOKASSA_CURRENCY.lower())
-	amount = order.retail_price_with_discount / valute.rate
+	CURRENCY = getattr(settings, 'ROBOKASSA_CURRENCY', False)
+
+	if CURRENCY:
+		valute = Valute.objects.get(slug=settings.ROBOKASSA_CURRENCY.lower())
+		amount = order.retail_price_with_discount / valute.rate
+	else:
+		amount = order.retail_price_with_discount
 
 	form = RobokassaForm(initial={
 		'OutSum': amount,
@@ -39,27 +44,24 @@ from robokassa.signals import success_page_visited
 from robokassa.signals import fail_page_visited
 
 def payment_received(sender, **kwargs):
-	order = Transaction.objects.get(id=kwargs['InvId'])
-	order.status = 'success'
-	# order.paid_sum = kwargs['OutSum']
+	order = Order.objects.get(id=kwargs['InvId'])
+	order.status = 'processed'
 	order.save()
 
 result_received.connect(payment_received)
 
 
 def payment_success(sender, **kwargs):
-	order = Transaction.objects.get(id=kwargs['InvId'])
-	order.status = 'success'
-	# order.amount = kwargs['OutSum']
+	order = Order.objects.get(id=kwargs['InvId'])
+	order.payment_status = 'success'
 	order.save()
 
 success_page_visited.connect(payment_success)
 
 
 def payment_fail(sender, **kwargs):
-	order = Transaction.objects.get(id=kwargs['InvId'])
-	order.status = 'fail'
-	# order.amount = kwargs['OutSum']
+	order = Order.objects.get(id=kwargs['InvId'])
+	order.status = 'failed'
 	order.save()
 
 fail_page_visited.connect(payment_fail)
