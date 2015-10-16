@@ -18,7 +18,7 @@ from ..forms import ChangePasswordForm
 from ..models import User
 from ..models import Order
 from ..models import OrderItem
-from ..forms import OrderForm
+from ..forms import OrderForm, OrderItemForm
 import uuid
 
 from apps.useful.easy_email import mail
@@ -257,4 +257,3 @@ def order(request):
 	context['form'] = form
 
 	return render(request, 'accounts/order.html', context)
-

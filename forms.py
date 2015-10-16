@@ -2,7 +2,7 @@ from django import forms
 
 from django.utils.translation import ugettext as _
 
-from .models import Order
+from .models import Order, OrderItem
 from .models import User
 
 
@@ -65,3 +65,17 @@ class OrderForm(forms.ModelForm):
 	class Meta:
 		model = Order
 		exclude = ['user', 'retail_price', 'wholesale_price', 'retail_price_with_discount', 'status', 'accounting', 'acceptor', 'payment_status']
+
+
+class OrderItemForm(forms.ModelForm):
+
+	class Meta:
+		model = OrderItem
+		fields = ['retail_price_with_discount', 'count']
+
+
+class OrderItemAddForm(forms.ModelForm):
+
+	class Meta:
+		model = OrderItem
+		fields = ['object_id', 'count']

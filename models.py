@@ -15,6 +15,7 @@ AbstractUser._meta.get_field('email')._unique = False
 AbstractUser._meta.get_field('email').blank = False
 AbstractUser._meta.get_field('first_name').blank = True
 AbstractUser._meta.get_field('last_name').blank = True
+AbstractUser._meta.get_field('last_login').blank = True
 
 class User(AbstractUser):
 	phone = models.CharField(_('Phone'), max_length=50)

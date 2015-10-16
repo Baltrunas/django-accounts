@@ -1,10 +1,11 @@
 import json
 
 from django.http import HttpResponse
-
+from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.csrf import csrf_exempt
-
-from ..models import Order
+from apps.catalog.models import Product
+from ..models import Order, OrderItem
+from ..forms import OrderForm, OrderItemAddForm, OrderItemForm
 
 
 def auth_check(view):
@@ -106,9 +107,63 @@ def json_order_accounting(request, id):
 @csrf_exempt
 def json_order_status(request, status, id):
 	context = {}
-	order = Order.objects.get(id=order_id, acceptor=request.user, accounting=False)
+	order = Order.objects.get(id=id, acceptor=request.user, accounting=False)
 	order.status = status
 	order.save()
 
 	context['status'] = 'ok'
 	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
+
+
+def json_order_update(request, id):
+	context = {}
+	instance = Order.objects.get(id=id)
+	form = OrderForm(request.POST or None, instance=instance)
+	if form.is_valid():
+		form.save()
+		context['status'] = True
+	else:
+		context['status'] = False
+		context['errors'] = form.errors
+	return HttpResponse(json.dumps(context, ensure_ascii=False), content_type="application/json; charset=utf-8")
+
+
+def json_order_item_update(request, id):
+	context = {}
+	instance = OrderItem.objects.get(id=id)
+	form = OrderItemForm(request.POST or None, instance=instance)
+	if form.is_valid():
+		form.save()
+		context['status'] = True
+	else:
+		context['status'] = False
+		context['errors'] = form.errors
+	return HttpResponse(json.dumps(context, ensure_ascii=False), content_type="application/json; charset=utf-8")
+
+
+def json_order_item_add(request, id):
+	context = {}
+	item_form = OrderItemAddForm(request.POST or None)
+	order = Order.objects.get(id=id)
+	if item_form.is_valid():
+		order_item = item_form.save(commit=False)
+		content_type = ContentType.objects.get_for_model(Product)
+		order_item.order = Order.objects.get(id=id)
+		order_item.content_type = content_type
+		order_item.save()
+		order.save()
+		context['status'] = True
+	else:
+		context['status'] = False
+	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
+
+
+def json_order_item_delete(request, id):
+	context = {}
+	try:
+		del_orderitem = OrderItem.objects.get(id=id)
+		del_orderitem.delete()
+		context['status'] = True
+	except:
+		context['status'] = False
+	return HttpResponse(json.dumps(context))
