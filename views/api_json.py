@@ -10,13 +10,13 @@ from ..forms import OrderForm, OrderItemAddForm, OrderItemForm
 
 def auth_check(view):
 	def wrapped(request, *args, **kwargs):
-		# username = request.POST.get('username', None)
-		# password = request.POST.get('password', None)
-		# try:
-		# 	user = User.objects.get(username=username)
-		# 	status = user.check_password(password)
-		# except:
-		# 	return HttpResponse(json.dumps({'auth': False}), content_type='application/json')
+		username = request.POST.get('username', None)
+		password = request.POST.get('password', None)
+		try:
+			user = User.objects.get(username=username)
+			status = user.check_password(password)
+		except:
+			return HttpResponse(json.dumps({'auth': False}), content_type='application/json')
 		return view(request, *args, **kwargs)
 	return wrapped
 
@@ -72,7 +72,6 @@ def json_order_list(request, status):
 @csrf_exempt
 def json_order_accept(request, id):
 	context = {}
-	id = 3
 
 	order = Order.objects.get(id=id)
 	if order.status == 'new':
@@ -84,14 +83,6 @@ def json_order_accept(request, id):
 		context['status'] = order.status
 		context['acceptor'] = '%s' % order.acceptor
 	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
-
-
-@csrf_exempt
-def json_order_update(request, id):
-	id = 3
-
-	order = Order.objects.get(id=id, acceptor=request.user, accounting=False)
-	context = {}
 
 
 @csrf_exempt
@@ -144,11 +135,12 @@ def json_order_item_update(request, id):
 def json_order_item_add(request, id):
 	context = {}
 	item_form = OrderItemAddForm(request.POST or None)
-	order = Order.objects.get(id=id)
 	if item_form.is_valid():
-		order_item = item_form.save(commit=False)
+		order = Order.objects.get(id=id)
 		content_type = ContentType.objects.get_for_model(Product)
-		order_item.order = Order.objects.get(id=id)
+
+		order_item = item_form.save(commit=False)
+		order_item.order = order
 		order_item.content_type = content_type
 		order_item.save()
 		order.save()
@@ -161,8 +153,7 @@ def json_order_item_add(request, id):
 def json_order_item_delete(request, id):
 	context = {}
 	try:
-		del_orderitem = OrderItem.objects.get(id=id)
-		del_orderitem.delete()
+		OrderItem.objects.get(id=id).delete()
 		context['status'] = True
 	except:
 		context['status'] = False
