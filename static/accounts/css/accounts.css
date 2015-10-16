@@ -45,9 +45,9 @@ section .b-bucket {
 	display: table-row;
 }
 
-.m-valute:after {
+/* .m-valute:after {
 	content: ' сом';
-}
+} */
 
 .b-bucket-item td {
 	padding: 5px;
@@ -354,6 +354,13 @@ section .b-bucket {
 	margin: 10px auto 0 auto;
 }
 
+.m-template_login .b-error {
+	width: 100%;
+	text-align: center;
+	display: block;
+	margin: 20px 0;
+}
+
 .m-login_form {
 	width: 325px;
 	display: block;
@@ -489,7 +496,7 @@ section .b-bucket {
 
 /**
  **************************
- Password change
+ Login
  **************************
 */
 
@@ -517,52 +524,6 @@ section .b-bucket {
 	height: 70px;
 	margin: 10px auto 0 auto;
 }
-
-.b-password_change {
-	width: 325px;
-	display: block;
-	margin: 0 auto;
-	box-shadow: 0 0 20px rgba(0,0,0,0.3);
-	margin-bottom: 100px;
-	padding: 10px 20px;
-	box-sizing: border-box;
-}
-
-.b-password_change .b-field__label {
-	margin-bottom: 10px;
-	font-size: 16px;
-}
-
-.b-password_change input {
-	width: 100%;
-	height: 30px;
-	border: 1px solid silver;
-	padding-left: 5px;
-	box-sizing: border-box;
-	margin-bottom: 10px;
-}
-
-.b-password_change button {
-	display: block;
-	margin: 15px auto 10px auto;
-	width: 200px;
-	height: 40px;
-	font-size: 16px;
-	background: #ef5350;
-	outline: none;
-	border: none;
-	cursor: pointer;
-	-webkit-transition: all 0.3s ease-out;
-	-o-transition: all 0.3s ease-out;
-	transition: all 0.3s ease-out;
-	color: #fff;
-}
-
-.b-password_change button:hover {
-	background: #e57373;
-}
-
-
 
 /**
  **************************
@@ -1006,6 +967,14 @@ section .b-bucket {
 	margin: 10px auto 0 auto;
 }
 
+.m-template_pay .b-order__middle {
+	display: block;
+}
+
+.m-template_pay .b-order__up {
+	border-bottom: none;
+}
+
 .b-electro_wrapper {
 	float: left;
 	width: 48%;
@@ -1015,7 +984,7 @@ section .b-bucket {
 
 .b-bank_wrapper {
 	float: left;
-	width: 48.6%;
+	width: 48.667%;
 	margin-top: 25px;
 }
 
@@ -1179,6 +1148,385 @@ section .b-bucket {
 .b-button {
 	margin: 0;
 }
+
+/**
+ **************************
+ Order succes
+ **************************
+*/
+
+.m-template_succes {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: hidden;
+	padding-top: 100px;
+}
+
+.m-template_succes h1 {
+	color: #265c1b;
+	font-weight: bold!important;
+	text-transform: uppercase;
+	margin: 0;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.m-template_succes h1:after {
+	display: block;
+	content: " ";
+	background: url(../img/line_decor.png) no-repeat;
+	background-size: 100%;
+	width: 300px;
+	height: 70px;
+	margin: 10px auto 30px auto;
+}
+
+.m-template_succes h3 {
+	text-align: center;
+	margin-bottom: 170px;
+}
+
+/**
+ **************************
+ Order error
+ **************************
+*/
+
+.m-template_error {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: hidden;
+	padding-top: 100px;
+}
+
+.m-template_error h1 {
+	color: #265c1b;
+	font-weight: bold!important;
+	text-transform: uppercase;
+	margin: 0;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.m-template_error h1:after {
+	display: block;
+	content: " ";
+	background: url(../img/line_decor.png) no-repeat;
+	background-size: 100%;
+	width: 300px;
+	height: 70px;
+	margin: 10px auto 30px auto;
+}
+
+.m-template_error h3 {
+	text-align: center;
+	margin-bottom: 170px;
+}
+
+/**
+ **************************
+ Order succes
+ **************************
+*/
+
+.m-template_fail {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: hidden;
+	padding-top: 100px;
+}
+
+.m-template_fail h1 {
+	color: #265c1b;
+	font-weight: bold!important;
+	text-transform: uppercase;
+	margin: 0;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.m-template_fail h1:after {
+	display: block;
+	content: " ";
+	background: url(../img/line_decor.png) no-repeat;
+	background-size: 100%;
+	width: 300px;
+	height: 70px;
+	margin: 10px auto 30px auto;
+}
+
+.m-template_fail h3 {
+	text-align: center;
+	margin-bottom: 170px;
+}
+
+/**
+ **************************
+ Password_change
+ **************************
+*/
+
+.m-template_password_change {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: hidden;
+	padding-top: 100px;
+}
+
+.m-template_password_change h1 {
+	color: #265c1b;
+	font-weight: bold!important;
+	text-transform: uppercase;
+	margin: 0;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.m-template_password_change h1:after {
+	display: block;
+	content: " ";
+	background: url(../img/line_decor.png) no-repeat;
+	background-size: 100%;
+	width: 300px;
+	height: 70px;
+	margin: 10px auto 30px auto;
+}
+
+/**
+ **************************
+ Password_reset
+ **************************
+*/
+
+.m-template_password_reset {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: hidden;
+	padding-top: 100px;
+}
+
+.m-template_password_reset h1 {
+	color: #265c1b;
+	font-weight: bold!important;
+	text-transform: uppercase;
+	margin: 0;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.m-template_password_reset h1:after {
+	display: block;
+	content: " ";
+	background: url(../img/line_decor.png) no-repeat;
+	background-size: 100%;
+	width: 300px;
+	height: 70px;
+	margin: 10px auto 30px auto;
+}
+
+.m-template_password_reset__done h1 {
+	display: block;
+	text-align: center;
+	width: 650px;
+	margin: 0 auto;
+}
+
+.m-template_password_reset .b-content {
+	width: 500px;
+	margin: 0 auto;
+}
+
+.m-template_password_reset .b-password_reset__title {
+	width: 100%;
+	height: 35px;
+	display: block;
+	color: #000;
+	font-weight: bold;
+	text-align: center;
+	line-height: 2;
+}
+
+.m-template_password_reset .b-password_reset {
+	display: block;
+	width: 300px;
+	margin: 0 auto;
+	padding: 20px;
+	box-sizing: border-box;
+	box-shadow: 0px 0px 38px rgba(0,0,0,0.1);
+	margin-bottom: 10px;
+}
+
+.m-template_password_reset .b-password_reset label {
+	width: 100%;
+	display: block;
+	text-align: center;
+	margin-bottom: 15px;
+	font-size: 20px;
+	font-weight: inherit;
+}
+
+.m-template_password_reset .b-password_reset #id_email {
+	width: 100%;
+	display: block;
+	height: 40px;
+	box-sizing: border-box;
+	margin: 0 auto 15px auto;
+	outline: none;
+	padding-left: 5px;
+}
+
+.m-template_password_reset .b-password_reset__btn {
+	background: #43A047;
+	width: 100%;
+	height: 40px;
+	color: #fff;
+	border: none;
+	-webkit-transition: 0.7s;
+	-o-transition: 0.7s;
+	transition: 0.7s;
+	cursor: pointer;
+}
+
+.m-template_password_reset .b-password_reset__btn:hover {
+	background: #61e767;
+}
+
+.m-template_password_reset_confirm .b-confirm__title {
+	width: 100%;
+	height: 35px;
+	display: block;
+	color: #000;
+	font-weight: bold;
+	text-align: center;
+	line-height: 2;
+}
+
+.m-template_password_reset_confirm .b-password_reset label {
+	text-align: left;
+}
+
+.m-template_password_reset_confirm .b-password_reset input {
+	width: 100%;
+	display: block;
+	height: 40px;
+	box-sizing: border-box;
+	margin: 0 auto 15px auto;
+	outline: none;
+	padding-left: 5px;
+}
+
+.m-template_password_reset .b-login {
+	display: block;
+	margin: 0 auto;
+	background: #43A047;
+	-webkit-transition: 0.7s;
+	-o-transition: 0.7s;
+	transition: 0.7s;
+	cursor: pointer;
+	border: none;
+	outline: none;
+	color: #fff;
+	height: 40px;
+	padding: 0 15px;
+}
+
+.m-template_password_reset .b-login:hover {
+	background: #61e767;
+}
+
+.m-template_password_reset_confirm .button {
+	background: #43A047;
+	width: 100%;
+	height: 40px;
+	color: #fff;
+	border: none;
+	-webkit-transition: 0.7s;
+	-o-transition: 0.7s;
+	transition: 0.7s;
+	cursor: pointer;
+}
+
+.m-template_password_reset_confirm .button:hover {
+	background: #61e767;
+}
+
+/**
+ **************************
+ Password_change
+ **************************
+*/
+
+.m-template_password_change_done {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: hidden;
+	padding-top: 100px;
+}
+
+.m-template_password_change_done h1 {
+	color: #265c1b;
+	font-weight: bold!important;
+	text-transform: uppercase;
+	margin: 0;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.m-template_password_change_done h1:after {
+	display: block;
+	content: " ";
+	background: url(../img/line_decor.png) no-repeat;
+	background-size: 100%;
+	width: 300px;
+	height: 70px;
+	margin: 10px auto 30px auto;
+}
+
+
+.b-password_change {
+	width: 325px;
+	display: block;
+	margin: 0 auto;
+	box-shadow: 0 0 20px rgba(0,0,0,0.3);
+	margin-bottom: 100px;
+	padding: 10px 20px;
+	box-sizing: border-box;
+}
+
+.b-password_change .b-field__label {
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+
+.b-password_change input {
+	width: 100%;
+	height: 30px;
+	border: 1px solid silver;
+	padding-left: 5px;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+}
+
+.b-password_change button {
+	display: block;
+	margin: 15px auto 10px auto;
+	width: 200px;
+	height: 40px;
+	font-size: 16px;
+	background: #ef5350;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	-webkit-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+	color: #fff;
+}
+
+.b-password_change button:hover {
+	background: #e57373;
+}
+
 
 /**
  **************************
