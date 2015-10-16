@@ -40,13 +40,13 @@ urlpatterns = [
 	# API JSON
 	url(r'^api/json/check/$', views.api_json.json_check, name='json_check'),
 	url(r'^api/json/order/list/(?P<status>new|my|history)/$', views.api_json.json_order_list, name='json_order_list'),
-	url(r'^api/json/order/accept/(?P<id>[0-9]+)/$', views.api_json.json_order_accept, name='json_order_accept'),
-	url(r'^api/json/order/update/$', views.json_order_update, name='json_order_update'),
-	url(r'^api/json/order/accounting/(?P<id>[0-9]+)/$', views.api_json.json_order_accounting, name='json_order_accounting'),
-	url(r'^api/json/order/status/(?P<status>processed|paid|success|canceled)/(?P<id>[0-9]+)/$', views.api_json.json_order_status, name='json_order_status'),
+	url(r'^api/json/order/accept/(?P<order_id>[0-9]+)/$', views.api_json.json_order_accept, name='json_order_accept'),
+	url(r'^api/json/order/update/(?P<order_id>\d+)/$', api_json.json_order_update, name='json_order_update'),
+	url(r'^api/json/order/accounting/(?P<order_id>[0-9]+)/$', views.api_json.json_order_accounting, name='json_order_accounting'),
+	url(r'^api/json/order/status/(?P<status>processed|paid|success|canceled)/(?P<order_id>[0-9]+)/$', views.api_json.json_order_status, name='json_order_status'),
 
 	# Items
-	url(r'^api/json/order/item/add/(?P<id>\d+)/$', api_json.json_order_item_add, name='json_order_item_add'),
-	url(r'^api/json/order/item/delete/(?P<id>\d+)/$', api_json.json_order_item_delete, name='json_order_item_delete'),
-	url(r'^api/json/order/item/update/(?P<id>\d+)/$', api_json.json_order_item_update, name='json_order_item_update'),
+	url(r'^api/json/order/item/add/(?P<order_id>\d+)/$', api_json.json_order_item_add, name='json_order_item_add'),
+	url(r'^api/json/order/item/update/(?P<order_item_id>\d+)/$', api_json.json_order_item_update, name='json_order_item_update'),
+	url(r'^api/json/order/item/delete/(?P<order_item_id>\d+)/$', api_json.json_order_item_delete, name='json_order_item_delete'),
 ]

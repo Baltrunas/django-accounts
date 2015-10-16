@@ -70,10 +70,10 @@ def json_order_list(request, status):
 
 
 @csrf_exempt
-def json_order_accept(request, id):
+def json_order_accept(request, order_id):
 	context = {}
 
-	order = Order.objects.get(id=id)
+	order = Order.objects.get(id=order_id)
 	if order.status == 'new':
 		order.status = 'accept'
 		order.acceptor = request.user
@@ -86,9 +86,9 @@ def json_order_accept(request, id):
 
 
 @csrf_exempt
-def json_order_accounting(request, id):
+def json_order_accounting(request, order_id):
 	context = {}
-	order = Order.objects.get(id=id, acceptor=request.user, accounting=False)
+	order = Order.objects.get(id=order_id, acceptor=request.user, accounting=False)
 	order.accounting = True
 	order.save()
 	context['status'] = 'ok'
@@ -96,9 +96,9 @@ def json_order_accounting(request, id):
 
 
 @csrf_exempt
-def json_order_status(request, status, id):
+def json_order_status(request, status, order_id):
 	context = {}
-	order = Order.objects.get(id=id, acceptor=request.user, accounting=False)
+	order = Order.objects.get(id=order_id, acceptor=request.user, accounting=False)
 	order.status = status
 	order.save()
 
@@ -106,10 +106,13 @@ def json_order_status(request, status, id):
 	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
 
 
-def json_order_update(request, id):
+@csrf_exempt
+@auth_check
+def json_order_update(request, order_id):
 	context = {}
-	instance = Order.objects.get(id=id)
-	form = OrderForm(request.POST or None, instance=instance)
+	context['auth'] = True
+	order_instance = Order.objects.get(id=order_id)
+	form = OrderForm(request.POST or None, instance=order_instance)
 	if form.is_valid():
 		form.save()
 		context['status'] = True
@@ -119,10 +122,13 @@ def json_order_update(request, id):
 	return HttpResponse(json.dumps(context, ensure_ascii=False), content_type="application/json; charset=utf-8")
 
 
-def json_order_item_update(request, id):
+@csrf_exempt
+@auth_check
+def json_order_item_update(request, order_item_id):
 	context = {}
-	instance = OrderItem.objects.get(id=id)
-	form = OrderItemForm(request.POST or None, instance=instance)
+	context['auth'] = True
+	order_item_instance = OrderItem.objects.get(id=order_item_id)
+	form = OrderItemForm(request.POST or None, instance=order_item_instance)
 	if form.is_valid():
 		form.save()
 		context['status'] = True
@@ -132,11 +138,14 @@ def json_order_item_update(request, id):
 	return HttpResponse(json.dumps(context, ensure_ascii=False), content_type="application/json; charset=utf-8")
 
 
-def json_order_item_add(request, id):
+@csrf_exempt
+@auth_check
+def json_order_item_add(request, order_id):
 	context = {}
+	context['auth'] = True
 	item_form = OrderItemAddForm(request.POST or None)
 	if item_form.is_valid():
-		order = Order.objects.get(id=id)
+		order = Order.objects.get(id=order_id)
 		content_type = ContentType.objects.get_for_model(Product)
 
 		order_item = item_form.save(commit=False)
@@ -150,10 +159,13 @@ def json_order_item_add(request, id):
 	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
 
 
-def json_order_item_delete(request, id):
+@csrf_exempt
+@auth_check
+def json_order_item_delete(request, order_item_id):
 	context = {}
+	context['auth'] = True
 	try:
-		OrderItem.objects.get(id=id).delete()
+		OrderItem.objects.get(id=order_item_id).delete()
 		context['status'] = True
 	except:
 		context['status'] = False
