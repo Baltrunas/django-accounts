@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.csrf import csrf_exempt
 from apps.catalog.models import Product
-from ..models import Order, OrderItem
+from ..models import Order, OrderItem, User
 from ..forms import OrderForm, OrderItemAddForm, OrderItemForm
 
 
