@@ -138,6 +138,7 @@ class Valute (models.Model):
 	name = models.CharField(verbose_name=_('Name'), max_length=128)
 	slug = models.SlugField(verbose_name=_('Slug'), max_length=128, help_text=_('A slug is the part of a URL which identifies a page using human-readable keywords'))
 	rate = models.DecimalField(_('Currency rate'), max_digits=16, decimal_places=4, default=Decimal('0.0000'))
+	decimal_places = models.PositiveIntegerField(verbose_name=_('Decimal places'), default=0)
 
 	class Meta:
 		ordering = ['name']

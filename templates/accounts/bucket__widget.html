@@ -9,10 +9,14 @@
 	data-object_id='{{ obj.id }}'
 	data-count='{{ products_in_bucked }}'
 >
+	{% if obj.retail_price_with_discount %}
 	<span class="b-bucket-widget__add" data-widget='{{ obj.id }}'>В корзину</span>
 	<div class="b-bucket-widget_counter">
 		<button class="b-bucket-widget__down" data-widget='{{ obj.id }}'>–</button>
 		<span class='b-bucket-widget__count' data-widget='{{ obj.id }}' contenteditable='true'>{{ products_in_bucked }}</span>
 		<button class="b-bucket-widget__up" data-widget='{{ obj.id }}'>+</button>
 	</div>
+	{% else %}
+		<span class="b-bucket-widget__inactive" data-widget='{{ obj.id }}'>По запросу</span>
+	{% endif %}
 </div>

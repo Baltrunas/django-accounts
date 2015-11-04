@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.db.models import Sum
 
+from .models import Valute
 from .models import OrderItem
 
 
@@ -31,9 +32,11 @@ def bucket(request):
 		bucket_total += item.get_total_retail_price_with_discount()
 
 
+	current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', 'kgs'))
 
 	return {
 		'bucket_total_count': bucket_total_count,
 		'bucket_total_price': '%s' % bucket_total,
-		'current_valute': request.COOKIES.get('valute', 'kgs')
+		'current_valute': current_valute.slug,
+		'decimal_places': current_valute.decimal_places
 	}
