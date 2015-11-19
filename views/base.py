@@ -21,8 +21,8 @@ from ..models import OrderItem
 from ..forms import OrderForm, OrderItemForm
 import uuid
 
-from apps.useful.easy_email import mail
-from apps.useful.sms import send_sms
+from helpful.easy_email import mail
+from helpful.sms import send_sms
 
 from django.db.models import Sum
 from decimal import Decimal
