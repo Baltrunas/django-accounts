@@ -38,7 +38,7 @@ def singup(request):
 	if request.POST and context['form'].is_valid():
 		new_user = context['form'].save()
 		context['new_user'] = new_user
-		new_user.backend = 'apps.accounts.auth.EmailOrUsernameModelBackend'
+		new_user.backend = 'django.contrib.auth.backends.ModelBackend'
 		login(request, new_user)
 		return redirect('/', username=new_user.username)
 
