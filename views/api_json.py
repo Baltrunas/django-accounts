@@ -12,6 +12,8 @@ def auth_check(view):
 	def wrapped(request, *args, **kwargs):
 		username = request.POST.get('username', None)
 		password = request.POST.get('password', None)
+		print username
+		print password
 		try:
 			user = User.objects.get(username=username)
 			status = user.check_password(password)
@@ -68,15 +70,19 @@ def json_order_list(request, status):
 
 
 @csrf_exempt
+@auth_check
 def json_order_accept(request, order_id):
 	context = {}
-
+	context['auth'] = True
+	username = request.POST.get('username', None)
+	user = User.objects.get(username=username)
 	order = Order.objects.get(id=order_id)
 	if order.status == 'new':
 		order.status = 'accept'
-		order.acceptor = request.user
+		order.acceptor = user
 		order.save()
 		context['status'] = 'ok'
+		print order.acceptor
 	else:
 		context['status'] = order.status
 		context['acceptor'] = '%s' % order.acceptor
