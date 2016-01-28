@@ -49,4 +49,8 @@ urlpatterns = [
 	url(r'^api/json/order/item/add/(?P<order_id>\d+)/$', api_json.json_order_item_add, name='json_order_item_add'),
 	url(r'^api/json/order/item/update/(?P<order_item_id>\d+)/$', api_json.json_order_item_update, name='json_order_item_update'),
 	url(r'^api/json/order/item/delete/(?P<order_item_id>\d+)/$', api_json.json_order_item_delete, name='json_order_item_delete'),
+
+
+
+	url(r'^ren/$', views.base.render_csv, name='ren'),
 ]

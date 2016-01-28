@@ -24,7 +24,11 @@ class User(AbstractUser):
 	objects = UserManager()
 
 	def __unicode__(self):
-		return self.username
+		if self.first_name or self.last_name:
+			name = '%s %s' % (self.first_name, self.last_name)
+		else:
+			name = self.username
+		return name.strip()
 
 
 class Order (models.Model):

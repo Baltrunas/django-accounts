@@ -107,12 +107,15 @@ def json_order_accounting(request, order_id):
 
 
 @csrf_exempt
+@auth_check
 def json_order_status(request, status, order_id):
 	context = {}
-	order = Order.objects.get(id=order_id, acceptor=request.user, accounting=False)
+	context['auth'] = True
+	username = request.POST.get('username', None)
+	user = User.objects.get(username=username)
+	order = Order.objects.get(id=order_id, acceptor=user, accounting=False)
 	order.status = status
 	order.save()
-
 	context['status'] = 'ok'
 	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
 

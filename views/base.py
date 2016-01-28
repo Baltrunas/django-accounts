@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import datetime
 
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
@@ -257,3 +258,44 @@ def order(request):
 	context['form'] = form
 
 	return render(request, 'accounts/order.html', context)
+
+
+import os
+import csv
+import sys
+from apps.settings import MEDIA_ROOT
+
+
+def render_csv(request):
+	context = {}
+	data = User.objects.all()
+	orders = Order.objects.all()
+	export = []
+	for	user in data:
+		export.append(
+			{
+				'name': user.__unicode__(),
+				'email': user.email,
+				'phone': user.phone
+			}
+		)
+	for	order in orders:
+		export.append(
+			{
+				'name': order.name,
+				'email': order.email,
+				'phone': order.phone,
+			}
+		)
+	path = os.path.join(MEDIA_ROOT, 'aaa.csv')
+	with open(path, 'w') as csvfile:
+		try:
+			writer = csv.DictWriter(csvfile, export, delimiter=",")
+			writer.writeheader()
+			writer.writerows(export)
+			answer = True
+		except Exception:
+			answer = str(sys.exc_info())
+		csvfile.close()
+	context['export'] = export
+	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
