@@ -154,7 +154,6 @@ class Valute (models.Model):
 
 
 class Promo(models.Model):
-	order = models.ForeignKey(Order, verbose_name=_('Order'), related_name='order_promo')
 	number = models.CharField(verbose_name=_('Coupon number'), max_length=16)
 	name = models.CharField(verbose_name=_('Coupon name'), max_length=256)
 	description = models.TextField(verbose_name=_('Description'))
