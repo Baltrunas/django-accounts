@@ -4,6 +4,7 @@ from .models import User
 from .models import Order
 from .models import OrderItem
 from .models import Valute
+from .models import Promo
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -37,3 +38,6 @@ class ValuteAdmin(admin.ModelAdmin):
 	list_display = ['name', 'slug', 'rate']
 
 admin.site.register(Valute, ValuteAdmin)
+
+
+admin.site.register(Promo)

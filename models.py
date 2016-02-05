@@ -151,3 +151,26 @@ class Valute (models.Model):
 
 	def __unicode__(self):
 		return '%s (%s)' % (self.name, self.rate)
+
+
+class Promo(models.Model):
+	order = models.ForeignKey(Order, verbose_name=_('Order'), related_name='order_promo')
+	number = models.CharField(verbose_name=_('Coupon number'), max_length=16)
+	name = models.CharField(verbose_name=_('Coupon name'), max_length=256)
+	description = models.TextField(verbose_name=_('Description'))
+	TYPE_DISCOUNT = (
+		('absolute', 'Absolute'),
+		('interest', 'Interest'),
+	)
+	discount_type = models.CharField(max_length=10, choices=TYPE_DISCOUNT)
+	discount_value = models.DecimalField(verbose_name=_('Value discout'), max_digits=10, decimal_places=0)
+	active = models.BooleanField(verbose_name=_('Active'), default=False)
+	active_before = models.DateField(verbose_name=_('Active before'))
+	used = models.BooleanField(verbose_name=_('Used'), default=False)
+
+	def __unicode__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = _('Promo')
+		verbose_name_plural = _('Promo')
