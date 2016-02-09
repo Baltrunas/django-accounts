@@ -130,7 +130,7 @@ class OrderItem (models.Model):
 		)
 		return string
 
-	def save(self, sort=True, *args, **kwargs):
+	def save(self, *args, **kwargs):
 		if not self.order:
 			self.retail_price = self.content_object.retail_price
 			self.wholesale_price = self.content_object.wholesale_price

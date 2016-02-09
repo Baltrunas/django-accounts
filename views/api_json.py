@@ -157,19 +157,21 @@ def json_order_item_update(request, order_item_id):
 def json_order_item_add(request, order_id):
 	context = {}
 	context['auth'] = True
+	order = Order.objects.get(id=order_id)
 	item_form = OrderItemAddForm(request.POST or None)
 	if item_form.is_valid():
-		order = Order.objects.get(id=order_id)
 		content_type = ContentType.objects.get_for_model(Product)
-
 		order_item = item_form.save(commit=False)
-		order_item.order = order
 		order_item.content_type = content_type
 		order_item.save()
+		order_item.order = order
+		order_item.save()
+		print order_item.retail_price
 		order.save()
 		context['status'] = True
 	else:
 		context['status'] = False
+	context['item_form'] = item_form
 	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
 
 
