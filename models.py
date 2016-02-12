@@ -41,6 +41,8 @@ class Order (models.Model):
 	phone = models.CharField(_('Phone'), max_length=100)
 	comment = models.TextField(_('Comment'), null=True, blank=True)
 
+	promocode = models.CharField(verbose_name=_('Promo code'), max_length=16, blank=True, null=True)
+
 	retail_price = models.DecimalField(_('Retail Price'), max_digits=16, decimal_places=4, default=Decimal('0.0000'))
 	wholesale_price = models.DecimalField(_('Wholesale Price'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
 	retail_price_with_discount = models.DecimalField(_('Retail Price With Discount'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
