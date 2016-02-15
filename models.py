@@ -31,6 +31,32 @@ class User(AbstractUser):
 		return name.strip()
 
 
+class Promo(models.Model):
+	number = models.CharField(verbose_name=_('Coupon number'), max_length=16)
+	name = models.CharField(verbose_name=_('Coupon name'), max_length=256)
+	description = models.TextField(verbose_name=_('Description'))
+	TYPE_DISCOUNT = (
+		('absolute', 'Absolute'),
+		('interest', 'Interest'),
+	)
+	discount_type = models.CharField(max_length=10, choices=TYPE_DISCOUNT)
+	discount_value = models.DecimalField(verbose_name=_('Value discout'), max_digits=10, decimal_places=0)
+	users_limit = models.DecimalField(verbose_name=_('users limit'), max_digits=60, decimal_places=0)
+	active = models.BooleanField(verbose_name=_('Active'), default=False)
+	active_by = models.DateField(verbose_name=_('Active by'), blank=True, null=True)
+	active_before = models.DateField(verbose_name=_('Active before'))
+	used = models.BooleanField(verbose_name=_('Used'), default=False)
+	registered_users = models.BooleanField(verbose_name=_('registered users'), default=False)
+	sum_up = models.BooleanField(verbose_name=_('sum up'), default=False)
+
+	def __unicode__(self):
+		return self.name
+
+	class Meta:
+		verbose_name = _('Promo')
+		verbose_name_plural = _('Promo')
+
+
 class Order (models.Model):
 	user = models.ForeignKey(User, null=True, blank=True)
 	guid = models.CharField(_('GUID'), max_length=37, null=True, blank=True, editable=False)
@@ -39,9 +65,10 @@ class Order (models.Model):
 	email = models.EmailField(_('E-Mail'), max_length=100, null=True, blank=True)
 	address = models.CharField(_('Address'), max_length=300)
 	phone = models.CharField(_('Phone'), max_length=100)
-	comment = models.TextField(_('Comment'), null=True, blank=True)
 
-	promocode = models.CharField(verbose_name=_('Promo code'), max_length=16, blank=True, null=True)
+	promocode = models.ForeignKey(Promo, verbose_name=_('Promo'), related_name='promocodes', blank=True, null=True)
+
+	comment = models.TextField(_('Comment'), null=True, blank=True)
 
 	retail_price = models.DecimalField(_('Retail Price'), max_digits=16, decimal_places=4, default=Decimal('0.0000'))
 	wholesale_price = models.DecimalField(_('Wholesale Price'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
@@ -84,6 +111,7 @@ class Order (models.Model):
 
 	created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
 	updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
+
 
 	def save(self, sort=True, *args, **kwargs):
 		for item in self.items.all():
@@ -153,25 +181,3 @@ class Valute (models.Model):
 
 	def __unicode__(self):
 		return '%s (%s)' % (self.name, self.rate)
-
-
-class Promo(models.Model):
-	number = models.CharField(verbose_name=_('Coupon number'), max_length=16)
-	name = models.CharField(verbose_name=_('Coupon name'), max_length=256)
-	description = models.TextField(verbose_name=_('Description'))
-	TYPE_DISCOUNT = (
-		('absolute', 'Absolute'),
-		('interest', 'Interest'),
-	)
-	discount_type = models.CharField(max_length=10, choices=TYPE_DISCOUNT)
-	discount_value = models.DecimalField(verbose_name=_('Value discout'), max_digits=10, decimal_places=0)
-	active = models.BooleanField(verbose_name=_('Active'), default=False)
-	active_before = models.DateField(verbose_name=_('Active before'))
-	used = models.BooleanField(verbose_name=_('Used'), default=False)
-
-	def __unicode__(self):
-		return self.name
-
-	class Meta:
-		verbose_name = _('Promo')
-		verbose_name_plural = _('Promo')
