@@ -115,8 +115,10 @@ class Order (models.Model):
 	created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
 	updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
 
-
 	def save(self, sort=True, *args, **kwargs):
+		self.retail_price = 0
+		self.wholesale_price = 0
+		self.retail_price_with_discount = 0
 		for item in self.items.all():
 			self.retail_price += item.get_total_retail_price()
 			self.wholesale_price += item.get_total_wholesale_price()
