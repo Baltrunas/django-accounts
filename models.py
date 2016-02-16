@@ -32,22 +32,25 @@ class User(AbstractUser):
 
 
 class Promo(models.Model):
-	number = models.CharField(verbose_name=_('Coupon number'), max_length=16)
+	code = models.CharField(verbose_name=_('Code'), max_length=16)
 	name = models.CharField(verbose_name=_('Coupon name'), max_length=256)
 	description = models.TextField(verbose_name=_('Description'))
 	TYPE_DISCOUNT = (
-		('absolute', 'Absolute'),
-		('interest', 'Interest'),
+		('interest', _('Interest')),
+		('percent', _('Percent')),
 	)
 	discount_type = models.CharField(max_length=10, choices=TYPE_DISCOUNT)
 	discount_value = models.DecimalField(verbose_name=_('Value discout'), max_digits=10, decimal_places=0)
-	users_limit = models.DecimalField(verbose_name=_('users limit'), max_digits=60, decimal_places=0)
+	limit = models.DecimalField(verbose_name=_('Limit'), max_digits=60, decimal_places=0)
 	active = models.BooleanField(verbose_name=_('Active'), default=False)
-	active_by = models.DateField(verbose_name=_('Active by'), blank=True, null=True)
+	active_after = models.DateField(verbose_name=_('Active after'), blank=True, null=True)
 	active_before = models.DateField(verbose_name=_('Active before'))
-	used = models.BooleanField(verbose_name=_('Used'), default=False)
-	registered_users = models.BooleanField(verbose_name=_('registered users'), default=False)
+
 	sum_up = models.BooleanField(verbose_name=_('sum up'), default=False)
+	only_registered = models.BooleanField(verbose_name=_('Only registered users'), default=False)
+	oneperuser = models.BooleanField(verbose_name=_('Oneperuser'), default=False)
+
+	delete = models.BooleanField(verbose_name=_('Delete'), default=False)
 
 	def __unicode__(self):
 		return self.name

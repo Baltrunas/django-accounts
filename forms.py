@@ -2,11 +2,10 @@ from django import forms
 
 from django.utils.translation import ugettext as _
 
-from .models import Order, OrderItem
-from .models import User
-
+from .models import User, Order, OrderItem
 
 from django.contrib.auth.forms import AuthenticationForm
+
 
 class EmailAuthenticationForm(AuthenticationForm):
 	username = forms.CharField(label=_('Login or E-Mail'))
@@ -59,12 +58,10 @@ class ChangePasswordForm(forms.Form):
 		return self.cleaned_data
 
 
-
 class OrderForm(forms.ModelForm):
-
 	class Meta:
 		model = Order
-		exclude = ['user', 'retail_price', 'wholesale_price', 'retail_price_with_discount', 'status', 'accounting', 'acceptor', 'payment_status']
+		exclude = ['user', 'retail_price', 'wholesale_price', 'retail_price_with_discount', 'status', 'accounting', 'acceptor', 'payment_status', 'promocode']
 
 
 class OrderItemForm(forms.ModelForm):

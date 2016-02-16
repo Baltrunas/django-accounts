@@ -19,6 +19,7 @@ from ..forms import ChangePasswordForm
 from ..models import User
 from ..models import Order
 from ..models import OrderItem
+from ..models import Promo
 from ..forms import OrderForm, OrderItemForm
 import uuid
 
@@ -198,15 +199,15 @@ def bucket(request):
 def order(request):
 	context = {}
 	context['title'] = _('Order')
-
-	if request.user.is_authenticated():
-		bucket = OrderItem.objects.filter(user=request.user.id, order=None)
+	user = request.user
+	if user.is_authenticated():
+		bucket = OrderItem.objects.filter(user=user.id, order=None)
 		initial = {
-			'user': request.user,
-			'name': request.user.first_name + ' ' + request.user.last_name,
-			'email': request.user.email,
-			'address': request.user.address,
-			'phone': request.user.phone
+			'user': user,
+			'name': user.first_name + ' ' + user.last_name,
+			'email': user.email,
+			'address': user.address,
+			'phone': user.phone
 		}
 	else:
 		if 'cookies_bucket' in request.COOKIES:
@@ -216,28 +217,20 @@ def order(request):
 				cookies_bucket = []
 		else:
 			cookies_bucket = []
-
 		bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
 		initial = {}
 
 	form = OrderForm(request.POST or None, initial=initial)
-
 	if request.POST and form.is_valid():
 		new_order = form.save()
-
 		new_order.guid = uuid.uuid1()
-
-		if request.user.is_authenticated():
-			new_order.user = request.user
-
+		if user.is_authenticated():
+			new_order.user = user
 		for item in bucket:
 			item.order = new_order
 			item.save()
-
 		new_order.save()
-
 		context['new_order'] = new_order
-
 		try:
 			order_email_from = settings.ORDER_EMAIL_FROM
 			subject = _('We recive your order!')
@@ -245,18 +238,12 @@ def order(request):
 			mail(subject, context, template, order_email_from, [new_order.email, order_email_from])
 		except:
 			pass
-
 		if settings.SMS_SEND:
 			send_sms('New order: %s\n%s\n%s' % (new_order.id, new_order.name, new_order.phone))
-
-
 		context['status'] = 'ok'
-
 		if new_order.payment_method in ['robokassa', 'mobilnik.kg', 'elsom']:
-			return redirect ('/pay/%s/' % new_order.id)
-
+			return redirect('/pay/%s/' % new_order.id)
 	context['form'] = form
-
 	return render(request, 'accounts/order.html', context)
 
 
