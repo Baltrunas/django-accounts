@@ -50,6 +50,7 @@ class Promo(models.Model):
 	only_registered = models.BooleanField(verbose_name=_('Only registered users'), default=False)
 	oneperuser = models.BooleanField(verbose_name=_('Oneperuser'), default=False)
 
+	# delete this field
 	delete = models.BooleanField(verbose_name=_('Delete'), default=False)
 
 	def __unicode__(self):

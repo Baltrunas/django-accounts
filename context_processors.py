@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 from decimal import Decimal
 
@@ -23,6 +24,14 @@ def bucket(request):
 			context['current_promo'] = current_promo
 		except:
 			context['promo_error'] = True
+			# 1) Промокод не существует
+			# 2) Промокод не активен
+				# 2.1) Промокод начинает действовать с
+				# 2.2) Промокод прекратил действовать
+			# 3) Промокод действителен только для зарегестрированных пользоывателей
+			# 4) Вы уже использовали этот промокод
+			# 5) Лимит использования этого промокода исчерпан
+
 			# request.COOKIES['current_promo'] = 'deleted'
 	else:
 		print 'real deleted'
