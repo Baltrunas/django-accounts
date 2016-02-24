@@ -85,6 +85,25 @@
 		<b class="b-bucket_total_price">{{ bucket_total_price|floatformat:0 }}</b>
 	</div>
 
+<h3>Хочешь скидку?</h3>
+
+Текущяя скидка: <b>{{ current_promo }}</b>
+
+<pre>
+{% if promo_error %}
+	Промокод не существует или не может быть использован!
+{% endif %}
+</pre>
+
+<form method='POST' action='{% url "accounts_promo" %}'>
+	{% csrf_token %}
+
+	{{ promo_form }}
+	<label for="id_code">Code:</label>
+	<input id="id_code" maxlength="100" name="code" type="text">
+	<input class='b-button' type='submit' value='Применить'>
+	<input class='b-button' type='submit' name='deactivate' value='Деактивировать промокод'>
+</form>
 
 	<h3>Рекомендуем вам</h3>
 

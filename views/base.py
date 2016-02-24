@@ -148,6 +148,21 @@ def bucket_update(request):
 	return response
 
 
+
+def promo(request):
+	referer = request.META.get('HTTP_REFERER', 'bucket')
+	response = redirect(referer)
+
+	if request.POST:
+		if request.POST.get('code', None):
+			response.set_cookie('current_promo', value=request.POST.get('code', None), path='/')
+
+		if request.POST.get('deactivate', None):
+			response.delete_cookie('current_promo')
+
+	return response
+
+
 def bucket(request):
 	context = {}
 	context['title'] = _('Bucket')
