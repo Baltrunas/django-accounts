@@ -26,6 +26,7 @@
 
 		{% for item in bucket %}
 			{% in_bucket item.content_object as products_in_bucked %}
+
 <tr class='b-bucket-item
 		m-widget-{{ item.content_object.id }}
 		{% if products_in_bucked %}m-in-bucket_True{% endif %}
@@ -76,28 +77,68 @@
 
 
 
-
-
-
-
 		{% endfor %}
-	</table>
+	</table><!-- b-bucket -->
 
 	<div class="b-bucket_total">
-		<span>
-			{% trans "Total price" %}:
-			<b class="b-bucket_total_price">{{ bucket_total_price|floatformat:0 }}</b>
-		</span>
-
-		{% if bucket_total_count %}
-			<a href='{% url "order" %}' class='b-button m-button__order'>Перейти к оформлению заказа</a>
-		{% endif %}
+		{% trans "Total price" %}:
+		<b class="b-bucket_total_price">{{ bucket_total_price|floatformat:0 }}</b>
 	</div>
+
+
+	<h3>Рекомендуем вам</h3>
+
+	<div class="b-products">
+		{% for product in related %}
+			<div class="b-product"
+			data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
+			data-created='{{ product.created_at|date:"U" }}'>
+				{# {% thumbnail product.cover "370x260" crop="center" as im %} #}
+					<img class='b-product__cover' src='{{ product.cover.url }}' alt='{{ product.name }}'>
+				{# {% empty %} #}
+					{# <img class='b-product__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'> #}
+				{# {% endthumbnail %} #}
+				<div class="b-product_bottom">
+					<a href="{{ product.get_absolute_url }}" class="b-product__name">{{ product.name }}</a>
+					<div class='b-product__price'>
+						{{ product.retail_price_with_discount|floatformat:0 }}
+					</div>
+					{% include "accounts/bucket__widget.html" with obj=product %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+
+	<h3>Оформление заказа</h3>
+	<form class='b-form m-order' method='POST' action=''>
+		{% csrf_token %}
+
+		{% for field in order_form %}
+			<ul class='b-field
+				m-field_{{ field.name }}
+				{% if field.errors %}m-field_error{% endif %}
+				{% if field.field.required %}m-field_required{% endif %}
+			'>
+				<li class='b-field__label'>{{ field.label_tag }}</li>
+				{% if field.errors %}
+					<li class='b-field__errors'>
+						{% for error in field.errors %}
+							{{ error|safe }}
+						{% endfor %}
+					</li>
+				{% endif %}
+
+				<li class='b-field__element'>{{ field }}</li>
+			</ul><!-- b-field -->
+		{% endfor %}
+
+		<a href="{% url "bucket" %}" class='m-go_bucket b-button'>Вернуться в корзину</a>
+		<input class='b-button' type='submit' value='{% trans "Order" %}'>
+	</form>
 
 {% else %}
 	<h3 class='b-bucket__empty'>Ваша корзина пуста!</h3>
 {% endif %}
-
-
 
 {% endblock content %}

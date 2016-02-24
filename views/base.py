@@ -152,85 +152,70 @@ def bucket(request):
 	context = {}
 	context['title'] = _('Bucket')
 
+	# Clear zero items
 	OrderItem.objects.filter(order=None, count=0).delete()
 
+	# Get cookies_bucket
+	try:
+		cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
+	except:
+		cookies_bucket = []
+	cookies_bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
+
+	# If user log in move cookies bucket in server bucket
 	if request.user.is_authenticated():
-		if 'cookies_bucket' in request.COOKIES:
-			try:
-				cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
-			except:
-				cookies_bucket = []
+		server_bucket = OrderItem.objects.filter(user=request.user.id, order=None)
 
-			cookies_bucket = OrderItem.objects.filter(id__in=cookies_bucket)
-			server_bucket = OrderItem.objects.filter(user=request.user.id, order=None)
+		for item in cookies_bucket:
+			if server_bucket.filter(user=request.user, order=None, content_type=item.content_type, object_id=item.object_id):
+				server_item = server_bucket.get(
+					user=request.user,
+					order=None,
+					content_type=item.content_type,
+					object_id=item.object_id
+				)
+				server_item.count += item.count
+				server_item.save()
+				item.delete()
+			else:
+				item.user = request.user
+				item.save()
 
-			for item in cookies_bucket:
-				if server_bucket.filter(user=request.user, order=None, content_type=item.content_type, object_id=item.object_id):
-					server_item = server_bucket.get(
-						user=request.user,
-						order=None,
-						content_type=item.content_type,
-						object_id=item.object_id
-					)
-					server_item.count += item.count
-					server_item.save()
-					item.delete()
-				else:
-					item.user = request.user
-					item.save()
-
-		context['bucket'] = OrderItem.objects.filter(user=request.user.id, order=None)
-
-		response = render(request, 'accounts/bucket.html', context)
-		response.delete_cookie('cookies_bucket')
-
+		bucket = OrderItem.objects.filter(user=request.user.id, order=None)
 	else:
-		try:
-			cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
-		except:
-			cookies_bucket = []
+		bucket = cookies_bucket
 
-		context['bucket'] = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
-		response =  render(request, 'accounts/bucket.html', context)
-
-	return response
+	context['bucket'] = bucket
 
 
-def order(request):
-	context = {}
-	context['title'] = _('Order')
+	# Orders
 	user = request.user
+	order_initial = {}
 	if user.is_authenticated():
-		bucket = OrderItem.objects.filter(user=user.id, order=None)
-		initial = {
-			'user': user,
-			'name': user.first_name + ' ' + user.last_name,
-			'email': user.email,
-			'address': user.address,
-			'phone': user.phone
-		}
-	else:
-		if 'cookies_bucket' in request.COOKIES:
-			try:
-				cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
-			except:
-				cookies_bucket = []
-		else:
-			cookies_bucket = []
-		bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
-		initial = {}
+		order_initial['user'] = user
+		order_initial['name'] = user.first_name + ' ' + user.last_name
+		order_initial['email'] = user.email
+		order_initial['address'] = user.address
+		order_initial['phone'] = user.phone
 
-	form = OrderForm(request.POST or None, initial=initial)
-	if request.POST and form.is_valid():
-		new_order = form.save()
+	order_form = OrderForm(request.POST or None, initial=order_initial)
+
+	if request.POST and order_form.is_valid():
+		new_order = order_form.save()
 		new_order.guid = uuid.uuid1()
+
+		# Why if initial?
 		if user.is_authenticated():
 			new_order.user = user
+
 		for item in bucket:
 			item.order = new_order
 			item.save()
 		new_order.save()
+
 		context['new_order'] = new_order
+
+		# Notification E-Mail
 		try:
 			order_email_from = settings.ORDER_EMAIL_FROM
 			subject = _('We recive your order!')
@@ -238,13 +223,26 @@ def order(request):
 			mail(subject, context, template, order_email_from, [new_order.email, order_email_from])
 		except:
 			pass
+
+		# Notification SMS
 		if settings.SMS_SEND:
 			send_sms('New order: %s\n%s\n%s' % (new_order.id, new_order.name, new_order.phone))
-		context['status'] = 'ok'
+
+		# Pay
 		if new_order.payment_method in ['robokassa', 'mobilnik.kg', 'elsom']:
 			return redirect('/pay/%s/' % new_order.id)
-	context['form'] = form
-	return render(request, 'accounts/order.html', context)
+
+	context['order_form'] = order_form
+
+	from apps.catalog.models import Product
+	context['related'] = Product.objects.filter(public=True, main=True).order_by('?')[:2]
+
+	response = render(request, 'accounts/bucket.html', context)
+
+	if user.is_authenticated():
+		response.delete_cookie('cookies_bucket')
+
+	return response
 
 
 import os

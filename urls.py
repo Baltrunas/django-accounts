@@ -25,8 +25,6 @@ urlpatterns = [
 	url(r'^bucket/$', views.base.bucket, name='bucket'),
 	url(r'^bucket/update/$', views.base.bucket_update, name='bucket_update'),
 
-	url(r'^order/$', views.base.order, name='order'),
-
 	# PAY
 	url(r'^pay/(?P<id>\d+)/$', views.pay.pay, name="pay"),
 	url(r'^pay/mobilnik/$', views.pay.pay_mobilnik, name="pay_mobilnik"),
