@@ -60,7 +60,7 @@ class ChangePasswordForm(forms.Form):
 
 
 class OrderForm(forms.ModelForm):
-	# payment_method = forms.ChoiceField(widget=forms.RadioSelect, choices=settings.ACCOUNTS_PAYMENTS)
+	payment_method = forms.ChoiceField(widget=forms.RadioSelect, choices=settings.ACCOUNTS_PAYMENTS)
 
 	class Meta:
 		model = Order

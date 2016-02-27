@@ -4,7 +4,7 @@ from .models import User
 from .models import Order
 from .models import OrderItem
 from .models import Valute
-from .models import Promo
+from .models import PromoCode
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -22,8 +22,6 @@ class OrderAdmin(admin.ModelAdmin):
 	list_filter = ['status', 'user']
 	inlines = [OrderItemInline]
 
-
-
 admin.site.register(Order, OrderAdmin)
 
 
@@ -40,4 +38,9 @@ class ValuteAdmin(admin.ModelAdmin):
 admin.site.register(Valute, ValuteAdmin)
 
 
-admin.site.register(Promo)
+class PromoCodeAdmin(admin.ModelAdmin):
+	list_display = ['name', 'code', 'discount_type', 'discount_value', 'limit', 'active', 'active_from', 'active_before', 'sum_up', 'only_registered', 'one_per_user']
+	list_filter = ['discount_type', 'active', 'active_from', 'active_before', 'sum_up', 'only_registered', 'one_per_user']
+	search_fields = ['name', 'code', 'description']
+
+admin.site.register(PromoCode, PromoCodeAdmin)

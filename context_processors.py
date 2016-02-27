@@ -5,13 +5,18 @@ def bucket(request):
 	context = {}
 
 	# Promo
-	context['current_promo'] = request.current_promo
-	context['promo_errors'] = request.promo_errors
+	context['promocode'] = request.promocode
+	context['promocode_errors'] = request.promocode_errors
 
 	# Bucket
 	context['bucket'] = request.bucket
-	# context['bucket_total_count'] = bucket_total_count
-	# context['bucket_total_price'] = '%s' % bucket_total
+	context['bucket_item_count'] = request.bucket_item_count
+	context['bucket_total_count'] = request.bucket_total_count
+
+	context['promo_discount'] = '%s' % request.promo_discount
+	context['promo_price'] = '%s' % request.promo_price
+	context['bucket_total_price'] = '%s' % request.bucket_total_price
+	context['bucket_total_price_with_discount'] = '%s' % request.bucket_total_price_with_discount
 
 	# Current valute
 	current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', 'kgs'))

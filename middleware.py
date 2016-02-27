@@ -1,45 +1,48 @@
-# -*- coding: utf-8 -*-
+import json
+
 from decimal import Decimal
 from datetime import date
 
 from django.db.models import Sum
+from django.db.models import Count
+from django.utils.translation import ugettext_lazy as _
 
-from .models import Promo
+from .models import PromoCode
 from .models import OrderItem
 
 
 class Bucket(object):
 	def process_request(self, request):
 		# Promo Code
-		current_promo = None
-		promo_errors = []
-		if 'current_promo' in request.COOKIES:
+		promocode = None
+		promocode_errors = []
+		if 'promocode' in request.COOKIES:
 			try:
-				current_promo = Promo.objects.get(code=request.COOKIES['current_promo'])
+				promocode = PromoCode.objects.get(code=request.COOKIES['promocode'])
 
-				if not current_promo.active:
-					promo_errors.append('Промокод не активен')
+				if not promocode.active:
+					promocode_errors.append(_('Promo code is not active'))
 
-				if current_promo.active_after > date.today():
-					promo_errors.append('Промокод начинает действовать с %s' % current_promo.active_after)
+				if promocode.active_from > date.today():
+					promocode_errors.append('%s %s' % (_('Promo code active from'), promocode.active_from))
 
-				if current_promo.active_before < date.today():
-					promo_errors.append('Промокод прекратил действовать с %s' % current_promo.active_before)
+				if promocode.active_before < date.today():
+					promocode_errors.append('%s %s' % (_('Promo code active before'), promocode.active_before))
 
-				if current_promo.only_registered and request.user.is_anonymous():
-					promo_errors.append('Промокод действителен только для зарегестрированных пользоывателей')
+				if promocode.only_registered and request.user.is_anonymous():
+					promocode_errors.append(_('Promo Code  only for registered users'))
 
-				if current_promo.oneperuser and request.user.is_authenticated() and current_promo.used_by_user(request.user):
-					promo_errors.append('Вы уже использовали этот промокод')
+				if promocode.one_per_user and request.user.is_authenticated() and promocode.used_by_user(request.user):
+					promocode_errors.append(_('You have already used this promo code'))
 
-				if current_promo.limit and current_promo.limit <= current_promo.used_count():
-					promo_errors.append('Лимит использования этого промокода исчерпан')
+				if promocode.limit and promocode.limit <= promocode.used_count():
+					promocode_errors.append(_('Limit use this promo code exhausted'))
 
 			except:
-				promo_errors.append('Промокод не существует')
+				promocode_errors.append(_('Promo code does not exist'))
 
-		request.current_promo = current_promo
-		request.promo_errors = promo_errors
+		request.promocode = promocode
+		request.promocode_errors = promocode_errors
 
 
 		# Clear zero items from bucket
@@ -50,10 +53,23 @@ class Bucket(object):
 			cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
 		except:
 			cookies_bucket = []
+
+		print cookies_bucket
 		cookies_bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
+
 
 		if request.user.is_authenticated():
 			server_bucket = OrderItem.objects.filter(user=request.user.id, order=None)
+
+			# clear bucket bugs
+			user_items_groups = server_bucket.values('content_type', 'object_id').order_by('content_type').annotate(cc=Count('content_type'))
+
+			for user_item in user_items_groups:
+				group = server_bucket.filter(content_type=user_item['content_type'], object_id=user_item['object_id'])
+				for group_item in group[1:]:
+					group[0].count += group_item.count
+					group[0].save()
+					group_item.delete()
 
 			if 'cookies_bucket' in request.COOKIES:
 				# Update server bucket
@@ -79,10 +95,10 @@ class Bucket(object):
 			bucket = cookies_bucket
 
 
-		# количество видов в корзине
+		# Bucket items count
 		bucket_item_count = bucket.count()
 
-		# количество товаров в корзине
+		# Bucket goods count
 		bucket_count = bucket.aggregate(Sum('count'))
 		if bucket_count['count__sum']:
 			bucket_total_count = bucket_count['count__sum']
@@ -101,48 +117,43 @@ class Bucket(object):
 			bucket_total_price_with_discount += item.get_total_retail_price_with_discount()
 
 
+		# total_price_with_discount+promo_discount
 		promo_discount = 0
 		promo_price = 0
-		# total_price_with_discount+promo_discount
-		if current_promo and not promo_errors:
-			total_item_price = Decimal('0')
-			total_ditem_price = Decimal('0')
+		if promocode and not promocode_errors:
+			total_without_discount = Decimal('0')
+			total_with_discount = Decimal('0')
 
 			for item in bucket:
-				item_price = item.get_total_retail_price()
-				item_dprice = item.get_total_retail_price_with_discount()
-				if item_price > item_dprice:
-					total_item_price += item_price
+				if item.get_total_retail_price() > item.get_total_retail_price_with_discount():
+					total_without_discount += item.get_total_retail_price()
 				else:
-					total_ditem_price += item_dprice
+					total_with_discount += item.get_total_retail_price_with_discount()
 
 
-			if current_promo.discount_type == 'interest':
-				if current_promo.sum_up:
-					total_price = total_item_price + total_ditem_price
-					if total_price > current_promo.discount_value:
-						promo_price = total_price - current_promo.discount_value
-						promo_discount = current_promo.discount_value
+			if promocode.discount_type == 'interest':
+				if promocode.sum_up:
+					if bucket_total_price_with_discount > promocode.discount_value:
+						promo_discount = promocode.discount_value
+						promo_price = bucket_total_price_with_discount - promocode.discount_value
 					else:
-						promo_discount = total_price
+						promo_discount = bucket_total_price_with_discount
 						promo_price = Decimal('0')
 				else:
-					if total_item_price > current_promo.discount_value:
-						total_item_price = total_item_price - current_promo.discount_value
-						promo_discount = current_promo.discount_value
+					if total_without_discount > promocode.discount_value:
+						promo_discount = promocode.discount_value
+						total_without_discount = total_without_discount - promocode.discount_value
 					else:
-						total_item_price = Decimal('0')
-						promo_discount = total_item_price
+						promo_discount = total_without_discount
+						total_without_discount = Decimal('0')
+					promo_price = total_without_discount + total_with_discount
 
-					promo_price = total_item_price + total_ditem_price
 
-
-			elif current_promo.discount_type == 'percent':
-				if current_promo.sum_up:
-					promo_discount = bucket_total_price_with_discount / 100 * current_promo.discount_value
+			elif promocode.discount_type == 'percent':
+				if promocode.sum_up:
+					promo_discount = bucket_total_price_with_discount / 100 * promocode.discount_value
 				else:
-					promo_discount = total_item_price / 100 * current_promo.discount_value
-
+					promo_discount = total_without_discount / 100 * promocode.discount_value
 				promo_price = bucket_total_price_with_discount - promo_discount
 
 
@@ -159,7 +170,9 @@ class Bucket(object):
 
 		return
 
+
 	def process_response(self, request, response):
+		self.process_request(request)
 		if request.user.is_authenticated() and 'cookies_bucket' in request.COOKIES:
 			response.delete_cookie('cookies_bucket')
 

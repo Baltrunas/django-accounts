@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.conf import settings
 from django.db import models
 
 from django.utils.translation import ugettext_lazy as _
@@ -31,31 +32,27 @@ class User(AbstractUser):
 		return name.strip()
 
 
-class Promo(models.Model):
-	code = models.CharField(verbose_name=_('Code'), max_length=16)
-	name = models.CharField(verbose_name=_('Coupon name'), max_length=256)
+class PromoCode(models.Model):
+	code = models.CharField(verbose_name=_('Code'), max_length=32)
+	name = models.CharField(verbose_name=_('Name'), max_length=256)
 	description = models.TextField(verbose_name=_('Description'))
+
 	TYPE_DISCOUNT = (
 		('interest', _('Interest')),
 		('percent', _('Percent')),
 	)
-	discount_type = models.CharField(max_length=10, choices=TYPE_DISCOUNT)
-	discount_value = models.DecimalField(verbose_name=_('Value discout'), max_digits=10, decimal_places=0)
+	discount_type = models.CharField(verbose_name=_('Discout type'), max_length=10, choices=TYPE_DISCOUNT)
+	discount_value = models.DecimalField(verbose_name=_('Discout value'), max_digits=10, decimal_places=0)
+
 	limit = models.DecimalField(verbose_name=_('Limit'), max_digits=60, decimal_places=0)
 
 	active = models.BooleanField(verbose_name=_('Active'), default=False)
-	# todo: rename to active_from verbose: Active from the date
-	active_after = models.DateField(verbose_name=_('Active after'), blank=True, null=True)
+	active_from = models.DateField(verbose_name=_('Active from'), blank=True, null=True)
 	active_before = models.DateField(verbose_name=_('Active before'))
 
 	sum_up = models.BooleanField(verbose_name=_('Sum up'), default=False)
-	# todo: rename to
-	only_registered = models.BooleanField(verbose_name=_('Only registered users'), default=False)
-	# todo: rename one_per_user
-	oneperuser = models.BooleanField(verbose_name=_('Oneperuser'), default=False)
-
-	# todo: delete this field
-	delete = models.BooleanField(verbose_name=_('Delete'), default=False)
+	only_registered = models.BooleanField(verbose_name=_('Only registered'), default=False)
+	one_per_user = models.BooleanField(verbose_name=_('One per user'), default=False)
 
 	def used_by_user(self, user):
 		return self.orders.filter(user=user).count()
@@ -80,7 +77,7 @@ class Order (models.Model):
 	address = models.CharField(_('Address'), max_length=300)
 	phone = models.CharField(_('Phone'), max_length=100)
 
-	promocode = models.ForeignKey(Promo, verbose_name=_('Promo'), related_name='orders', blank=True, null=True)
+	promocode = models.ForeignKey(PromoCode, verbose_name=_('Promo Code'), related_name='orders', blank=True, null=True)
 
 	comment = models.TextField(_('Comment'), null=True, blank=True)
 
@@ -109,19 +106,7 @@ class Order (models.Model):
 	)
 	payment_status = models.CharField(_('Payment status'), choices=PAYMENT_STATUS_CHOICES, default='created', max_length=32)
 
-	PAYMENT_METHOD_CHOICES = (
-		('cacshe', _('Cache')),
-		('courier', _('Courier')),
-		('bonus', _('Bonus')),
-		('robokassa', _('Robokassa')),
-		('mobilnik.kg', _('Mobilnik.kg')),
-		('elsom', _('Elsom')),
-	)
-
-	from django.conf import settings
-	PAYMENT_METHOD_CHOICES = settings.ACCOUNTS_PAYMENTS
-
-	payment_method = models.CharField(verbose_name=_('Payment method'), max_length='64', choices=PAYMENT_METHOD_CHOICES, default='cacshe')
+	payment_method = models.CharField(verbose_name=_('Payment method'), max_length='64', choices=settings.ACCOUNTS_PAYMENTS, default='cash')
 
 	accounting = models.BooleanField(verbose_name=_('Accounting'), default=False)
 
@@ -130,7 +115,7 @@ class Order (models.Model):
 	created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
 	updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
 
-	def save(self, sort=True, *args, **kwargs):
+	def save(self, *args, **kwargs):
 		self.retail_price = 0
 		self.wholesale_price = 0
 		self.retail_price_with_discount = 0

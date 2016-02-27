@@ -19,7 +19,6 @@ from ..forms import ChangePasswordForm
 from ..models import User
 from ..models import Order
 from ..models import OrderItem
-from ..models import Promo
 from ..forms import OrderForm, OrderItemForm
 import uuid
 
@@ -87,12 +86,9 @@ def bucket_update(request):
 			order_item.count = count
 			order_item.save()
 		else:
-			if 'cookies_bucket' in request.COOKIES:
-				try:
-					cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
-				except:
-					cookies_bucket = []
-			else:
+			try:
+				cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
+			except:
 				cookies_bucket = []
 
 			order_items = OrderItem.objects.filter(
@@ -151,17 +147,16 @@ def bucket_update(request):
 	return response
 
 
-
 def promo(request):
 	referer = request.META.get('HTTP_REFERER', 'bucket')
 	response = redirect(referer)
 
 	if request.POST:
-		if request.POST.get('code', None):
-			response.set_cookie('current_promo', value=request.POST.get('code', None), path='/')
+		if request.POST.get('promocode', None):
+			response.set_cookie('promocode', value=request.POST.get('promocode', None), path='/')
 
 		if request.POST.get('deactivate', None):
-			response.delete_cookie('current_promo')
+			response.delete_cookie('promocode')
 
 	return response
 

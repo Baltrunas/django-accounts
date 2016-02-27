@@ -82,47 +82,59 @@
 		</table><!-- b-bucket -->
 
 
+
+
 	<div class='b-promo-totals'>
 
 		<dl class='b-totals'>
-			<dt class='b-totals_key'>bucket_item_count:</dt>
-			<dd class='b-totals_value'>{{ request.bucket_item_count }}</dd>
-			<dt class='b-totals_key'>bucket_total_count:</dt>
-			<dd class='b-totals_value'>{{ request.bucket_total_count }}</dd>
-			<dt class='b-totals_key'>bucket_total_price:</dt>
-			<dd class='b-totals_value'>{{ request.bucket_total_price }}</dd>
-			<dt class='b-totals_key'>bucket_total_price_with_discount:</dt>
-			<dd class='b-totals_value'>{{ request.bucket_total_price_with_discount }}</dd>
+			{# <dt class='b-totals_key'>bucket_item_count:</dt> #}
+			{# <dd class='b-totals_value'>{{ request.bucket_item_count }}</dd> #}
+			{# <dt class='b-totals_key'>bucket_total_count:</dt> #}
+			{# <dd class='b-totals_value'>{{ request.bucket_total_count }}</dd> #}
+
+			<dt class='b-totals_key'>{% trans "Bucket price" %}:</dt>
+			<dd class='b-totals_value'>{{ bucket_total_price }}</dd>
+
+			{% if bucket_total_price_with_discount < bucket_total_price %}
+				<dt class='b-totals_key'>{% trans "Bucket price with discount" %}:</dt>
+				<dd class='b-totals_value'>{{ request.bucket_total_price_with_discount }}</dd>
+			{% endif %}
 
 			{% if request.promo_discount %}
-				<dt class='b-totals_key'>promo_discount:</dt>
+				<dt class='b-totals_key'>{% trans "Promo discount" %}:</dt>
 				<dd class='b-totals_value'>{{ request.promo_discount }}</dd>
 			{% endif %}
 
+
+			{# |in_valute:current_valute|floatformat:decimal_places #}
+			<dt class='b-totals_key m-totals_total'>{% trans "Total" %}:</dt>
 			{% if request.promo_price %}
-				<dt class='b-totals_key m-totals_total'>promo_price:</dt>
-				<dd class='b-totals_value m-totals_total'>{{ request.promo_price }}</dd>
+				<dd class='b-totals_value m-totals_total'>{{ promo_price|floatformat:decimal_places }}</dd>
+			{% else %}
+				<dd class='b-totals_value m-totals_total'>{{ bucket_total_price_with_discount|floatformat:decimal_places }}</dd>
 			{% endif %}
-		</dl>
+		</dl> <!-- b-totals -->
+
+
 
 		<div class='b-promo'>
 
-			{% if current_promo and not promo_errors %}
+			{% if promocode and not promocode_errors %}
 				<div class='b-promo-info'>
 					<big class='b-promo-info__title'>
 						Активирован промо-код:
-						<b>{{ current_promo.code }}</b>
+						<b>{{ promocode.code }}</b>
 					</big>
 
 					<div class='b-promo-info__info'>
-						<b>{{ current_promo.name }}</b> -
-						{{ current_promo.description }}
+						<b>{{ promocode.name }}</b> -
+						{{ promocode.description }}
 
-						{% if current_promo.sum_up %}
+						{% if promocode.sum_up %}
 							<p>Скидка по промокоду суммируется с другими скидками.</p>
 						{% endif %}
 
-						{% if current_promo.oneperuser %}
+						{% if promocode.one_per_user %}
 							<p>Промокод может быть использован только один раз.</p>
 						{% endif %}
 					</div>
@@ -134,17 +146,17 @@
 				</div><!-- b-promo-info -->
 			{% endif %}
 
-			{% if promo_errors %}
+			{% if promocode_errors %}
 				<div class='b-promo-errors'>
 					<h3 class='b-promo-errors__title'>Промокод не верный или не может быть применён:</h3>
 
-					<form class='' method='POST' action='{% url "accounts_promo" %}'>
+					<form class='b-promo-errors__form' method='POST' action='{% url "accounts_promo" %}'>
 						{% csrf_token %}
 						<input class='b-button m-button__close_error' type='submit' name='deactivate' value='×'>
 					</form>
 
 					<ul class='b-promo-errors__list'>
-						{% for promo_error in  promo_errors %}
+						{% for promo_error in  promocode_errors %}
 							<li class='b-promo-errors__list_item'>{{ promo_error }}</li>
 						{% endfor %}
 					</ul>
@@ -152,16 +164,16 @@
 			{% endif %}
 
 
-			{% if not current_promo or promo_errors %}
+			{% if not promocode or promocode_errors %}
 				<form class='b-promo-form' method='POST' action='{% url "accounts_promo" %}'>
 					{% csrf_token %}
 					<h3 class='b-promo-form__title'>Есть промо-код?</h3>
-					<input class='b-promo-form__field' maxlength='100' name='code' placeholder='Введите его здесь'>
+					<input class='b-promo-form__field' maxlength='100' name='promocode' placeholder='Введите его здесь'>
 					<input class='b-button m-button__promo' type='submit' value='Применить'>
 				</form><!-- b-promo-form -->
 			{% endif %}
 		</div><!-- b-promo -->
-	</div>
+	</div> <!-- b-promo-totals -->
 
 		<h3>Рекомендуем вам</h3>
 
