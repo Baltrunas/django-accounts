@@ -8,156 +8,216 @@
 
 {% block content %}
 
-<h1>{% trans "Bucket" %}</h1>
+<div class="b-wrapper">
+	<h1>{% trans "Bucket" %}</h1>
 
-{% if bucket %}
+	{% if bucket %}
 
-	<table class='b-bucket'>
-		<thead>
-			<tr class='b-bucket__head'>
-				<td>Фото</td>
-				<td>Имя</td>
-				<td>Цена шт</td>
-				<td>Количество</td>
-				<td>Итого</td>
-				<td>Удалить</td>
-			</tr>
-		</thead>
+		<table class='b-bucket'>
+			<thead>
+				<tr class='b-bucket__head'>
+					<td>Фото</td>
+					<td>Имя</td>
+					<td>Цена шт</td>
+					<td>Количество</td>
+					<td>Итого</td>
+					<td>Удалить</td>
+				</tr>
+			</thead>
 
-		{% for item in bucket %}
-			{% in_bucket item.content_object as products_in_bucked %}
+			{% for item in bucket %}
+				{% in_bucket item.content_object as products_in_bucked %}
 
-<tr class='b-bucket-item
-		m-widget-{{ item.content_object.id }}
-		{% if products_in_bucked %}m-in-bucket_True{% endif %}
-		b-bucket-widget
-	'
+	<tr class='b-bucket-item
+			m-widget-{{ item.content_object.id }}
+			{% if products_in_bucked %}m-in-bucket_True{% endif %}
+			b-bucket-widget
+		'
 
-	data-csrf='{{ csrf_token }}'
-	data-content_type='{{ item.content_object.get_content_type.id }}'
-	data-object_id='{{ item.content_object.id }}'
-	data-price='{{ item.content_object.retail_price_with_discount }}'
-	data-count='{{ products_in_bucked }}'
->
+		data-csrf='{{ csrf_token }}'
+		data-content_type='{{ item.content_object.get_content_type.id }}'
+		data-object_id='{{ item.content_object.id }}'
+		data-price='{{ item.content_object.retail_price_with_discount }}'
+		data-count='{{ products_in_bucked }}'
+	>
 
-	<td class='b-bucket-item__photo'>
-		{% thumbnail item.content_object.cover "100x100" crop="center" as im %}
-			<img class='b-bucket-item__cover' src='{{ im.url }}' alt='{{ item.content_object.name }}'>
-		{% empty %}
-			<img class='b-bucket-item__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ item.content_object.name }}'>
-		{% endthumbnail %}
-	</td>
+		<td class='b-bucket-item__photo'>
+			{% thumbnail item.content_object.cover "100x100" crop="center" as im %}
+				<img class='b-bucket-item__cover' src='{{ im.url }}' alt='{{ item.content_object.name }}'>
+			{% empty %}
+				<img class='b-bucket-item__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ item.content_object.name }}'>
+			{% endthumbnail %}
+		</td>
 
-	<td>
-		<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name'>{{ item.content_object.name }}
-		</a>
-	</td>
+		<td>
+			<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name'>{{ item.content_object.name }}
+			</a>
+		</td>
 
-	<td class='b-bucket-item__price m-valute'>
-		{{ item.content_object.retail_price_with_discount|floatformat:0 }}
-	</td>
+		<td class='b-bucket-item__price m-valute'>
+			{{ item.content_object.retail_price_with_discount|floatformat:0 }}
+		</td>
 
-	<td class='b-bucket-item__count'>
-		<div class="b-bucket-widget_counter">
-			<button class="b-bucket-widget__down" data-widget='{{ item.content_object.id }}'>–</button>
-			<span class='b-bucket-widget__count' data-widget='{{ item.content_object.id }}' contenteditable='true'>{{ products_in_bucked }}</span>
-			<button class="b-bucket-widget__up" data-widget='{{ item.content_object.id }}'>+</button>
-		</div>
-	</td>
-
-	<td class='b-bucket-item__total b-bucket-widget__total_price m-valute'>
-		{{ item.get_total_retail_price_with_discount|floatformat:0 }}
-	</td>
-
-	<td class='b-bucket-item__delete' data-widget='{{ item.content_object.id }}'>
-		⊗
-	</td>
-
-</tr>
-
-
-
-		{% endfor %}
-	</table><!-- b-bucket -->
-
-	<div class="b-bucket_total">
-		{% trans "Total price" %}:
-		<b class="b-bucket_total_price">{{ bucket_total_price|floatformat:0 }}</b>
-	</div>
-
-<h3>Хочешь скидку?</h3>
-
-Текущяя скидка: <b>{{ current_promo }}</b>
-
-<pre>
-{% if promo_error %}
-	Промокод не существует или не может быть использован!
-{% endif %}
-</pre>
-
-<form method='POST' action='{% url "accounts_promo" %}'>
-	{% csrf_token %}
-
-	{{ promo_form }}
-	<label for="id_code">Code:</label>
-	<input id="id_code" maxlength="100" name="code" type="text">
-	<input class='b-button' type='submit' value='Применить'>
-	<input class='b-button' type='submit' name='deactivate' value='Деактивировать промокод'>
-</form>
-
-	<h3>Рекомендуем вам</h3>
-
-	<div class="b-products">
-		{% for product in related %}
-			<div class="b-product"
-			data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
-			data-created='{{ product.created_at|date:"U" }}'>
-				{# {% thumbnail product.cover "370x260" crop="center" as im %} #}
-					<img class='b-product__cover' src='{{ product.cover.url }}' alt='{{ product.name }}'>
-				{# {% empty %} #}
-					{# <img class='b-product__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'> #}
-				{# {% endthumbnail %} #}
-				<div class="b-product_bottom">
-					<a href="{{ product.get_absolute_url }}" class="b-product__name">{{ product.name }}</a>
-					<div class='b-product__price'>
-						{{ product.retail_price_with_discount|floatformat:0 }}
-					</div>
-					{% include "accounts/bucket__widget.html" with obj=product %}
-				</div>
+		<td class='b-bucket-item__count'>
+			<div class="b-bucket-widget_counter">
+				<button class="b-bucket-widget__down" data-widget='{{ item.content_object.id }}'>–</button>
+				<span class='b-bucket-widget__count' data-widget='{{ item.content_object.id }}' contenteditable='true'>{{ products_in_bucked }}</span>
+				<button class="b-bucket-widget__up" data-widget='{{ item.content_object.id }}'>+</button>
 			</div>
-		{% endfor %}
+		</td>
+
+		<td class='b-bucket-item__total b-bucket-widget__total_price m-valute'>
+			{{ item.get_total_retail_price_with_discount|floatformat:0 }}
+		</td>
+
+		<td class='b-bucket-item__delete' data-widget='{{ item.content_object.id }}'>
+			⊗
+		</td>
+
+	</tr>
+
+
+
+			{% endfor %}
+		</table><!-- b-bucket -->
+
+
+	<div class='b-promo-totals'>
+
+		<dl class='b-totals'>
+			<dt class='b-totals_key'>bucket_item_count:</dt>
+			<dd class='b-totals_value'>{{ request.bucket_item_count }}</dd>
+			<dt class='b-totals_key'>bucket_total_count:</dt>
+			<dd class='b-totals_value'>{{ request.bucket_total_count }}</dd>
+			<dt class='b-totals_key'>bucket_total_price:</dt>
+			<dd class='b-totals_value'>{{ request.bucket_total_price }}</dd>
+			<dt class='b-totals_key'>bucket_total_price_with_discount:</dt>
+			<dd class='b-totals_value'>{{ request.bucket_total_price_with_discount }}</dd>
+
+			{% if request.promo_discount %}
+				<dt class='b-totals_key'>promo_discount:</dt>
+				<dd class='b-totals_value'>{{ request.promo_discount }}</dd>
+			{% endif %}
+
+			{% if request.promo_price %}
+				<dt class='b-totals_key m-totals_total'>promo_price:</dt>
+				<dd class='b-totals_value m-totals_total'>{{ request.promo_price }}</dd>
+			{% endif %}
+		</dl>
+
+		<div class='b-promo'>
+
+			{% if current_promo and not promo_errors %}
+				<div class='b-promo-info'>
+					<big class='b-promo-info__title'>
+						Активирован промо-код:
+						<b>{{ current_promo.code }}</b>
+					</big>
+
+					<div class='b-promo-info__info'>
+						<b>{{ current_promo.name }}</b> -
+						{{ current_promo.description }}
+
+						{% if current_promo.sum_up %}
+							<p>Скидка по промокоду суммируется с другими скидками.</p>
+						{% endif %}
+
+						{% if current_promo.oneperuser %}
+							<p>Промокод может быть использован только один раз.</p>
+						{% endif %}
+					</div>
+
+					<form method='POST' action='{% url "accounts_promo" %}'>
+						{% csrf_token %}
+						<input class='b-button m-button__promo m-button__deactivate' type='submit' name='deactivate' value='{% trans "Deactivate" %}'>
+					</form>
+				</div><!-- b-promo-info -->
+			{% endif %}
+
+			{% if promo_errors %}
+				<div class='b-promo-errors'>
+					<h3 class='b-promo-errors__title'>Промокод не верный или не может быть применён:</h3>
+
+					<form class='' method='POST' action='{% url "accounts_promo" %}'>
+						{% csrf_token %}
+						<input class='b-button m-button__close_error' type='submit' name='deactivate' value='×'>
+					</form>
+
+					<ul class='b-promo-errors__list'>
+						{% for promo_error in  promo_errors %}
+							<li class='b-promo-errors__list_item'>{{ promo_error }}</li>
+						{% endfor %}
+					</ul>
+				</div><!-- b-promo-errors -->
+			{% endif %}
+
+
+			{% if not current_promo or promo_errors %}
+				<form class='b-promo-form' method='POST' action='{% url "accounts_promo" %}'>
+					{% csrf_token %}
+					<h3 class='b-promo-form__title'>Есть промо-код?</h3>
+					<input class='b-promo-form__field' maxlength='100' name='code' placeholder='Введите его здесь'>
+					<input class='b-button m-button__promo' type='submit' value='Применить'>
+				</form><!-- b-promo-form -->
+			{% endif %}
+		</div><!-- b-promo -->
 	</div>
 
+		<h3>Рекомендуем вам</h3>
 
-	<h3>Оформление заказа</h3>
-	<form class='b-form m-order' method='POST' action=''>
-		{% csrf_token %}
+		<div class="b-products">
+			{% for product in related %}
+				<div class="b-product"
+				data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
+				data-created='{{ product.created_at|date:"U" }}'>
+					{# {% thumbnail product.cover "370x260" crop="center" as im %} #}
+						<img class='b-product__cover' src='{{ product.cover.url }}' alt='{{ product.name }}'>
+					{# {% empty %} #}
+						{# <img class='b-product__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'> #}
+					{# {% endthumbnail %} #}
+					<div class="b-product_bottom">
+						<a href="{{ product.get_absolute_url }}" class="b-product__name">{{ product.name }}</a>
+						<div class='b-product__price'>
+							{{ product.retail_price_with_discount|floatformat:0 }}
+						</div>
+						{% include "accounts/bucket__widget.html" with obj=product %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 
-		{% for field in order_form %}
-			<ul class='b-field
-				m-field_{{ field.name }}
-				{% if field.errors %}m-field_error{% endif %}
-				{% if field.field.required %}m-field_required{% endif %}
-			'>
-				<li class='b-field__label'>{{ field.label_tag }}</li>
-				{% if field.errors %}
-					<li class='b-field__errors'>
-						{% for error in field.errors %}
-							{{ error|safe }}
-						{% endfor %}
-					</li>
-				{% endif %}
 
-				<li class='b-field__element'>{{ field }}</li>
-			</ul><!-- b-field -->
-		{% endfor %}
 
-		<a href="{% url "bucket" %}" class='m-go_bucket b-button'>Вернуться в корзину</a>
-		<input class='b-button' type='submit' value='{% trans "Order" %}'>
-	</form>
+		<h3>Оформление заказа</h3>
+		<form class='b-form m-order' method='POST' action=''>
+			{% csrf_token %}
 
-{% else %}
-	<h3 class='b-bucket__empty'>Ваша корзина пуста!</h3>
-{% endif %}
+			{% for field in order_form %}
+				<ul class='b-field
+					m-field_{{ field.name }}
+					{% if field.errors %}m-field_error{% endif %}
+					{% if field.field.required %}m-field_required{% endif %}
+				'>
+					<li class='b-field__label'>{{ field.label_tag }}</li>
+					{% if field.errors %}
+						<li class='b-field__errors'>
+							{% for error in field.errors %}
+								{{ error|safe }}
+							{% endfor %}
+						</li>
+					{% endif %}
+
+					<li class='b-field__element'>{{ field }}</li>
+				</ul><!-- b-field -->
+			{% endfor %}
+
+			<a href="{% url "bucket" %}" class='m-go_bucket b-button'>Вернуться в корзину</a>
+			<input class='b-button' type='submit' value='{% trans "Order" %}'>
+		</form>
+
+	{% else %}
+		<h3 class='b-bucket__empty'>Ваша корзина пуста!</h3>
+	{% endif %}
+</div>
 
 {% endblock content %}

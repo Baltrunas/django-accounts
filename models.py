@@ -42,23 +42,33 @@ class Promo(models.Model):
 	discount_type = models.CharField(max_length=10, choices=TYPE_DISCOUNT)
 	discount_value = models.DecimalField(verbose_name=_('Value discout'), max_digits=10, decimal_places=0)
 	limit = models.DecimalField(verbose_name=_('Limit'), max_digits=60, decimal_places=0)
+
 	active = models.BooleanField(verbose_name=_('Active'), default=False)
+	# todo: rename to active_from verbose: Active from the date
 	active_after = models.DateField(verbose_name=_('Active after'), blank=True, null=True)
 	active_before = models.DateField(verbose_name=_('Active before'))
 
-	sum_up = models.BooleanField(verbose_name=_('sum up'), default=False)
+	sum_up = models.BooleanField(verbose_name=_('Sum up'), default=False)
+	# todo: rename to
 	only_registered = models.BooleanField(verbose_name=_('Only registered users'), default=False)
+	# todo: rename one_per_user
 	oneperuser = models.BooleanField(verbose_name=_('Oneperuser'), default=False)
 
-	# delete this field
+	# todo: delete this field
 	delete = models.BooleanField(verbose_name=_('Delete'), default=False)
+
+	def used_by_user(self, user):
+		return self.orders.filter(user=user).count()
+
+	def used_count(self):
+		return self.orders.count()
 
 	def __unicode__(self):
 		return self.name
 
 	class Meta:
-		verbose_name = _('Promo')
-		verbose_name_plural = _('Promo')
+		verbose_name = _('Promo Code')
+		verbose_name_plural = _('Promo Codes')
 
 
 class Order (models.Model):
@@ -70,7 +80,7 @@ class Order (models.Model):
 	address = models.CharField(_('Address'), max_length=300)
 	phone = models.CharField(_('Phone'), max_length=100)
 
-	promocode = models.ForeignKey(Promo, verbose_name=_('Promo'), related_name='promocodes', blank=True, null=True)
+	promocode = models.ForeignKey(Promo, verbose_name=_('Promo'), related_name='orders', blank=True, null=True)
 
 	comment = models.TextField(_('Comment'), null=True, blank=True)
 
@@ -107,6 +117,10 @@ class Order (models.Model):
 		('mobilnik.kg', _('Mobilnik.kg')),
 		('elsom', _('Elsom')),
 	)
+
+	from django.conf import settings
+	PAYMENT_METHOD_CHOICES = settings.ACCOUNTS_PAYMENTS
+
 	payment_method = models.CharField(verbose_name=_('Payment method'), max_length='64', choices=PAYMENT_METHOD_CHOICES, default='cacshe')
 
 	accounting = models.BooleanField(verbose_name=_('Accounting'), default=False)

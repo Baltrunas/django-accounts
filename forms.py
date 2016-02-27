@@ -1,3 +1,4 @@
+from django.conf import settings
 from django import forms
 
 from django.utils.translation import ugettext as _
@@ -59,6 +60,8 @@ class ChangePasswordForm(forms.Form):
 
 
 class OrderForm(forms.ModelForm):
+	# payment_method = forms.ChoiceField(widget=forms.RadioSelect, choices=settings.ACCOUNTS_PAYMENTS)
+
 	class Meta:
 		model = Order
 		exclude = ['user', 'retail_price', 'wholesale_price', 'retail_price_with_discount', 'status', 'accounting', 'acceptor', 'payment_status', 'promocode']

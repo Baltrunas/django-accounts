@@ -29,9 +29,8 @@ urlpatterns = [
 	url(r'^bucket/update/$', views.base.bucket_update, name='bucket_update'),
 
 	# PAY
-	url(r'^pay/(?P<id>\d+)/$', views.pay.pay, name="pay"),
-	url(r'^pay/mobilnik/$', views.pay.pay_mobilnik, name="pay_mobilnik"),
-	url(r'^pay/robokassa/', include('robokassa.urls')),
+	# url(r'^pay/mobilnik/$', views.pay.pay_mobilnik, name="pay_mobilnik"),
+	# url(r'^pay/robokassa/', include('robokassa.urls')),
 
 	# API XML
 	url(r'^api/xml/orders/list/$', views.api_xml.orders_list, name='orders_list'),

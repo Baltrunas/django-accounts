@@ -31,6 +31,9 @@ from decimal import Decimal
 
 from django.conf import settings
 
+from . import payments
+
+
 
 def singup(request):
 	context = {}
@@ -167,41 +170,7 @@ def bucket(request):
 	context = {}
 	context['title'] = _('Bucket')
 
-	# Clear zero items
-	OrderItem.objects.filter(order=None, count=0).delete()
-
-	# Get cookies_bucket
-	try:
-		cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
-	except:
-		cookies_bucket = []
-	cookies_bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
-
-	# If user log in move cookies bucket in server bucket
-	if request.user.is_authenticated():
-		server_bucket = OrderItem.objects.filter(user=request.user.id, order=None)
-
-		for item in cookies_bucket:
-			if server_bucket.filter(user=request.user, order=None, content_type=item.content_type, object_id=item.object_id):
-				server_item = server_bucket.get(
-					user=request.user,
-					order=None,
-					content_type=item.content_type,
-					object_id=item.object_id
-				)
-				server_item.count += item.count
-				server_item.save()
-				item.delete()
-			else:
-				item.user = request.user
-				item.save()
-
-		bucket = OrderItem.objects.filter(user=request.user.id, order=None)
-	else:
-		bucket = cookies_bucket
-
-	context['bucket'] = bucket
-
+	bucket = request.bucket
 
 	# Orders
 	user = request.user
@@ -243,21 +212,16 @@ def bucket(request):
 		if settings.SMS_SEND:
 			send_sms('New order: %s\n%s\n%s' % (new_order.id, new_order.name, new_order.phone))
 
-		# Pay
-		if new_order.payment_method in ['robokassa', 'mobilnik.kg', 'elsom']:
-			return redirect('/pay/%s/' % new_order.id)
+		# Pay with selected payment method
+		payment = getattr(payments, new_order.payment_method)
+		return payment.pay(request, new_order.id)
 
 	context['order_form'] = order_form
 
 	from apps.catalog.models import Product
 	context['related'] = Product.objects.filter(public=True, main=True).order_by('?')[:2]
 
-	response = render(request, 'accounts/bucket.html', context)
-
-	if user.is_authenticated():
-		response.delete_cookie('cookies_bucket')
-
-	return response
+	return render(request, 'accounts/bucket.html', context)
 
 
 import os

@@ -1,23 +1,19 @@
-import json
-
 from django.conf import settings
-
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import render
+from django.shortcuts import redirect
 
 from robokassa.forms import RobokassaForm
 
-from ..models import Order
-from ..models import Valute
+from robokassa.signals import result_received
+from robokassa.signals import success_page_visited
+from robokassa.signals import fail_page_visited
 
-# @login_required
+from ...models import Order
+from ...models import Valute
+
+
+# Payment creator views
 def pay(request, id):
-	context = {}
-	context['title'] = _('Pay')
 	order = Order.objects.get(id=id)
-	context['order'] = order
 
 	CURRENCY = getattr(settings, 'ROBOKASSA_CURRENCY', False)
 
@@ -27,7 +23,7 @@ def pay(request, id):
 	else:
 		amount = order.retail_price_with_discount
 
-	form = RobokassaForm(initial={
+	robokassa_form = RobokassaForm(initial={
 		'OutSum': amount,
 		'InvId': order.id,
 		'Desc': 'Order #%s' % order.id,
@@ -35,14 +31,11 @@ def pay(request, id):
 		'Encoding': 'utf8',
 		'Culture': 'ru'
 	})
-	context['form'] = form
-	return render(request, 'accounts/pay/pay.html', context)
+
+	return redirect(robokassa_form.get_redirect_url())
 
 
-from robokassa.signals import result_received
-from robokassa.signals import success_page_visited
-from robokassa.signals import fail_page_visited
-
+# Payment signals
 def payment_received(sender, **kwargs):
 	order = Order.objects.get(id=kwargs['InvId'])
 	order.status = 'processed'
@@ -65,23 +58,3 @@ def payment_fail(sender, **kwargs):
 	order.save()
 
 fail_page_visited.connect(payment_fail)
-
-
-def pay_mobilnik(request):
-	context = {}
-	context['title'] = _('Pay')
-	if request.POST and request.POST.get('datetime', ''):
-		order = Transaction(
-			amount = Decimal('0.0'),
-			user = request.user,
-			status = 'processed',
-			comment = request.POST.get('datetime', ''),
-			payment_method = 'mobilnik.kg'
-		)
-		order.save()
-
-		context['ok'] = True
-	else:
-		context['ok'] = False
-	return render(request, 'accounts/pay/mobilnik.html', context)
-
