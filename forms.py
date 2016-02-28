@@ -64,7 +64,7 @@ class OrderForm(forms.ModelForm):
 
 	class Meta:
 		model = Order
-		exclude = ['user', 'retail_price', 'wholesale_price', 'retail_price_with_discount', 'status', 'accounting', 'acceptor', 'payment_status', 'promocode']
+		exclude = ['user', 'retail_price', 'retail_price_with_discount', 'status', 'accounting', 'acceptor', 'payment_status', 'promocode']
 
 
 class OrderItemForm(forms.ModelForm):

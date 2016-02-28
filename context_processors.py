@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from .models import Valute
 
 
@@ -19,7 +21,7 @@ def bucket(request):
 	context['bucket_total_price_with_discount'] = '%s' % request.bucket_total_price_with_discount
 
 	# Current valute
-	current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', 'kgs'))
+	current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', settings.DEFAULT_VALUTE))
 	context['current_valute'] = current_valute.slug
 	context['decimal_places'] = current_valute.decimal_places
 

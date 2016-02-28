@@ -82,7 +82,6 @@ class Order (models.Model):
 	comment = models.TextField(_('Comment'), null=True, blank=True)
 
 	retail_price = models.DecimalField(_('Retail Price'), max_digits=16, decimal_places=4, default=Decimal('0.0000'))
-	wholesale_price = models.DecimalField(_('Wholesale Price'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
 	retail_price_with_discount = models.DecimalField(_('Retail Price With Discount'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
 
 	STATUS_CHOICES = (
@@ -117,11 +116,9 @@ class Order (models.Model):
 
 	def save(self, *args, **kwargs):
 		self.retail_price = 0
-		self.wholesale_price = 0
 		self.retail_price_with_discount = 0
 		for item in self.items.all():
 			self.retail_price += item.get_total_retail_price()
-			self.wholesale_price += item.get_total_wholesale_price()
 			self.retail_price_with_discount += item.get_total_retail_price_with_discount()
 		super(Order, self).save(*args, **kwargs)
 
@@ -139,7 +136,6 @@ class OrderItem (models.Model):
 	content_object = GenericForeignKey('content_type', 'object_id')
 
 	retail_price = models.DecimalField(_('Retail Price'), max_digits=16, decimal_places=4, default=Decimal('0.0000'))
-	wholesale_price = models.DecimalField(_('Wholesale Price'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
 	retail_price_with_discount = models.DecimalField(_('Retail Price With Discount'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
 
 	count = models.IntegerField(_('Count'), null=True, blank=True, default=0)
@@ -149,9 +145,6 @@ class OrderItem (models.Model):
 
 	def get_total_retail_price(self):
 		return self.retail_price * self.count
-
-	def get_total_wholesale_price(self):
-		return self.wholesale_price * self.count
 
 	def get_total_retail_price_with_discount(self):
 		return self.retail_price_with_discount * self.count
@@ -168,7 +161,6 @@ class OrderItem (models.Model):
 	def save(self, *args, **kwargs):
 		if not self.order:
 			self.retail_price = self.content_object.retail_price
-			self.wholesale_price = self.content_object.wholesale_price
 			self.retail_price_with_discount = self.content_object.retail_price_with_discount
 		super(OrderItem, self).save(*args, **kwargs)
 

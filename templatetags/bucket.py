@@ -13,12 +13,9 @@ def in_bucket(context, instance):
 	if request.user.is_authenticated():
 		bucket = OrderItem.objects.filter(user=request.user.id, order=None)
 	else:
-		if 'cookies_bucket' in request.COOKIES:
-			try:
-				cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
-			except:
-				cookies_bucket = []
-		else:
+		try:
+			cookies_bucket = json.loads(request.COOKIES['cookies_bucket'])
+		except:
 			cookies_bucket = []
 
 		bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
