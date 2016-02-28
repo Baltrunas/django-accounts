@@ -67,7 +67,7 @@
 		</td>
 
 		<td class='b-bucket-item__total b-bucket-widget__total_price m-valute'>
-			{{ item.get_total_retail_price_with_discount|floatformat:0 }}
+			{{ item.total_discount_price|floatformat:0 }}
 		</td>
 
 		<td class='b-bucket-item__delete' data-widget='{{ item.content_object.id }}'>
@@ -87,32 +87,28 @@
 	<div class='b-promo-totals'>
 
 		<dl class='b-totals'>
-			{# <dt class='b-totals_key'>bucket_item_count:</dt> #}
-			{# <dd class='b-totals_value'>{{ request.bucket_item_count }}</dd> #}
-			{# <dt class='b-totals_key'>bucket_total_count:</dt> #}
-			{# <dd class='b-totals_value'>{{ request.bucket_total_count }}</dd> #}
+			<dt class='b-totals_key'>bucket_item_count:</dt>
+			<dd class='b-totals_value b-bucket_item_count'>{{ request.bucket_item_count }}</dd>
+			<dt class='b-totals_key'>bucket_total_count:</dt>
+			<dd class='b-totals_value b-bucket_total_count'>{{ request.bucket_total_count }}</dd>
 
 			<dt class='b-totals_key'>{% trans "Bucket price" %}:</dt>
-			<dd class='b-totals_value'>{{ bucket_total_price }}</dd>
+			<dd class='b-totals_value b-bucket_total_retail_price'>{{ bucket_total_retail_price|floatformat:decimal_places }}</dd>
 
-			{% if bucket_total_price_with_discount < bucket_total_price %}
+			{% if bucket_total_discount_price < bucket_total_retail_price %}
 				<dt class='b-totals_key'>{% trans "Bucket price with discount" %}:</dt>
-				<dd class='b-totals_value'>{{ request.bucket_total_price_with_discount }}</dd>
+				<dd class='b-totals_value'>{{ request.bucket_total_discount_price|floatformat:decimal_places }}</dd>
 			{% endif %}
 
 			{% if request.promo_discount %}
 				<dt class='b-totals_key'>{% trans "Promo discount" %}:</dt>
-				<dd class='b-totals_value'>{{ request.promo_discount }}</dd>
+				<dd class='b-totals_value b-promo_discount'>{{ request.promo_discount|floatformat:decimal_places }}</dd>
 			{% endif %}
 
 
 			{# |in_valute:current_valute|floatformat:decimal_places #}
 			<dt class='b-totals_key m-totals_total'>{% trans "Total" %}:</dt>
-			{% if request.promo_price %}
-				<dd class='b-totals_value m-totals_total'>{{ promo_price|floatformat:decimal_places }}</dd>
-			{% else %}
-				<dd class='b-totals_value m-totals_total'>{{ bucket_total_price_with_discount|floatformat:decimal_places }}</dd>
-			{% endif %}
+			<dd class='b-totals_value m-totals_total b-order_price'>{{ order_price|floatformat:decimal_places }}</dd>
 		</dl> <!-- b-totals -->
 
 
@@ -131,7 +127,9 @@
 						{{ promocode.description }}
 
 						{% if promocode.sum_up %}
-							<p>Скидка по промокоду суммируется с другими скидками.</p>
+							<p>Скидка по промокоду <b>суммируется</b> с другими скидками.</p>
+						{% else %}
+							<p>Скидка по промокоду <b>не суммируется</b> с другими скидками.</p>
 						{% endif %}
 
 						{% if promocode.one_per_user %}

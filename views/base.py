@@ -74,7 +74,7 @@ def bucket_update(request):
 	if request.POST:
 		content_type = ContentType.objects.get(id=int(request.POST.get('content_type', None)))
 		object_id = int(request.POST.get('object_id', None))
-		count = int(request.POST.get('count', None))
+		count = int(request.POST.get('count', 0))
 
 		if request.user.is_authenticated():
 			order_item, created = OrderItem.objects.get_or_create(
@@ -112,34 +112,19 @@ def bucket_update(request):
 				order_item.save()
 				cookies_bucket.append(order_item.id)
 
-		if request.user.is_authenticated():
-			bucket = OrderItem.objects.filter(user=request.user.id, order=None)
-		else:
-			bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
 
-		bucket_total = Decimal('0')
-		for item in bucket:
-			bucket_total += item.get_total_retail_price_with_discount()
-
-		bucket_count = bucket.aggregate(Sum('count'))
-
-		if count:
-			item_count = order_item.count
-			item_total_price = order_item.content_object.retail_price_with_discount * order_item.count
-		else:
-			item_count = 0
-			item_total_price = 0
+		item_count = order_item.count
+		item_total_price = order_item.total_discount_price()
 
 		context = {
 			'status': 'ok',
 			'item_count': item_count,
-			'item_total_price': '%s' % item_total_price,
-
-			'bucket_total_count': bucket_count['count__sum'],
-			'bucket_total_price': '%s' % bucket_total
+			'item_total_price': '%s' % item_total_price
 		}
 
-		response = HttpResponse(json.dumps(context), content_type="application/json")
+
+		# response = HttpResponse(context, content_type="application/json")
+		response = render(request, 'accounts/bucket_update.json', context, content_type='application/json')
 		if not request.user.is_authenticated():
 			response.set_cookie('cookies_bucket', value=json.dumps(cookies_bucket), path='/')
 	else:

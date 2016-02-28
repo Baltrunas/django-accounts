@@ -2,18 +2,19 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+from decimal import Decimal
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0012_auto_20160212_1533'),
+        ('accounts', '0010_auto_20160228_1240'),
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.RenameField(
             model_name='order',
-            name='promocode',
-            field=models.ForeignKey(related_name='promocodes', verbose_name='Promo', blank=True, to='accounts.Promo', null=True),
+            old_name='retail_price_with_discount',
+            new_name='discount_price',
         ),
     ]

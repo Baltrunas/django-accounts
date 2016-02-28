@@ -82,7 +82,7 @@ class Order (models.Model):
 	comment = models.TextField(_('Comment'), null=True, blank=True)
 
 	retail_price = models.DecimalField(_('Retail Price'), max_digits=16, decimal_places=4, default=Decimal('0.0000'))
-	retail_price_with_discount = models.DecimalField(_('Retail Price With Discount'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
+	discount_price = models.DecimalField(_('Discount price'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
 
 	STATUS_CHOICES = (
 		('new', _('New')),
@@ -116,14 +116,14 @@ class Order (models.Model):
 
 	def save(self, *args, **kwargs):
 		self.retail_price = 0
-		self.retail_price_with_discount = 0
+		self.discount_price = 0
 		for item in self.items.all():
-			self.retail_price += item.get_total_retail_price()
-			self.retail_price_with_discount += item.get_total_retail_price_with_discount()
+			self.retail_price += item.total_retail_price()
+			self.discount_price += item.total_discount_price()
 		super(Order, self).save(*args, **kwargs)
 
 	def __unicode__(self):
-		string = '%s #%s = [%s]' % (self.user, self.id, self.retail_price_with_discount)
+		string = '#%010d %s = [%s]' % (self.id, self.user, self.discount_price)
 		return string
 
 
@@ -135,33 +135,33 @@ class OrderItem (models.Model):
 	object_id = models.PositiveIntegerField(verbose_name=_('Object ID'))
 	content_object = GenericForeignKey('content_type', 'object_id')
 
-	retail_price = models.DecimalField(_('Retail Price'), max_digits=16, decimal_places=4, default=Decimal('0.0000'))
-	retail_price_with_discount = models.DecimalField(_('Retail Price With Discount'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
+	retail_price = models.DecimalField(_('Retail price'), max_digits=16, decimal_places=4, default=Decimal('0.0000'))
+	discount_price = models.DecimalField(_('Discount price'), max_digits=16, decimal_places=4, null=True, blank=True, default=Decimal('0.0000'))
 
 	count = models.IntegerField(_('Count'), null=True, blank=True, default=0)
 
 	created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
 	updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
 
-	def get_total_retail_price(self):
+	def total_retail_price(self):
 		return self.retail_price * self.count
 
-	def get_total_retail_price_with_discount(self):
-		return self.retail_price_with_discount * self.count
+	def total_discount_price(self):
+		return self.discount_price * self.count
 
 	def __unicode__(self):
 		string = '#%s (%sx%s) = [%s]' % (
 			self.id,
-			self.retail_price_with_discount,
+			self.discount_price,
 			self.count,
-			self.get_total_retail_price_with_discount()
+			self.total_discount_price()
 		)
 		return string
 
 	def save(self, *args, **kwargs):
 		if not self.order:
 			self.retail_price = self.content_object.retail_price
-			self.retail_price_with_discount = self.content_object.retail_price_with_discount
+			self.discount_price = self.content_object.retail_price_with_discount
 		super(OrderItem, self).save(*args, **kwargs)
 
 

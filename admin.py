@@ -18,7 +18,7 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
 
 class OrderAdmin(admin.ModelAdmin):
-	list_display = ['user', 'status', 'payment_status', 'name', 'email', 'phone', 'comment', 'retail_price', 'retail_price_with_discount']
+	list_display = ['user', 'status', 'payment_status', 'name', 'email', 'phone', 'comment', 'retail_price', 'discount_price']
 	list_filter = ['status', 'user']
 	inlines = [OrderItemInline]
 
@@ -26,7 +26,7 @@ admin.site.register(Order, OrderAdmin)
 
 
 class OrderItemAdmin(admin.ModelAdmin):
-	list_display = ['user', 'order', 'content_object', 'retail_price', 'retail_price_with_discount', 'count']
+	list_display = ['user', 'order', 'content_object', 'retail_price', 'discount_price', 'count']
 	list_filter = ['user', 'order', 'count']
 
 admin.site.register(OrderItem, OrderItemAdmin)
