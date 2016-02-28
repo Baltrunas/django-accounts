@@ -114,13 +114,6 @@ class Order (models.Model):
 	created_at = models.DateTimeField(_('Created at'), auto_now_add=True)
 	updated_at = models.DateTimeField(_('Updated at'), auto_now=True)
 
-	def save(self, *args, **kwargs):
-		self.retail_price = 0
-		self.discount_price = 0
-		for item in self.items.all():
-			self.retail_price += item.total_retail_price()
-			self.discount_price += item.total_discount_price()
-		super(Order, self).save(*args, **kwargs)
 
 	def __unicode__(self):
 		string = '#%010d %s = [%s]' % (self.id, self.user, self.discount_price)

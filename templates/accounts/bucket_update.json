@@ -3,7 +3,7 @@
 	"item_count": {{ item_count }},
 	"item_total_price": {{ item_total_price|floatformat:decimal_places }},
 
-	"bucket_item_count": {{ request.bucket_item_count }},
+	"bucket_item_count": {{ bucket_item_count }},
 	"bucket_total_count": {{ bucket_total_count }},
 	"promo_discount": {{ promo_discount|floatformat:decimal_places }},
 	"promo_price": {{ promo_price|floatformat:decimal_places }},

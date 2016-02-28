@@ -91,41 +91,34 @@ def bucket_update(request):
 			except:
 				cookies_bucket = []
 
-			order_items = OrderItem.objects.filter(
+			order_item, created = OrderItem.objects.get_or_create(
 				id__in=cookies_bucket,
 				user=None,
 				order=None,
 				content_type=content_type,
 				object_id=object_id
 			)
+			order_item.count = count
+			order_item.save()
 
-			if order_items:
-				order_item = order_items[0]
-				order_item.count = count
-				order_item.save()
-			else:
-				order_item = OrderItem(
-					content_type=content_type,
-					object_id=object_id,
-					count=count
-				)
-				order_item.save()
+			if created:
 				cookies_bucket.append(order_item.id)
 
-
-		item_count = order_item.count
-		item_total_price = order_item.total_discount_price()
+			# Fresh and delete old ids
+			cookies_bucket = [oi.id for oi in OrderItem.objects.filter(id__in=cookies_bucket)]
 
 		context = {
 			'status': 'ok',
-			'item_count': item_count,
-			'item_total_price': '%s' % item_total_price
+			'item_count': order_item.count,
+			'item_total_price': order_item.total_discount_price()
 		}
-
 
 		# response = HttpResponse(context, content_type="application/json")
 		response = render(request, 'accounts/bucket_update.json', context, content_type='application/json')
-		if not request.user.is_authenticated():
+
+		if request.user.is_authenticated():
+			response.delete_cookie('cookies_bucket')
+		else:
 			response.set_cookie('cookies_bucket', value=json.dumps(cookies_bucket), path='/')
 	else:
 		response = HttpResponse(json.dumps({'status': 'error'}), content_type="application/json")
@@ -133,7 +126,7 @@ def bucket_update(request):
 
 
 def promo(request):
-	referer = request.META.get('HTTP_REFERER', 'bucket')
+	referer = request.META.get('HTTP_REFERER', 'order')
 	response = redirect(referer)
 
 	if request.POST:
@@ -146,9 +139,13 @@ def promo(request):
 	return response
 
 
-def bucket(request):
+def order(request):
 	context = {}
-	context['title'] = _('Bucket')
+	context['title'] = _('Order')
+
+
+	from ..middleware import calculate
+	request = calculate(request)
 
 	bucket = request.bucket
 
@@ -175,6 +172,12 @@ def bucket(request):
 		for item in bucket:
 			item.order = new_order
 			item.save()
+
+		new_order.retail_price = request.bucket_total_retail_price
+		new_order.discount_price = request.order_price
+		if request.promocode:
+			new_order.promocode = request.promocode
+
 		new_order.save()
 
 		context['new_order'] = new_order

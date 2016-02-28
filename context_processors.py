@@ -23,10 +23,7 @@ def bucket(request):
 	context['bucket_total_retail_price'] = '%s' % request.bucket_total_retail_price
 	context['bucket_total_discount_price'] = '%s' % request.bucket_total_discount_price
 
-	if request.promo_price:
-		context['order_price'] = request.promo_price
-	else:
-		context['order_price'] = request.bucket_total_discount_price
+	context['order_price'] = request.order_price
 
 	# Current valute
 	current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', settings.DEFAULT_VALUTE))

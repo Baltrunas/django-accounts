@@ -53,7 +53,6 @@ def calculate(request):
 	except:
 		cookies_bucket = []
 
-	print cookies_bucket
 	cookies_bucket = OrderItem.objects.filter(id__in=cookies_bucket, user=None, order=None)
 
 
@@ -65,9 +64,10 @@ def calculate(request):
 
 		for user_item in user_items_groups:
 			group = server_bucket.filter(content_type=user_item['content_type'], object_id=user_item['object_id'])
+			first_object = group[0]
 			for group_item in group[1:]:
-				group[0].count += group_item.count
-				group[0].save()
+				first_object.count += group_item.count
+				first_object.save()
 				group_item.delete()
 
 		if 'cookies_bucket' in request.COOKIES:
@@ -90,7 +90,22 @@ def calculate(request):
 			server_bucket = OrderItem.objects.filter(user=request.user.id, order=None)
 
 		bucket = server_bucket
+
+		request.COOKIES.pop('cookies_bucket', None)
 	else:
+		# clear bucket bugs
+		user_items_groups = cookies_bucket.values('content_type', 'object_id').order_by('content_type').annotate(cc=Count('content_type'))
+
+
+		for user_item in user_items_groups:
+			group = cookies_bucket.filter(content_type=user_item['content_type'], object_id=user_item['object_id'])
+			first_object = group[0]
+			for group_item in group[1:]:
+				first_object.count += group_item.count
+				first_object.save()
+				# cookies_bucket.remove(group_item.id) # delete from
+				group_item.delete()
+
 		bucket = cookies_bucket
 
 
@@ -168,6 +183,12 @@ def calculate(request):
 	request.bucket_item_count = bucket_item_count
 	request.bucket_total_count = bucket_total_count
 
+	if request.promo_price:
+		request.order_price = request.promo_price
+	else:
+		request.order_price = request.bucket_total_discount_price
+
+
 	return request
 
 
@@ -176,10 +197,3 @@ class Bucket(object):
 		request = calculate(request)
 
 		return
-
-
-	def process_response(self, request, response):
-		if request.user.is_authenticated() and 'cookies_bucket' in request.COOKIES:
-			response.delete_cookie('cookies_bucket')
-
-		return response

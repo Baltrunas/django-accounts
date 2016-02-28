@@ -22,11 +22,12 @@ urlpatterns = [
 	url(r'^profile/$', views.base.profile, name='profile'),
 	url(r'^profile/edit/$', views.base.edit, name='accounts_edit'),
 
+	url(r'^bucket/update/$', views.base.bucket_update, name='bucket_update'),
 
 	url(r'^promo/$', views.base.promo, name='accounts_promo'),
 
-	url(r'^bucket/$', views.base.bucket, name='bucket'),
-	url(r'^bucket/update/$', views.base.bucket_update, name='bucket_update'),
+	url(r'^order/$', views.base.order, name='order'),
+
 
 	# PAY
 	# url(r'^pay/mobilnik/$', views.pay.pay_mobilnik, name="pay_mobilnik"),
