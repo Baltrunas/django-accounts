@@ -117,6 +117,7 @@ def bucket_update(request):
 		current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', settings.DEFAULT_VALUTE))
 		decimal_places = current_valute.decimal_places
 
+		request.COOKIES['cookies_bucket'] = json.dumps(cookies_bucket)
 		request = calculate(request)
 
 		context = {
@@ -228,10 +229,10 @@ def order(request):
 		orders_items = OrderItem.objects.filter(order__in=orders_ids).values('object_id', 'content_type').annotate(sum=Sum('count')).order_by('-sum')
 
 		related_bucket = []
-		for oi in orders_items:
-			if oi['object_id'] not in bucket_ids:
-				content_type = ContentType.objects.get_for_id(oi['content_type'])
-				obj = content_type.get_object_for_this_type(pk=oi['object_id'])
+		for order_item in orders_items:
+			if order_item['object_id'] not in bucket_ids:
+				content_type = ContentType.objects.get_for_id(order_item['content_type'])
+				obj = content_type.get_object_for_this_type(pk=order_item['object_id'])
 				related_bucket.append(obj)
 
 		context['related'] = related_bucket
@@ -240,14 +241,14 @@ def order(request):
 
 		related_empty = []
 		for order_item in orders_items:
-			content_type = ContentType.objects.get_for_id(oi['content_type'])
-			obj = content_type.get_object_for_this_type(pk=oi['object_id'])
+			content_type = ContentType.objects.get_for_id(order_item['content_type'])
+			obj = content_type.get_object_for_this_type(pk=order_item['object_id'])
 			related_empty.append(obj)
 
 		context['related'] = related_empty
 
 
-	return render(request, 'accounts/bucket.html', context)
+	return render(request, 'accounts/order.html', context)
 
 
 def render_csv(request):

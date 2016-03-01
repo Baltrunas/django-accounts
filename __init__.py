@@ -1,1 +1,1 @@
-# import signals
+default_app_config = 'apps.accounts.apps.Config'

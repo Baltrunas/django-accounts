@@ -42,15 +42,15 @@
 			>
 
 			<td class='b-bucket-item__photo'>
-				{% thumbnail item.content_object.cover "100x100" crop="center" as im %}
+				{% thumbnail item.content_object.cover "100x100" padding=True as im %}
 					<img class='b-bucket-item__cover' src='{{ im.url }}' alt='{{ item.content_object.name }}'>
 				{% empty %}
 					<img class='b-bucket-item__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ item.content_object.name }}'>
 				{% endthumbnail %}
 			</td>
 
-			<td>
-				<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name'>
+			<td class='b-bucket-item__name'>
+				<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name_link'>
 					{{ item.content_object.name }}
 				</a>
 			</td>
@@ -84,7 +84,7 @@
 
 	{% else %}
 		<h3 class='b-bucket__empty'>Ваша корзина пуста!</h3>
-		<pre>{{ related_empty }}</pre>
+		<pre>{{ related }}</pre>
 	{% endif %}
 
 
@@ -108,8 +108,6 @@
 				<dd class='b-totals_value b-promo_discount'>{{ request.promo_discount|floatformat:decimal_places }}</dd>
 			{% endif %}
 
-
-			{# |in_valute:current_valute|floatformat:decimal_places #}
 			<dt class='b-totals_key m-totals_total'>{% trans "Total" %}:</dt>
 			<dd class='b-totals_value m-totals_total b-order_price'>{{ order_price|floatformat:decimal_places }}</dd>
 		</dl> <!-- b-totals -->
@@ -173,21 +171,20 @@
 		</div><!-- b-promo -->
 	</div> <!-- b-promo-totals -->
 
-	<div class="b-products-order">
-		<div class="b-products">
-			<h3 class="b-recommended__title">Рекомендуем вам</h3>
-			<pre>!{{ related_bucket }}!</pre>
+	<div class='b-products-order'>
+		<div class='b-products'>
+			<h3 class='b-recommended__title'>Рекомендуем вам</h3>
 			{% for product in related %}
-				<div class="b-product"
+				<div class='b-product'
 				data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
 				data-created='{{ product.created_at|date:"U" }}'>
-					{# {% thumbnail product.cover "370x260" crop="center" as im %} #}
-						<img class='b-product__cover' src='{{ product.cover.url }}' alt='{{ product.name }}'>
-					{# {% empty %} #}
-						{# <img class='b-product__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'> #}
-					{# {% endthumbnail %} #}
-					<div class="b-product_bottom">
-						<a href="{{ product.get_absolute_url }}" class="b-product__name">{{ product.name }}</a>
+					{% thumbnail product.cover "660x520" padding=True as im %}
+						<img class='b-product__cover' src='{{ im.url }}' alt='{{ product.name }}'>
+					{% empty %}
+						<img class='b-product__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'>
+					{% endthumbnail %}
+					<div class='b-product_bottom'>
+						<a href='{{ product.get_absolute_url }}' class='b-product__name'>{{ product.name }}</a>
 						<div class='b-product__price'>
 							{{ product.retail_price_with_discount|floatformat:0 }}
 						</div>
@@ -198,8 +195,8 @@
 		</div> <!-- b-products -->
 
 
-		<div class="b-order-panel">
-			<h3 class="b-recommended__title">Оформление заказа</h3>
+		<div class='b-order-panel'>
+			<h3 class='b-recommended__title'>Оформление заказа</h3>
 			<form class='b-form-order m-order' method='POST' action=''>
 				{% csrf_token %}
 
@@ -222,7 +219,7 @@
 					</ul><!-- b-field -->
 				{% endfor %}
 
-				<input class='b-button' type='submit' value='{% trans "Order" %}'>
+				<input class='b-button m-button__order' type='submit' value='{% trans "Order" %}'>
 			</form> <!-- b-form-order -->
 		</div><!-- b-order -->
 	</div>

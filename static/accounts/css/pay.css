@@ -1,0 +1,157 @@
+/**
+ **************************
+ Pay template
+ **************************
+*/
+
+.m-template_pay {
+	background: #fff;
+	padding-top: 20px;
+	overflow: hidden;
+	padding-bottom: 50px;
+}
+
+.m-template_pay h1 {
+	color: #666;
+	font-weight: bold!important;
+	text-transform: uppercase;
+	margin: 0;
+	text-align: center;
+}
+
+.m-template_pay h1:after {
+	display: block;
+	content: " ";
+	background: #666;
+	background-size: 100%;
+	width: 100px;
+	height: 2px;
+	margin: 10px auto 30px auto;
+}
+
+.m-template_pay .b-order__middle {
+	display: block;
+}
+
+.m-template_pay .b-order__up {
+	border-bottom: none;
+}
+
+.b-electro_wrapper {
+	float: left;
+	width: 48%;
+	margin-right: 40px;
+	margin-top: 25px;
+}
+
+.b-bank_wrapper {
+	float: left;
+	width: 48.667%;
+	margin-top: 25px;
+}
+
+.m-template_pay h3 {
+	font-size: 16px;
+	color: #fff;
+	background: #43A047;
+	border-color: #dddddd;
+	padding: 10px 15px;
+	border-bottom: 1px solid transparent;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+	margin-top: 0;
+	margin-bottom: 0;
+	box-sizing: border-box;
+	width: 100%;
+	display: block;
+}
+
+.m-template_pay .b-electronic_money {
+	border: 1px solid silver;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	margin-bottom: 20px;
+	width: 100%;
+	padding: 15px;
+	box-sizing: border-box;
+}
+
+.m-template_pay .b-bank {
+	border: 1px solid silver;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	width: 100%;
+	padding: 15px;
+	box-sizing: border-box;
+	margin-bottom: 20px;
+}
+
+.b-electronic_money {
+	float: left;
+	width: 100%;
+}
+
+.b-bank {
+	float: left;
+	width: 100%;
+	min-height: 210px;
+}
+
+.b-money {
+	margin: 10px 42px 10px 0;
+	display: block;
+	float: left;
+}
+
+.b-money:nth-of-type(4n) {
+	margin-right: 0;
+}
+
+.b-money__img {
+	width: 110px;
+	border: 2px solid silver;
+}
+
+.b-money input {
+	display: block;
+	margin: 0 auto;
+	outline: none;
+}
+
+.b-money__img {
+	width: 100px;
+	height: 60px;
+	border: 2px solid silver;
+	opacity: 0.8;
+	cursor: pointer;
+}
+
+.b-money input {
+	display: none;
+}
+
+.b-money input:checked + img {
+	border-color: #43A047;
+	opacity: 1;
+}
+
+.m-template_pay .btn {
+	display: block;
+	float: right;
+	margin-top: 0;
+	width: 250px;
+	height: 45px;
+	font-size: 17px;
+	background: #43A047;
+	outline: none;
+	border: none;
+	cursor: pointer;
+	-webkit-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+	color: #fff;
+}
+
+.m-template_pay .btn:hover {
+	background: #61e767;
+}
