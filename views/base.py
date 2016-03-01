@@ -7,19 +7,21 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
 
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.db.models import Sum
+
+from django.shortcuts import render, redirect
 
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 
-from ..forms import SingUpForm
-from ..forms import ChangePasswordForm
+from ..forms import SingUpForm, ChangePasswordForm
 
-from ..models import User
-from ..models import Order
-from ..models import OrderItem
+from ..models import User, Order, OrderItem, Valute
+
 from ..forms import OrderForm, OrderItemForm
+
+from ..utils import calculate, decimal_format
+
 import uuid
 
 from helpful.easy_email import mail
@@ -31,6 +33,11 @@ from decimal import Decimal
 from django.conf import settings
 
 from . import payments
+
+import os
+import csv
+import sys
+from apps.settings import MEDIA_ROOT
 
 
 
@@ -107,21 +114,32 @@ def bucket_update(request):
 			# Fresh and delete old ids
 			cookies_bucket = [oi.id for oi in OrderItem.objects.filter(id__in=cookies_bucket)]
 
+		current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', settings.DEFAULT_VALUTE))
+		decimal_places = current_valute.decimal_places
+
+		request = calculate(request)
+
 		context = {
 			'status': 'ok',
 			'item_count': order_item.count,
-			'item_total_price': order_item.total_discount_price()
+			'item_total_price': decimal_format(order_item.total_discount_price(), decimal_places),
+			'bucket_item_count': decimal_format(request.bucket_item_count, decimal_places),
+			'bucket_total_count': decimal_format(request.bucket_total_count, decimal_places),
+			'bucket_total_retail_price': decimal_format(request.bucket_total_retail_price, decimal_places),
+			'bucket_total_discount_price': decimal_format(request.bucket_total_discount_price, decimal_places),
+			'promo_discount': decimal_format(request.promo_discount, decimal_places),
+			'promo_price': decimal_format(request.promo_price, decimal_places),
+			'order_price': decimal_format(request.order_price, decimal_places),
 		}
 
-		# response = HttpResponse(context, content_type="application/json")
-		response = render(request, 'accounts/bucket_update.json', context, content_type='application/json')
+		response = HttpResponse(json.dumps(context), content_type='application/json')
 
 		if request.user.is_authenticated():
 			response.delete_cookie('cookies_bucket')
 		else:
 			response.set_cookie('cookies_bucket', value=json.dumps(cookies_bucket), path='/')
 	else:
-		response = HttpResponse(json.dumps({'status': 'error'}), content_type="application/json")
+		response = HttpResponse(json.dumps({'status': 'error'}), content_type='application/json')
 	return response
 
 
@@ -143,8 +161,6 @@ def order(request):
 	context = {}
 	context['title'] = _('Order')
 
-
-	from ..middleware import calculate
 	request = calculate(request)
 
 	bucket = request.bucket
@@ -201,16 +217,37 @@ def order(request):
 
 	context['order_form'] = order_form
 
-	from apps.catalog.models import Product
-	context['related'] = Product.objects.filter(public=True, main=True).order_by('?')[:2]
+
+
+	if bucket:
+		bucket_ids = [bucket_order_item.object_id for bucket_order_item in bucket]
+		order_items = OrderItem.objects.filter(order__isnull=False, content_type_id=17, object_id__in=bucket_ids)
+
+		orders = Order.objects.filter(id__in=[order_item.order.id for order_item in order_items])
+		orders_ids = [order.id for order in orders]
+		orders_items = OrderItem.objects.filter(order__in=orders_ids).values('object_id', 'content_type').annotate(sum=Sum('count')).order_by('-sum')
+
+		related_bucket = []
+		for oi in orders_items:
+			if oi['object_id'] not in bucket_ids:
+				content_type = ContentType.objects.get_for_id(oi['content_type'])
+				obj = content_type.get_object_for_this_type(pk=oi['object_id'])
+				related_bucket.append(obj)
+
+		context['related'] = related_bucket
+	else:
+		orders_items = OrderItem.objects.filter(order__isnull=False).values('object_id', 'content_type').annotate(sum=Sum('count')).order_by('-sum')
+
+		related_empty = []
+		for order_item in orders_items:
+			content_type = ContentType.objects.get_for_id(oi['content_type'])
+			obj = content_type.get_object_for_this_type(pk=oi['object_id'])
+			related_empty.append(obj)
+
+		context['related'] = related_empty
+
 
 	return render(request, 'accounts/bucket.html', context)
-
-
-import os
-import csv
-import sys
-from apps.settings import MEDIA_ROOT
 
 
 def render_csv(request):

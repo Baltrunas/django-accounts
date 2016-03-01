@@ -8,84 +8,87 @@
 
 {% block content %}
 
-<div class="b-wrapper">
-	<h1>{% trans "Bucket" %}</h1>
+<div class='b-wrapper m-app_accounts m-template_bucket'>
+	<h1>{% trans "Order" %}</h1>
 
 	{% if bucket %}
+	<table class='b-bucket'>
+		<thead>
+			<tr class='b-bucket__head'>
+				<td>{% trans "Photo" %}</td>
+				<td>{% trans "Name" %}</td>
+				<td>{% trans "Price" %}</td>
+				<td>{% trans "Count" %}</td>
+				<td>{% trans "Total" %}</td>
+				<td>{% trans "Delete" %}</td>
+			</tr>
+		</thead>
 
-		<table class='b-bucket'>
-			<thead>
-				<tr class='b-bucket__head'>
-					<td>Фото</td>
-					<td>Имя</td>
-					<td>Цена шт</td>
-					<td>Количество</td>
-					<td>Итого</td>
-					<td>Удалить</td>
-				</tr>
-			</thead>
+		{% for item in bucket %}
+			{% in_bucket item.content_object as products_in_bucked %}
 
-			{% for item in bucket %}
-				{% in_bucket item.content_object as products_in_bucked %}
+			<tr class='
+					b-bucket-item
+					m-widget-{{ item.content_object.id }}
+					{% if products_in_bucked %}m-in-bucket_True{% endif %}
+					b-bucket-widget
+				'
 
-	<tr class='b-bucket-item
-			m-widget-{{ item.content_object.id }}
-			{% if products_in_bucked %}m-in-bucket_True{% endif %}
-			b-bucket-widget
-		'
+			data-csrf='{{ csrf_token }}'
+			data-content_type='{{ item.content_object.get_content_type.id }}'
+			data-object_id='{{ item.content_object.id }}'
+			data-price='{{ item.content_object.retail_price_with_discount }}'
+			data-count='{{ products_in_bucked }}'
+			>
 
-		data-csrf='{{ csrf_token }}'
-		data-content_type='{{ item.content_object.get_content_type.id }}'
-		data-object_id='{{ item.content_object.id }}'
-		data-price='{{ item.content_object.retail_price_with_discount }}'
-		data-count='{{ products_in_bucked }}'
-	>
+			<td class='b-bucket-item__photo'>
+				{% thumbnail item.content_object.cover "100x100" crop="center" as im %}
+					<img class='b-bucket-item__cover' src='{{ im.url }}' alt='{{ item.content_object.name }}'>
+				{% empty %}
+					<img class='b-bucket-item__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ item.content_object.name }}'>
+				{% endthumbnail %}
+			</td>
 
-		<td class='b-bucket-item__photo'>
-			{% thumbnail item.content_object.cover "100x100" crop="center" as im %}
-				<img class='b-bucket-item__cover' src='{{ im.url }}' alt='{{ item.content_object.name }}'>
-			{% empty %}
-				<img class='b-bucket-item__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ item.content_object.name }}'>
-			{% endthumbnail %}
-		</td>
+			<td>
+				<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name'>
+					{{ item.content_object.name }}
+				</a>
+			</td>
 
-		<td>
-			<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name'>{{ item.content_object.name }}
-			</a>
-		</td>
+			<td class='b-bucket-item__price m-valute'>
+				{{ item.content_object.retail_price_with_discount|floatformat:0 }}
+			</td>
 
-		<td class='b-bucket-item__price m-valute'>
-			{{ item.content_object.retail_price_with_discount|floatformat:0 }}
-		</td>
+			<td class='b-bucket-item__count'>
+				<div class='b-bucket-widget_counter'>
+					<button class='b-bucket-widget__down' data-widget='{{ item.content_object.id }}'>–</button>
+					<span class='b-bucket-widget__count' data-widget='{{ item.content_object.id }}' contenteditable='true'>
+						{{ products_in_bucked }}
+					</span>
+					<button class='b-bucket-widget__up' data-widget='{{ item.content_object.id }}'>+</button>
+				</div>
+			</td>
 
-		<td class='b-bucket-item__count'>
-			<div class="b-bucket-widget_counter">
-				<button class="b-bucket-widget__down" data-widget='{{ item.content_object.id }}'>–</button>
-				<span class='b-bucket-widget__count' data-widget='{{ item.content_object.id }}' contenteditable='true'>{{ products_in_bucked }}</span>
-				<button class="b-bucket-widget__up" data-widget='{{ item.content_object.id }}'>+</button>
-			</div>
-		</td>
+			<td class='b-bucket-item__total b-bucket-widget__total_price m-valute'>
+				{{ item.total_discount_price|floatformat:0 }}
+			</td>
 
-		<td class='b-bucket-item__total b-bucket-widget__total_price m-valute'>
-			{{ item.total_discount_price|floatformat:0 }}
-		</td>
+			<td class='b-bucket-item__delete'>
+				<button class='b-bucket-widget__delete' data-widget='{{ item.content_object.id }}'>×</button>
+			</td>
 
-		<td class='b-bucket-item__delete' data-widget='{{ item.content_object.id }}'>
-			⊗
-		</td>
-
-	</tr>
-
-
+			</tr><!-- b-bucket-item -->
 
 			{% endfor %}
 		</table><!-- b-bucket -->
 
-
+	{% else %}
+		<h3 class='b-bucket__empty'>Ваша корзина пуста!</h3>
+		<pre>{{ related_empty }}</pre>
+	{% endif %}
 
 
 	<div class='b-promo-totals'>
-
 		<dl class='b-totals'>
 			<dt class='b-totals_key'>bucket_item_count:</dt>
 			<dd class='b-totals_value b-bucket_item_count'>{{ request.bucket_item_count }}</dd>
@@ -112,9 +115,7 @@
 		</dl> <!-- b-totals -->
 
 
-
 		<div class='b-promo'>
-
 			{% if promocode and not promocode_errors %}
 				<div class='b-promo-info'>
 					<big class='b-promo-info__title'>
@@ -127,13 +128,13 @@
 						{{ promocode.description }}
 
 						{% if promocode.sum_up %}
-							<p>Скидка по промокоду <b>суммируется</b> с другими скидками.</p>
+							<p class='b-promo-info__info__text'>Скидка по промокоду <b>суммируется</b> с другими скидками.</p>
 						{% else %}
-							<p>Скидка по промокоду <b>не суммируется</b> с другими скидками.</p>
+							<p class='b-promo-info__info__text'>Скидка по промокоду <b>не суммируется</b> с другими скидками.</p>
 						{% endif %}
 
 						{% if promocode.one_per_user %}
-							<p>Промокод может быть использован только один раз.</p>
+							<p class='b-promo-info__info__text'>Промокод может быть использован только один раз.</p>
 						{% endif %}
 					</div>
 
@@ -161,7 +162,6 @@
 				</div><!-- b-promo-errors -->
 			{% endif %}
 
-
 			{% if not promocode or promocode_errors %}
 				<form class='b-promo-form' method='POST' action='{% url "accounts_promo" %}'>
 					{% csrf_token %}
@@ -173,9 +173,10 @@
 		</div><!-- b-promo -->
 	</div> <!-- b-promo-totals -->
 
-		<h3>Рекомендуем вам</h3>
-
+	<div class="b-products-order">
 		<div class="b-products">
+			<h3 class="b-recommended__title">Рекомендуем вам</h3>
+			<pre>!{{ related_bucket }}!</pre>
 			{% for product in related %}
 				<div class="b-product"
 				data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
@@ -194,39 +195,37 @@
 					</div>
 				</div>
 			{% endfor %}
-		</div>
+		</div> <!-- b-products -->
 
 
+		<div class="b-order-panel">
+			<h3 class="b-recommended__title">Оформление заказа</h3>
+			<form class='b-form-order m-order' method='POST' action=''>
+				{% csrf_token %}
 
-		<h3>Оформление заказа</h3>
-		<form class='b-form m-order' method='POST' action=''>
-			{% csrf_token %}
+				{% for field in order_form %}
+					<ul class='b-field
+						m-field_{{ field.name }}
+						{% if field.errors %}m-field_error{% endif %}
+						{% if field.field.required %}m-field_required{% endif %}
+					'>
+						<li class='b-field__label'>{{ field.label_tag }}</li>
+						{% if field.errors %}
+							<li class='b-field__errors'>
+								{% for error in field.errors %}
+									{{ error|safe }}
+								{% endfor %}
+							</li>
+						{% endif %}
 
-			{% for field in order_form %}
-				<ul class='b-field
-					m-field_{{ field.name }}
-					{% if field.errors %}m-field_error{% endif %}
-					{% if field.field.required %}m-field_required{% endif %}
-				'>
-					<li class='b-field__label'>{{ field.label_tag }}</li>
-					{% if field.errors %}
-						<li class='b-field__errors'>
-							{% for error in field.errors %}
-								{{ error|safe }}
-							{% endfor %}
-						</li>
-					{% endif %}
+						<li class='b-field__element'>{{ field }}</li>
+					</ul><!-- b-field -->
+				{% endfor %}
 
-					<li class='b-field__element'>{{ field }}</li>
-				</ul><!-- b-field -->
-			{% endfor %}
-
-			<input class='b-button' type='submit' value='{% trans "Order" %}'>
-		</form>
-
-	{% else %}
-		<h3 class='b-bucket__empty'>Ваша корзина пуста!</h3>
-	{% endif %}
+				<input class='b-button' type='submit' value='{% trans "Order" %}'>
+			</form> <!-- b-form-order -->
+		</div><!-- b-order -->
+	</div>
 </div>
 
 {% endblock content %}
