@@ -105,7 +105,7 @@ class Order (models.Model):
 	)
 	payment_status = models.CharField(_('Payment status'), choices=PAYMENT_STATUS_CHOICES, default='created', max_length=32)
 
-	payment_method = models.CharField(verbose_name=_('Payment method'), max_length='64', choices=settings.ACCOUNTS_PAYMENTS, default='cash')
+	payment_method = models.CharField(verbose_name=_('Payment method'), max_length=64, choices=settings.ACCOUNTS_PAYMENTS, default='cash')
 
 	accounting = models.BooleanField(verbose_name=_('Accounting'), default=False)
 
