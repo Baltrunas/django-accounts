@@ -113,11 +113,11 @@ def bucket_update(request):
 
 			# Fresh and delete old ids
 			cookies_bucket = [oi.id for oi in OrderItem.objects.filter(id__in=cookies_bucket)]
+			request.COOKIES['cookies_bucket'] = json.dumps(cookies_bucket)
 
 		current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', settings.DEFAULT_VALUTE))
 		decimal_places = current_valute.decimal_places
 
-		request.COOKIES['cookies_bucket'] = json.dumps(cookies_bucket)
 		request = calculate(request)
 
 		context = {
@@ -235,7 +235,7 @@ def order(request):
 				obj = content_type.get_object_for_this_type(pk=order_item['object_id'])
 				related_bucket.append(obj)
 
-		context['related'] = related_bucket
+		context['related'] = related_bucket[:3]
 	else:
 		orders_items = OrderItem.objects.filter(order__isnull=False).values('object_id', 'content_type').annotate(sum=Sum('count')).order_by('-sum')
 
@@ -245,7 +245,7 @@ def order(request):
 			obj = content_type.get_object_for_this_type(pk=order_item['object_id'])
 			related_empty.append(obj)
 
-		context['related'] = related_empty
+		context['related'] = related_empty[:8]
 
 
 	return render(request, 'accounts/order.html', context)

@@ -8,10 +8,11 @@
 
 {% block content %}
 
-<div class='b-wrapper m-app_accounts m-template_bucket'>
+<div class='b-wrapper m-app_accounts m-template_bucket
+	{% if not bucket %}m-bucket_empty{% endif %}'>
 	<h1>{% trans "Order" %}</h1>
 
-	{% if bucket %}
+
 	<table class='b-bucket'>
 		<thead>
 			<tr class='b-bucket__head'>
@@ -23,6 +24,29 @@
 				<td>{% trans "Delete" %}</td>
 			</tr>
 		</thead>
+
+		<!-- template -->
+		<tr class='b-bucket-item b-bucket-widget m-in-bucket_False'
+			data-csrf='{{ csrf_token }}'
+			data-content_type=''
+			data-object_id=''
+			data-price=''
+			data-count=''
+			>
+			<td class='b-bucket-item__photo'><img class='b-bucket-item__cover' src='' alt=''></td>
+			<td class='b-bucket-item__name'><a href='' class='b-bucket-item__name_link'></a></td>
+			<td class='b-bucket-item__price m-valute'></td>
+			<td class='b-bucket-item__count'>
+				<div class='b-bucket-widget_counter'>
+					<button class='b-bucket-widget__down'>–</button>
+					<span class='b-bucket-widget__count' contenteditable='true'></span>
+					<button class='b-bucket-widget__up'>+</button>
+				</div>
+			</td>
+			<td class='b-bucket-item__total b-bucket-widget__total_price m-valute'></td>
+			<td class='b-bucket-item__delete'><button class='b-bucket-widget__delete'>×</button></td>
+		</tr><!-- b-bucket-item -->
+
 
 		{% for item in bucket %}
 			{% in_bucket item.content_object as products_in_bucked %}
@@ -82,10 +106,31 @@
 			{% endfor %}
 		</table><!-- b-bucket -->
 
-	{% else %}
-		<h3 class='b-bucket__empty'>Ваша корзина пуста!</h3>
-		<pre>{{ related }}</pre>
-	{% endif %}
+	<div class='b-bucket-empty'>
+		<h2 class='b-bucket__empty'>Ваша корзина пуста!</h2>
+		<h3 class='b-bucket__empty'>Самые популярные продукты:</h3>
+
+		<div class='b-related'>
+			{% for product in related %}
+				<div class='b-product m-product_{{ product.id }}'
+				data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
+				data-created='{{ product.created_at|date:"U" }}'>
+					{% thumbnail product.cover "600x400" padding=True as im %}
+						<img class='b-product__cover' src='{{ im.url }}' alt='{{ product.name }}'>
+					{% empty %}
+						<img class='b-product__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'>
+					{% endthumbnail %}
+					<div class='b-product_bottom'>
+						<a href='{{ product.get_absolute_url }}' class='b-product__name'>{{ product.name }}</a>
+						<div class='b-product__price'>
+							{{ product.retail_price_with_discount|floatformat:0 }}
+						</div>
+						{% include "accounts/bucket__widget.html" with obj=product %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
 
 
 	<div class='b-promo-totals'>
@@ -173,12 +218,12 @@
 
 	<div class='b-products-order'>
 		<div class='b-products'>
-			<h3 class='b-recommended__title'>Рекомендуем вам</h3>
+			<h3 class='b-recommended__title'>С этими товарами покупают</h3>
 			{% for product in related %}
-				<div class='b-product'
+				<div class='b-product m-product_{{ product.id }}'
 				data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
 				data-created='{{ product.created_at|date:"U" }}'>
-					{% thumbnail product.cover "660x520" padding=True as im %}
+					{% thumbnail product.cover "600x400" padding=True as im %}
 						<img class='b-product__cover' src='{{ im.url }}' alt='{{ product.name }}'>
 					{% empty %}
 						<img class='b-product__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'>
@@ -224,5 +269,64 @@
 		</div><!-- b-order -->
 	</div>
 </div>
+
+
+<script type="text/javascript">
+
+
+function add_to_bucket (widget, create) {
+	// var widget = $('.m-widget-' + $(this).data('widget'));
+
+	if (create) {
+		$('.b-bucket tbody').children().first().clone().appendTo('.b-bucket');
+		var new_item = $('.b-bucket tbody').children().last();
+
+		new_item.removeClass('m-in-bucket_False');
+		new_item.addClass('m-in-bucket_True');
+		new_item.addClass('m-widget-' + widget.data('object_id'));
+
+		new_item.data('content_type', widget.data('content_type'));
+		new_item.data('object_id', widget.data('object_id'));
+		new_item.data('price', widget.data('price'));
+		new_item.data('count', widget.data('count'));
+
+		title = widget.parent().children('.b-product__name').first().text();
+		href = widget.parent().children('.b-product__name').attr('href');
+		src = widget.parent().parent().find('.b-product__cover').attr('src');
+
+		new_item.find('.b-bucket-item__cover').attr('alt', title);
+		new_item.find('.b-bucket-item__cover').attr('src', src);
+
+		new_item.find('.b-bucket-item__name_link').text(title);
+		new_item.find('.b-bucket-item__name_link').attr('href', href);
+
+
+		price = widget.parent().find('.b-product__price').first().text();
+		new_item.find('.b-bucket-item__price').text(price);
+
+		new_item.find('.b-bucket-item__total').text(price);
+
+
+		new_item.find('.b-bucket-widget__down').data('widget', widget.data('object_id'));
+		new_item.find('.b-bucket-widget__count').data('widget', widget.data('object_id'));
+		new_item.find('.b-bucket-widget__count').text('1');
+		new_item.find('.b-bucket-widget__up').data('widget', widget.data('object_id'));
+
+
+		new_item.find('.b-bucket-widget__delete').data('widget', widget.data('object_id'));
+	}
+	product = $('.m-product_' + widget.data('object_id'));
+	product.hide();
+}
+
+
+function restore_on_relative(widget) {
+	product = $('.m-product_' + widget.data('object_id'));
+	product.show();
+
+};
+
+</script>
+
 
 {% endblock content %}

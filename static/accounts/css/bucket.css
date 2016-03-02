@@ -152,8 +152,10 @@ section .b-bucket {
 .m-template_bucket .b-bucket-widget__count {
 	float: left;
 	border: 1px solid silver;
-	padding: 2px;
+	padding: 0px;
+	margin: 0 9px;
 	width: 30px;
+	text-align: center;
 }
 
 .b-bucket_total span {
