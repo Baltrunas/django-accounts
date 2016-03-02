@@ -3,8 +3,7 @@ import json
 from django.http import HttpResponse
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.csrf import csrf_exempt
-from apps.catalog.models import Category, Product
-from apps.catalog.forms import CategoryForm
+from apps.catalog.models import Product
 from ..models import Order, OrderItem, User
 from ..forms import OrderForm, OrderItemAddForm, OrderItemForm
 
@@ -28,69 +27,6 @@ def auth_check(view):
 @auth_check
 def json_check(request):
 	return HttpResponse(json.dumps({'auth': True}), content_type='application/json')
-
-
-@csrf_exempt
-@auth_check
-def json_category_list(request):
-	context = {}
-	categories = []
-	for category in Category.objects.all():
-		order_dict = {
-			"id": category.id,
-			"name": u'%s' % category.name,
-			"slug": u'%s' % category.slug,
-			"order": u'%s' % category.order,
-			"childs_count": u'%s' % category.childs_count,
-			"products_count": u'%s' % category.products_count,
-		}
-		categories.append(order_dict)
-	context['categories'] = categories
-	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
-
-
-@csrf_exempt
-@auth_check
-def json_category_add(request):
-	context = {}
-	context['auth'] = True
-	category_form = CategoryForm(request.POST or None)
-	if category_form.is_valid():
-		category_form.save()
-		context['status'] = True
-	else:
-		context['status'] = False
-	context['category_form'] = category_form
-	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
-
-
-@csrf_exempt
-@auth_check
-def json_category_update(request, category_id):
-	context = {}
-	context['auth'] = True
-	category_instance = Category.objects.get(id=category_id)
-	category_form = CategoryForm(request.POST or None, instance=category_instance)
-	if category_form.is_valid():
-		category_form.save()
-		context['status'] = True
-	else:
-		context['status'] = False
-		context['errors'] = category_form.errors
-	return HttpResponse(json.dumps(context, ensure_ascii=False), content_type="application/json; charset=utf-8")
-
-
-@csrf_exempt
-@auth_check
-def json_category_delete(request, category_id):
-	context = {}
-	context['auth'] = True
-	try:
-		Category.objects.get(id=category_id).delete()
-		context['status'] = True
-	except:
-		context['status'] = False
-	return HttpResponse(json.dumps(context))
 
 
 @csrf_exempt
