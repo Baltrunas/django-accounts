@@ -40,6 +40,11 @@ urlpatterns = [
 	url(r'^api/xml/orders/confirm/$', views.api_xml.orders_confirm, name='orders_confirm'),
 
 	# API JSON
+	url(r'^api/json/category/list/$', views.api_json.json_category_list, name='json_category_list'),
+	url(r'^api/json/category/add/$', views.api_json.json_category_add, name='json_category_add'),
+	url(r'^api/json/category/update/(?P<category_id>\d+)/$', views.api_json.json_category_update, name='json_category_update'),
+	url(r'^api/json/category/delete/(?P<category_id>\d+)/$', views.api_json.json_category_delete, name='json_category_delete'),
+
 	url(r'^api/json/check/$', views.api_json.json_check, name='json_check'),
 	url(r'^api/json/order/list/(?P<status>new|my|history)/$', views.api_json.json_order_list, name='json_order_list'),
 	url(r'^api/json/order/accept/(?P<order_id>[0-9]+)/$', views.api_json.json_order_accept, name='json_order_accept'),
