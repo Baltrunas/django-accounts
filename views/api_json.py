@@ -47,7 +47,7 @@ def json_order_list(request, status):
 			order_item_dict = {
 				"id": order_item.id,
 				"name": u'%s' % order_item.content_object,
-				"price": '%s' % order_item.retail_price_with_discount,
+				"price": '%s' % order_item.discount_price,
 				"count": order_item.count
 			}
 			order_items.append(order_item_dict)
@@ -60,7 +60,7 @@ def json_order_list(request, status):
 			"address": order.address,
 			"comment": order.comment,
 			"accounting": order.accounting,
-			"total": '%s' % order.retail_price_with_discount,
+			"total": '%s' % order.discount_price,
 			"created_at": order.created_at.strftime("%Y-%m-%d %H:%M:%S"),
 			"order_items": order_items
 		}
