@@ -218,7 +218,7 @@
 
 	<div class='b-products-order'>
 		<div class='b-products'>
-			<h3 class='b-recommended__title'>С этими товарами покупают</h3>
+			<h3 class='b-order-panel__title m-products__title'>С этими товарами покупают</h3>
 			{% for product in related %}
 				<div class='b-product m-product_{{ product.id }}'
 				data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
@@ -241,7 +241,7 @@
 
 
 		<div class='b-order-panel'>
-			<h3 class='b-recommended__title'>Оформление заказа</h3>
+			<h3 class='b-order-panel__title'>Оформление заказа</h3>
 			<form class='b-form-order m-order' method='POST' action=''>
 				{% csrf_token %}
 

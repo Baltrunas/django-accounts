@@ -35,7 +35,7 @@
 
 .m-order {
 	padding: 25px 70px 20px 35px;
-/* 	box-shadow: 0px 0px 38px rgba(0,0,0,0.1); */
+	background-color: rgba(59, 89, 152, 0.02);
 	border: 1px solid #e6e6e6;
 }
 
@@ -76,7 +76,6 @@
 	width: 100%;
 	height: 30px;
 	outline: none;
-	background: #fff;
 	box-sizing: border-box;
 	border-radius: 0px;
 	font-size: 14px;

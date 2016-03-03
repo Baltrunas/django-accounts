@@ -118,7 +118,7 @@ section .b-bucket {
 	color: transparent;
 	outline: none;
 	background: transparent;
-	background-size: 100%;
+	background-size: 99%;
 	background-repeat: no-repeat;
 	opacity: 0.8;
 }
