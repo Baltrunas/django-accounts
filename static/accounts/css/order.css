@@ -281,7 +281,7 @@ height: 50px; */
 
 
 .b-promo-totals{
-	width: inherit;
+	width: 100%;
 	border: 1px solid #e6e6e6;
 	border-top: none;
 	display: inline-block;
@@ -306,7 +306,7 @@ height: 50px; */
 
 .b-totals_key {
 	text-align: right;
-	padding-left: 35px;
+	padding-left: 34px;
 	width: 50%;
 }
 
