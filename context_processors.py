@@ -26,8 +26,11 @@ def bucket(request):
 	context['order_price'] = request.order_price
 
 	# Current valute
-	current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', settings.DEFAULT_VALUTE))
-	context['current_valute'] = current_valute.slug
-	context['decimal_places'] = current_valute.decimal_places
+	try:
+		current_valute = Valute.objects.get(slug=request.COOKIES.get('valute', settings.DEFAULT_VALUTE))
+		context['current_valute'] = current_valute.slug
+		context['decimal_places'] = current_valute.decimal_places
+	except:
+		pass
 
 	return context

@@ -1,3 +1,11 @@
+'apps.accounts',
+
+'apps.accounts.context_processors.bucket',
+
+AUTH_USER_MODEL = 'accounts.User'
+AUTHENTICATION_BACKENDS = ('apps.accounts.auth.EmailOrUsernameModelBackend',)
+
+
 разобраться с apps.py и __init__.py
 
 
