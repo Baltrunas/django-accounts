@@ -34,9 +34,10 @@
 }
 
 .m-order {
-	padding: 25px 70px 20px 35px;
+	padding: 35px 40px 35px 40px;
 	background-color: rgba(59, 89, 152, 0.02);
 	border: 1px solid #e6e6e6;
+	height: 471px;
 }
 
 .m-order .b-field {
@@ -44,11 +45,11 @@
 	list-style: none;
 	width: 400px; /*   */
 	display: inline-block;
-	margin: 0 0 25px 0;
+	margin: 0 0 20px 0;
 }
 
 .m-order .b-field__label {
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 	font-size: 16px;
 }
 
@@ -62,13 +63,12 @@
 }
 
 .m-order textarea {
-	height: 180px!important;
+	height: 115px!important;
 	width: 100%!important;
 	resize: none;
 	box-sizing: border-box;
 	outline: none;
 	padding-left: 5px;
-	margin-bottom: 10px;
 	border: 1px solid silver;
 }
 
@@ -100,8 +100,7 @@
 }
 
 .m-order .b-button:hover {
-/* 	background: #2b416f; */
-	opacity: 0.8;
+ 	background: #2b416f; 
 }
 
 .m-status_ok p {
@@ -272,3 +271,412 @@ height: 50px; */
 	text-align: center;
 	margin-bottom: 170px;
 }
+
+
+/**
+ **************************
+ Totals
+ **************************
+*/
+
+
+.b-promo-totals{
+	width: inherit;
+	border: 1px solid #e6e6e6;
+	border-top: none;
+	display: inline-block;
+	margin-bottom: 15px;
+	box-sizing: border-box;
+}
+
+.b-totals {
+	float: right;
+	width: 46.95%;
+	display: block;
+	position: relative;
+	border-left: 1px solid #e6e6e6;
+	margin: 0;
+	padding: 10px 0;
+}
+
+.b-totals_key,
+.b-totals_value {
+	display: inline-block;
+}
+
+.b-totals_key {
+	text-align: right;
+	padding-left: 35px;
+	width: 50%;
+}
+
+.b-totals_value {
+	-webkit-margin-start: 3px;
+	font-weight: bold;
+}
+
+.m-totals_total {
+	font-size: 25px;
+}
+
+
+/**
+ **************************
+ Promo
+ **************************
+*/
+
+.b-promo {
+	font-size: 13px;
+	border-right: 1px solid #e6e6e6;
+	width: 53%;
+	display: block;
+	position: relative;
+}
+
+.b-promo-info {
+	padding: 10px;
+}
+
+.b-promo-info__info {
+	margin-top: 7px;
+}
+
+.b-promo-info__info__text {
+	margin: 2px 0;
+}
+
+.b-promo-errors {
+	display: block;
+	border: 1px solid #b94947;
+	padding: 10px;
+	background-color: #f2dedf; 
+}
+
+.b-promo-errors__title {
+	color: #b94947;
+	margin: 0;
+	display: inline-block;
+	font-size: 16px;
+}
+
+.b-promo-errors__form {
+	float: right;
+	margin: -8px -6px 0 0;
+}
+
+.b-promo-errors__list {
+	padding-left: 20px;
+	display: inline-block;
+	color: #bf5958;
+	font-size: 14px;
+	margin: 5px 0 0 0;
+}
+
+.b-promo-form {
+	text-align: center;
+}
+
+.b-promo-form__title {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.b-promo-form__field {
+	width: 250px;
+	height: 27px;
+	border: 1px solid #e6e6e6;
+	margin: 0 5px;
+	border-radius: 2px;
+	outline: none;
+	vertical-align: middle;
+	font-size: 15px;
+}
+
+.m-button__promo {
+	padding: 0 37px;
+	height: 31px;
+	margin-left: 5px;
+	background-color: #3b5998;
+	color: #fff;
+	border: none;
+	border-radius: 2px;
+	font-size: 15px;
+	cursor: pointer;
+	outline: none;
+	vertical-align: middle;
+}
+
+.m-button__deactivate {
+	margin: 10px 20px 17px 10px !important;
+	float: right;
+	background-color: #e74c3c;
+	color: #fff;
+}
+
+.m-button__close_error {
+	width: 27px;
+	height: 27px;
+	color: #b94947;
+	background-color: transparent;
+	opacity: 0.8;
+	border: none;
+	cursor: pointer;
+	font-size: 27px;
+	padding: 0;
+	outline: none;
+}
+
+.b-promo .b-button:hover {
+	background-color: #2b416f;
+}
+
+.b-promo .m-button__deactivate:hover {
+	background-color: #b93d31;
+}
+
+
+/**
+ **************************
+ Product
+ **************************
+*/
+
+
+.b-product .b-bucket-widget {
+	float: right;
+}
+
+.b-bucket-widget__add {
+	height: 25px;
+	line-height: 2.1;
+	margin-top: 4.5px;
+	margin-right: 7px;
+	font-size: 12px;
+	background: #3b5998 url(../img/icons/add_bucket.png) no-repeat 10px 3px;
+	background-size: 17%;
+	color: #fff;
+	border-radius: 2px;
+	padding: 0 15px 0 37px;
+	cursor: pointer;
+}
+
+.b-bucket-widget__add:hover {
+	background: #2b416f url(../img/icons/add_bucket.png) no-repeat 10px 3px;
+	background-size: 17%;
+}
+
+.b-bucket-widget_counter {
+	margin-top: 4.5px;
+	margin-right: 7px;
+	outline: none;
+}
+
+.b-bucket-widget__down {
+	width: 25px;
+	height: 25px;
+}
+
+.b-bucket-widget__count {
+	float: left;
+	margin: 0 5px;
+	padding: 0 5px;
+	color: #333;
+	font-size: 20px;
+	border: 1px solid silver;
+	height: 23px;
+	line-height: 1.2;
+	outline: none;
+}
+
+.b-bucket-widget__inactive {
+	height: 25px;
+	line-height: 2.1;
+	margin-top: 4.5px;
+	margin-right: 7px;
+	font-size: 12px;
+	background: #aaa url(../img/icons/add_bucket.png) no-repeat 10px 3px;
+	background-size: 17%;
+	color: #fff;
+	border-radius: 2px;
+	padding: 0 15px 0 37px;
+	cursor: pointer;
+	display: block;
+}
+
+
+/**
+ **************************
+ Ordering
+ **************************
+*/
+
+.b-order-panel__title {
+	padding: 10px 0px 10px 10px;
+	margin: 0;
+	font-size: 18px;
+	background-color: #3b5998;
+	color: #fff;
+}
+
+.b-form-order_left {
+	width: 50%;
+	float: left;
+	display: inline-block;
+}
+
+.b-form-order_right {
+	width: 50%;
+	height: 396px;
+	float: right;
+}
+
+.m-template_bucket .m-products__title {
+	width: 282px;
+}
+
+.m-template_bucket .b-products-order {
+	display: inline-block;
+	margin-bottom: 35px;
+}
+
+.m-template_bucket .b-products {
+
+}
+
+.m-template_bucket .b-products {
+	background-color: rgba(59, 89, 152, 0.02);
+	width: 24.335%;
+	height: 587px;
+	display: inline-block;
+	overflow: hidden;
+}
+
+.m-template_bucket .b-product {
+	width: 290px;
+	height: 262px;
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 15px;
+	overflow: hidden;
+	border: 1px solid #e6e6e6;
+}
+
+.m-template_bucket .b-product:nth-of-type(4n) {
+	margin-right: 0;
+} 
+
+.m-template_bucket .b-product .b-product__cover {
+	width: 281px;
+	height: 187px;
+	padding: 5px;
+}
+
+.m-template_bucket .b-product .b-product_bottom {
+	width: 100%;
+	height: 68px;
+	margin-top: -4px;
+	overflow: hidden;
+}
+
+.m-template_bucket .b-product .b-product__name {
+	height: 28px;
+	display: block;
+	text-decoration: none;
+	color: #333333;
+	font-size: 13px;
+	line-height: 2.1;
+	padding-left: 20px;
+	overflow: hidden;
+	font-weight: bold;
+}
+
+.m-template_bucket .b-product .b-product__name:hover {
+	color: #678dde;
+	text-decoration: underline;
+}
+
+.m-template_bucket .b-product .b-product__price {
+	float: left;
+	font-size: 20px;
+	color: #333;
+	font-weight: bold;
+	margin-top: 3px;
+	padding-left: 20px;
+}
+
+.m-template_bucket .b-product .b-product__price:after {
+	content: "сом";
+	color: #333;
+	font-size: 20px;
+	font-weight: 400;
+}
+
+.m-template_bucket .b-order-panel {
+	width: 74.417%;
+	float: right;
+	margin-left: 15px;
+}
+
+.m-template_bucket .m-field_comment {
+	margin: 0;
+}
+
+.m-template_bucket .b-order-panel .m-field_payment_method {
+	margin: 0 0 130px 35px;
+}
+
+.m-template_bucket .b-field__info {
+	margin-left: 35px;
+}
+
+.m-template_bucket .b-order-panel .m-button__order {
+	width: 45.5%;
+	height: 44px;
+	margin: 26px 0 0 35px;
+	float: right;
+}
+
+.m-template_bucket .m-field_payment_method .b-field__label {
+	margin: 0 0 25px 0;
+}
+
+.m-template_bucket .b-form-order__list {
+	list-style-type: none;
+	padding: 0;
+}
+
+.m-template_bucket .m-field_payment_method .b-form-order__item {
+	margin-bottom: 25px;
+	font-size: 16px;
+}
+
+.m-template_bucket .m-field_payment_method .b-form-order__input {
+	width: auto;
+	height: auto;
+	vertical-align: middle;
+	margin: 0px 15px 1px 0;
+}
+
+.m-template_bucket .b-form-order__image {
+	width: 50px;
+	vertical-align: middle;
+	margin-right: 10px;
+}
+
+
+
+.m-template_bucket .b-bucket-empty {
+	display: none;
+}
+
+.m-template_bucket.m-bucket_empty .b-bucket-empty {
+	display: block;
+}
+
+.m-template_bucket.m-bucket_empty .b-bucket,
+.m-template_bucket.m-bucket_empty .b-promo-totals,
+.m-template_bucket.m-bucket_empty .b-products-order {
+	display: none;
+}
+

@@ -244,34 +244,73 @@
 			<h3 class='b-order-panel__title'>Оформление заказа</h3>
 			<form class='b-form-order m-order' method='POST' action=''>
 				{% csrf_token %}
-
-				{% for field in order_form %}
+				<div class='b-form-order_left'>
 					<ul class='b-field
-						m-field_{{ field.name }}
-						{% if field.errors %}m-field_error{% endif %}
-						{% if field.field.required %}m-field_required{% endif %}
-					'>
-						<li class='b-field__label'>{{ field.label_tag }}</li>
-						{% if field.errors %}
-							<li class='b-field__errors'>
-								{% for error in field.errors %}
-									{{ error|safe }}
+								m-field_{{ order_form.name.name }}
+								{% if field.errors %}m-field_error{% endif %}
+								{% if field.field.required %}m-field_required{% endif %}'>
+						<li class='b-field__label'>{{ order_form.name.label }}</li>
+						<li class='b-field__element'><input type='text' name='{{ order_form.name.name }}' class='b-field_{{ order_form.name.name }}'></li>
+					</ul>
+					<ul class='b-field
+								m-field_{{ order_form.email.name }}
+								{% if field.errors %}m-field_error{% endif %}
+								{% if field.field.required %}m-field_required{% endif %}'>
+						<li class='b-field__label'>{{ order_form.email.label }}</li>
+						<li class='b-field__element'><input type='email' name='{{ order_form.email.name }}' class='b-field_{{ order_form.email.name }}'></li>
+					</ul>
+					<ul class='b-field
+								m-field_{{ order_form.address.name }}
+								{% if field.errors %}m-field_error{% endif %}
+								{% if field.field.required %}m-field_required{% endif %}'>
+						<li class='b-field__label'>{{ order_form.address.label }}</li>
+						<li class='b-field__element'><input type='text' name='{{ order_form.address.name }}' class='b-field_{{ order_form.address.name }}'></li>
+					</ul>
+					<ul class='b-field
+								m-field_{{ order_form.phone.name }}
+								{% if field.errors %}m-field_error{% endif %}
+								{% if field.field.required %}m-field_required{% endif %}'>
+						<li class='b-field__label'>{{ order_form.phone.label }}</li>
+						<li class='b-field__element'><input type='text' name='{{ order_form.phone.name }}' class='b-field_{{ order_form.phone.name }}'></li>
+					</ul>
+					<ul class='b-field
+								m-field_{{ order_form.comment.name }}
+								{% if field.errors %}m-field_error{% endif %}
+								{% if field.field.required %}m-field_required{% endif %}'>
+						<li class='b-field__label'>{{ order_form.comment.label }}</li>
+						<li class='b-field__element'><textarea name='{{ order_form.comment.name }}' class='b-field_{{ order_form.comment.name }}'></textarea></li>
+					</ul>
+				</div>
+				<div class='b-form-order_right'>
+					<ul class='b-field
+								m-field_payment_method
+								m-field_required
+							'>
+								<li class='b-field__label'><label for='id_payment_method_{{ forloop.counter0 }}'>{{ order_form.payment_method.label }}</label></li>
+						<li class='b-field__element'>
+							<ul class='b-form-order__list' id='id_payment_method'>
+								{% for choise in order_form.payment_method %}
+									<li class='b-form-order__item'>
+										<label for='id_payment_method_{{ forloop.counter0}}'>
+											<input class='b-form-order__input' type='radio' name='{{ order_form.payment_method.name }}' value='{{ choise.choice_value }}'>
+												<img class='b-form-order__image' src='/static/accounts/img/icons/payments/{{ choise.choice_value }}.png' alt='{{ choise.choice_label }}'>
+												{{ choise.choice_label }}
+										</label>
+									</li>
 								{% endfor %}
-							</li>
-						{% endif %}
-
-						<li class='b-field__element'>{{ field }}</li>
-					</ul><!-- b-field -->
-				{% endfor %}
-
-				<input class='b-button m-button__order' type='submit' value='{% trans "Order" %}'>
+							</ul>
+						</li>
+					</ul>
+					<p class='b-field__info'></p>
+				</div>
+			<input class='b-button m-button__order' type='submit' value='{% trans "Order" %}'>
 			</form> <!-- b-form-order -->
 		</div><!-- b-order -->
 	</div>
 </div>
 
 
-<script type="text/javascript">
+<script type='text/javascript'>
 
 
 function add_to_bucket (widget, create) {

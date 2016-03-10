@@ -121,6 +121,8 @@ section .b-bucket {
 	background-size: 99%;
 	background-repeat: no-repeat;
 	opacity: 0.8;
+	width: 25px;
+	height: 25px;
 }
 
 .b-bucket-widget__down {
