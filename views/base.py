@@ -219,7 +219,7 @@ def order(request):
 	context['order_form'] = order_form
 
 
-
+	context['related'] = []
 	if bucket:
 		bucket_ids = [bucket_order_item.object_id for bucket_order_item in bucket]
 		order_items = OrderItem.objects.filter(order__isnull=False, content_type_id=17, object_id__in=bucket_ids)
@@ -236,7 +236,7 @@ def order(request):
 				related_bucket.append(obj)
 
 		context['related'] = related_bucket[:3]
-	else:
+	if not context['related']:
 		orders_items = OrderItem.objects.filter(order__isnull=False).values('object_id', 'content_type').annotate(sum=Sum('count')).order_by('-sum')
 
 		related_empty = []
