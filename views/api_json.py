@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.csrf import csrf_exempt
-from apps.catalog.models import Product
+# from apps.catalog.models import Product
 from ..models import Order, OrderItem, User
 from ..forms import OrderForm, OrderItemAddForm, OrderItemForm
 
@@ -160,7 +160,8 @@ def json_order_item_add(request, order_id):
 	order = Order.objects.get(id=order_id)
 	item_form = OrderItemAddForm(request.POST or None)
 	if item_form.is_valid():
-		content_type = ContentType.objects.get_for_model(Product)
+		# content_type = ContentType.objects.get_for_model(Product)
+		content_type = ContentType.objects.get_by_natural_key('catalog', 'product')
 		order_item = item_form.save(commit=False)
 		order_item.content_type = content_type
 		order_item.save()

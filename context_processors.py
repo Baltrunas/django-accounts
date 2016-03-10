@@ -31,6 +31,8 @@ def bucket(request):
 		context['current_valute'] = current_valute.slug
 		context['decimal_places'] = current_valute.decimal_places
 	except:
-		pass
+		context['current_valute'] = 'settings.DEFAULT_VALUTE'
+		context['decimal_places'] = 0
+
 
 	return context
