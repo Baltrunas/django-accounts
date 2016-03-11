@@ -2,6 +2,12 @@ import xmltodict
 
 from django.views.decorators.csrf import csrf_exempt
 
+from django.shortcuts import render
+from django.conf import settings
+
+from ..models import Order
+
+
 @csrf_exempt
 def orders_list(request):
 	context = {}
