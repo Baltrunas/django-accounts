@@ -18,7 +18,7 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
 
 class OrderAdmin(admin.ModelAdmin):
-	list_display = ['user', 'created_at', 'status', 'name', 'email', 'phone', 'comment', 'retail_price', 'wholesale_price', 'retail_price_with_discount', 'accounting']
+	list_display = ['user', 'created_at', 'status', 'name', 'email', 'phone', 'comment', 'retail_price', 'discount_price', 'accounting']
 	list_editable = ['accounting']
 	list_filter = ['status', 'user']
 	inlines = [OrderItemInline]
