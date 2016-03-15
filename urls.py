@@ -54,5 +54,6 @@ urlpatterns = [
 
 
 
-	url(r'^ren/$', views.base.render_csv, name='ren'),
+	url(r'^export/orders\.csv$', views.base.order_render_csv, name='order_render_csv'),
+	url(r'^export/users\.csv$', views.base.user_render_csv, name='user_render_csv'),
 ]

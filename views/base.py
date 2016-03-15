@@ -4,7 +4,10 @@ import datetime
 
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
+
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+
 from django.utils.translation import ugettext_lazy as _
 
 from django.db.models import Sum
@@ -251,36 +254,26 @@ def order(request):
 	return render(request, 'accounts/order.html', context)
 
 
-def render_csv(request):
-	context = {}
-	data = User.objects.all()
+def order_render_csv(request):
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="export-orders.csv"'
 	orders = Order.objects.all()
-	export = []
-	for	user in data:
-		export.append(
-			{
-				'name': user.__unicode__(),
-				'email': user.email,
-				'phone': user.phone
-			}
-		)
-	for	order in orders:
-		export.append(
-			{
-				'name': order.name,
-				'email': order.email,
-				'phone': order.phone,
-			}
-		)
-	path = os.path.join(MEDIA_ROOT, 'aaa.csv')
-	with open(path, 'w') as csvfile:
-		try:
-			writer = csv.DictWriter(csvfile, export, delimiter=",")
-			writer.writeheader()
-			writer.writerows(export)
-			answer = True
-		except Exception:
-			answer = str(sys.exc_info())
-		csvfile.close()
-	context['export'] = export
-	return HttpResponse(json.dumps(context, ensure_ascii=False, indent=4), content_type="application/json; charset=utf-8")
+	writer = csv.writer(response, delimiter =',', dialect='excel', quotechar ='"', quoting=csv.QUOTE_ALL)
+	writer.writerow(['id', 'name', 'address', 'email', 'phone', 'discount_price'])
+	for order in orders:
+		writer.writerow([order.id, unicode(order.name).encode('utf-8'), unicode(order.address).encode('utf-8'), unicode(order.phone).encode('utf-8'), order.discount_price])
+
+	return response
+
+
+def user_render_csv(request):
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="export-users.csv"'
+	users = User.objects.all()
+	writer = csv.writer(response, delimiter =',', dialect='excel', quotechar ='"', quoting=csv.QUOTE_ALL)
+	writer.writerow(['id', 'username', 'first_name', 'last_name', 'address', 'email', 'phone', 'date_joined'])
+	for user in users:
+		date = user.date_joined.strftime("%d.%m.%Y")
+		writer.writerow([user.id, unicode(user.username).encode('utf-8'), unicode(user.first_name).encode('utf-8'), unicode(user.last_name).encode('utf-8'), unicode(user.address).encode('utf-8'), user.email, user.phone, date])
+
+	return response
