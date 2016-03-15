@@ -255,20 +255,24 @@ def order(request):
 
 
 def order_render_csv(request):
+	now = datetime.datetime.now()
+	today = now.strftime("%Y-%m-%d %H:%M")
 	response = HttpResponse(content_type='text/csv')
-	response['Content-Disposition'] = 'attachment; filename="export-orders.csv"'
+	response['Content-Disposition'] = 'attachment; filename="orders(%s).csv"' % (today)
 	orders = Order.objects.all()
 	writer = csv.writer(response, delimiter =',', dialect='excel', quotechar ='"', quoting=csv.QUOTE_ALL)
 	writer.writerow(['id', 'name', 'address', 'email', 'phone', 'discount_price'])
 	for order in orders:
-		writer.writerow([order.id, unicode(order.name).encode('utf-8'), unicode(order.address).encode('utf-8'), unicode(order.phone).encode('utf-8'), order.discount_price])
+		writer.writerow([order.id, unicode(order.name).encode('utf-8'), unicode(order.address).encode('utf-8'), unicode(order.email).encode('utf-8'), unicode(order.phone).encode('utf-8'), order.discount_price])
 
 	return response
 
 
 def user_render_csv(request):
+	now = datetime.datetime.now()
+	today = now.strftime("%d-%m-%Y %H:%M")
 	response = HttpResponse(content_type='text/csv')
-	response['Content-Disposition'] = 'attachment; filename="export-users.csv"'
+	response['Content-Disposition'] = 'attachment; filename="users(%s).csv"' % (today)
 	users = User.objects.all()
 	writer = csv.writer(response, delimiter =',', dialect='excel', quotechar ='"', quoting=csv.QUOTE_ALL)
 	writer.writerow(['id', 'username', 'first_name', 'last_name', 'address', 'email', 'phone', 'date_joined'])
