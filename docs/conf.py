@@ -65,7 +65,7 @@ release = u'beta'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-# language = 'ru'
+language = 'ru'
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -221,6 +221,16 @@ latex_elements = {
 # Latex figure (float) alignment
 #'figure_align': 'htbp',
 }
+
+latex_elements['preamble'] = {
+
+'preamble': '\\usepackage[utf8]{inputenc}',
+'babel': '\\usepackage[russian]{babel}',
+'cmappkg': '\\usepackage{cmap}',
+'fontenc': '\usepackage[T1,T2A]{fontenc}',
+'utf8extra':'\\DeclareUnicodeCharacter{00A0}{\\nobreakspace}',
+}
+
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
