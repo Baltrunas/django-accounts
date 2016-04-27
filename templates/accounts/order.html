@@ -247,36 +247,81 @@
 				<div class='b-form-order_left'>
 					<ul class='b-field
 								m-field_{{ order_form.name.name }}
-								{% if field.errors %}m-field_error{% endif %}
-								{% if field.field.required %}m-field_required{% endif %}'>
+								{% if order_form.name.errors %}m-field_error{% endif %}
+								{% if order_form.name.required %}m-field_required{% endif %}'>
+						{% if order_form.name.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.name.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
 						<li class='b-field__label'>{{ order_form.name.label }}</li>
 						<li class='b-field__element'><input type='text' name='{{ order_form.name.name }}' class='b-field_{{ order_form.name.name }}'></li>
 					</ul>
 					<ul class='b-field
 								m-field_{{ order_form.email.name }}
-								{% if field.errors %}m-field_error{% endif %}
-								{% if field.field.required %}m-field_required{% endif %}'>
+								{% if order_form.email.errors %}m-field_error{% endif %}
+								{% if order_form.email.required %}m-field_required{% endif %}'>
+						{% if order_form.email.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.email.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
 						<li class='b-field__label'>{{ order_form.email.label }}</li>
 						<li class='b-field__element'><input type='email' name='{{ order_form.email.name }}' class='b-field_{{ order_form.email.name }}'></li>
 					</ul>
 					<ul class='b-field
 								m-field_{{ order_form.address.name }}
-								{% if field.errors %}m-field_error{% endif %}
-								{% if field.field.required %}m-field_required{% endif %}'>
+								{% if order_form.address.errors %}m-field_error{% endif %}
+								{% if order_form.address.required %}m-field_required{% endif %}'>
+						{% if order_form.address.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.address.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
 						<li class='b-field__label'>{{ order_form.address.label }}</li>
 						<li class='b-field__element'><input type='text' name='{{ order_form.address.name }}' class='b-field_{{ order_form.address.name }}'></li>
 					</ul>
 					<ul class='b-field
 								m-field_{{ order_form.phone.name }}
-								{% if field.errors %}m-field_error{% endif %}
-								{% if field.field.required %}m-field_required{% endif %}'>
+								{% if order_form.phone.errors %}m-field_error{% endif %}
+								{% if order_form.phone.required %}m-field_required{% endif %}'>
+						{% if order_form.phone.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.phone.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
 						<li class='b-field__label'>{{ order_form.phone.label }}</li>
 						<li class='b-field__element'><input type='text' name='{{ order_form.phone.name }}' class='b-field_{{ order_form.phone.name }}'></li>
 					</ul>
 					<ul class='b-field
 								m-field_{{ order_form.comment.name }}
-								{% if field.errors %}m-field_error{% endif %}
-								{% if field.field.required %}m-field_required{% endif %}'>
+								{% if order_form.comment.errors %}m-field_error{% endif %}
+								{% if order_form.comment.required %}m-field_required{% endif %}'>
+						{% if order_form.comment.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.comment.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
 						<li class='b-field__label'>{{ order_form.comment.label }}</li>
 						<li class='b-field__element'><textarea name='{{ order_form.comment.name }}' class='b-field_{{ order_form.comment.name }}'></textarea></li>
 					</ul>
