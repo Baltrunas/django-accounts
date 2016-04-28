@@ -13,11 +13,18 @@ POST
 
 Варианты ответа:
 
- ``{"auth": true}``
-  Всё ок
+Всё ок:
 
- ``{"auth": false}``
-  Неправильный логин или пароль
+.. code-block:: javascript
+
+    {"auth": true}
+
+Неправильный логин или пароль:
+
+.. code-block:: javascript
+
+    {"auth": false}
+
 
 
 Список заказов
@@ -34,6 +41,8 @@ POST
     | password - пароль для авторизации
 
 Варианты ответа:
+
+Всё ок:
 
 .. code-block:: javascript
 
@@ -61,10 +70,12 @@ POST
         ]
     }
 
-Всё ок
+Неправильный логин или пароль:
 
-    ``{"auth": false}``
-    Неправильный логин или пароль
+.. code-block:: javascript
+
+    {"auth": false}
+
 
 "auth": true - говорит о том что аутентификация прошла успешно (иначе false и не будет списка)
 
@@ -95,7 +106,7 @@ POST
 
  Если заявка успешна принята:
 
- .. code-block:: html
+ .. code-block:: javascript
 
         {
             "status": "accept",
@@ -105,7 +116,7 @@ POST
 
  Неправильный логин или пароль:
 
- .. code-block:: html
+ .. code-block:: javascript
 
          {"auth": false}
 
@@ -120,26 +131,30 @@ POST
     | login - логин для авторизации
     | password - пароль для авторизации
 Варианты ответа:
- Если успешно:
 
-    .. code-block:: html
+Если успешно:
 
-        {
-            "status": "ok",
-            "auth": true
-        }
+.. code-block:: javascript
 
- Если заявка не найдена:
+    {
+        "status": "ok",
+        "auth": true
+    }
 
-    .. code-block:: html
+Если заявка не найдена:
 
-        {
-            "status": "Error, order not found!",
-            "auth": true
-        }
+.. code-block:: javascript
 
- Неправильный логин или пароль
-    ``{"auth": false}``
+    {
+        "status": "Error, order not found!",
+        "auth": true
+    }
+
+Неправильный логин или пароль:
+
+.. code-block:: javascript
+
+    {"auth": false}
 
 
 Изменение статуса заказа
@@ -155,23 +170,27 @@ POST
     | password - пароль для авторизации
 
 Варианты ответа:
-    Если успешно:
 
-    .. code-block:: html
+Если успешно:
 
-        {
-            "status": "ok",
-            "auth": true
-        }
+.. code-block:: javascript
 
-    Если заявка не найдена:
+    {
+        "status": "ok",
+        "auth": true
+    }
 
-    .. code-block:: django
+Если заявка не найдена:
 
-        Order matching query does not exist.
+.. code-block:: django
 
-    Неправильный логин или пароль
-        ``{"auth": false}``
+    Order matching query does not exist.
+
+Неправильный логин или пароль
+
+.. code-block:: javascript
+
+    {"auth": false}
 
 
 Редактирование заявки
@@ -191,27 +210,31 @@ POST
     | payment_method - payment_method заказа
 
 Варианты ответа:
-    Если успешно:
 
-    .. code-block:: html
+Если успешно:
 
-        {
-            "status": true,
-            "auth": true
-        }
+.. code-block:: javascript
 
-    Если форма не валидна:
+    {
+        "status": true,
+        "auth": true
+    }
 
-    .. code-block:: html
+Если форма не валидна:
 
-        {
-            "status": false,
-            "errors": {"payment_method": ["Обязательное поле."], "phone": ["Обязательное поле."], "name": ["Обязательное поле."], "address": ["Обязательное поле."]},
-            "auth": true
-        }
+.. code-block:: javascript
 
-    Неправильный логин или пароль
-        ``{"auth": false}``
+    {
+        "status": false,
+        "errors": {"payment_method": ["Обязательное поле."], "phone": ["Обязательное поле."], "name": ["Обязательное поле."], "address": ["Обязательное поле."]},
+        "auth": true
+    }
+
+Неправильный логин или пароль
+
+.. code-block:: javascript
+
+    {"auth": false}
 
 
 Добавление темы заказа
@@ -228,26 +251,29 @@ POST
 
 Варианты ответа:
 
-    Если успешно:
+Если успешно:
 
-    .. code-block:: html
+.. code-block:: javascript
 
-        {
-            "status": true,
-            "auth": true
-        }
+    {
+        "status": true,
+        "auth": true
+    }
 
-    Если форма не валидна:
+Если форма не валидна:
 
-    .. code-block:: html
+.. code-block:: javascript
 
-        {
-            "status": false,
-            "auth": true
-        }
+    {
+        "status": false,
+        "auth": true
+    }
 
-    Неправильный логин или пароль
-        ``{"auth": false}``
+Неправильный логин или пароль
+
+.. code-block:: javascript
+
+    {"auth": false}
 
 
 Удаление темы заказа
@@ -262,14 +288,17 @@ POST
 
 Варианты ответа:
 
-    Если успешно:
+Если успешно:
 
-    .. code-block:: html
+.. code-block:: javascript
 
-        {
-            "status": true,
-            "auth": true
-        }
+    {
+        "status": true,
+        "auth": true
+    }
 
-    Неправильный логин или пароль
-        ``{"auth": false}``
+Неправильный логин или пароль:
+
+.. code-block:: javascript
+
+    {"auth": false}
