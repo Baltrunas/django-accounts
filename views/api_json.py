@@ -30,9 +30,10 @@ def json_check(request):
 
 
 @csrf_exempt
+@auth_check
 def json_order_list(request, status):
 	context = {}
-
+	context['auth'] = True
 	if status == 'new':
 		status_in = ['new']
 	elif status == 'my':
