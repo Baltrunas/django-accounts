@@ -1,0 +1,478 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-28 07:39+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps.py:8
+msgid "Accounts"
+msgstr ""
+
+#: forms.py:12
+msgid "Login or E-Mail"
+msgstr ""
+
+#: forms.py:16
+msgid "Password"
+msgstr ""
+
+#: forms.py:17
+msgid "Password (again)"
+msgstr ""
+
+#: forms.py:21
+msgid "This username is already in use. Please supply a different username."
+msgstr ""
+
+#: forms.py:26
+msgid ""
+"This email address is already in use. Please supply a different email "
+"address."
+msgstr ""
+
+#: forms.py:32 forms.py:57
+msgid "Passwords do not match!"
+msgstr ""
+
+#: forms.py:48
+msgid "Old password"
+msgstr ""
+
+#: forms.py:49
+msgid "New password"
+msgstr ""
+
+#: forms.py:50
+msgid "New password (again)"
+msgstr ""
+
+#: models.py:22 models.py:78 templates/accounts/e-mail/order.html.py:25
+#: templates/accounts/e-mail/order.txt:11
+msgid "Phone"
+msgstr ""
+
+#: models.py:23 models.py:77 templates/accounts/e-mail/order.html.py:29
+#: templates/accounts/e-mail/order.txt:12
+msgid "Address"
+msgstr ""
+
+#: models.py:36
+msgid "Code"
+msgstr ""
+
+#: models.py:37 models.py:75 models.py:162
+#: templates/accounts/e-mail/order.html:17
+#: templates/accounts/e-mail/order.txt:9 templates/accounts/order.html:20
+msgid "Name"
+msgstr ""
+
+#: models.py:38
+msgid "Description"
+msgstr ""
+
+#: models.py:41
+msgid "Interest"
+msgstr ""
+
+#: models.py:42
+msgid "Percent"
+msgstr ""
+
+#: models.py:44
+msgid "Discout type"
+msgstr ""
+
+#: models.py:45
+msgid "Discout value"
+msgstr ""
+
+#: models.py:47
+msgid "Limit"
+msgstr ""
+
+#: models.py:49
+msgid "Active"
+msgstr ""
+
+#: models.py:50
+msgid "Active from"
+msgstr ""
+
+#: models.py:51
+msgid "Active before"
+msgstr ""
+
+#: models.py:53
+msgid "Sum up"
+msgstr ""
+
+#: models.py:54
+msgid "Only registered"
+msgstr ""
+
+#: models.py:55
+msgid "One per user"
+msgstr ""
+
+#: models.py:67 models.py:80
+msgid "Promo Code"
+msgstr ""
+
+#: models.py:68
+msgid "Promo Codes"
+msgstr ""
+
+#: models.py:73
+msgid "GUID"
+msgstr ""
+
+#: models.py:76 templates/accounts/e-mail/order.html.py:21
+#: templates/accounts/e-mail/order.txt:10
+msgid "E-Mail"
+msgstr ""
+
+#: models.py:82 templates/accounts/e-mail/order.html.py:33
+#: templates/accounts/e-mail/order.txt:13
+msgid "Comment"
+msgstr ""
+
+#: models.py:84
+msgid "Retail Price"
+msgstr ""
+
+#: models.py:85 models.py:132
+msgid "Discount price"
+msgstr ""
+
+#: models.py:88
+msgid "New"
+msgstr ""
+
+#: models.py:89
+msgid "Accept by:"
+msgstr ""
+
+#: models.py:90
+msgid "Processed (1c)"
+msgstr ""
+
+#: models.py:91
+msgid "Paid"
+msgstr ""
+
+#: models.py:92 models.py:102
+msgid "Success"
+msgstr ""
+
+#: models.py:93 models.py:103
+msgid "Canceled"
+msgstr ""
+
+#: models.py:96
+msgid "Status"
+msgstr ""
+
+#: models.py:99
+msgid "Created"
+msgstr ""
+
+#: models.py:100
+msgid "Failed"
+msgstr ""
+
+#: models.py:101
+msgid "Processed"
+msgstr ""
+
+#: models.py:104
+msgid "Error"
+msgstr ""
+
+#: models.py:106
+msgid "Payment status"
+msgstr ""
+
+#: models.py:108
+msgid "Payment method"
+msgstr ""
+
+#: models.py:110
+msgid "Accounting"
+msgstr ""
+
+#: models.py:114 models.py:136
+msgid "Created at"
+msgstr ""
+
+#: models.py:115 models.py:137
+msgid "Updated at"
+msgstr ""
+
+#: models.py:124
+msgid "User"
+msgstr ""
+
+#: models.py:125 templates/accounts/order.html.py:13
+#: templates/accounts/order.html:306 views/base.py:163
+msgid "Order"
+msgstr ""
+
+#: models.py:127
+msgid "Content Type"
+msgstr ""
+
+#: models.py:128
+msgid "Object ID"
+msgstr ""
+
+#: models.py:131
+msgid "Retail price"
+msgstr ""
+
+#: models.py:134 templates/accounts/order.html.py:22
+msgid "Count"
+msgstr ""
+
+#: models.py:163
+msgid "Slug"
+msgstr ""
+
+#: models.py:163
+msgid ""
+"A slug is the part of a URL which identifies a page using human-readable "
+"keywords"
+msgstr ""
+
+#: models.py:164 models.py:169
+msgid "Currency rate"
+msgstr ""
+
+#: models.py:165
+msgid "Decimal places"
+msgstr ""
+
+#: models.py:170
+msgid "Currency rates"
+msgstr ""
+
+#: templates/accounts/e-mail/order.html:10
+#: templates/accounts/e-mail/order.txt:4
+msgid "We have received your order"
+msgstr ""
+
+#: templates/accounts/e-mail/order.html:12
+#: templates/accounts/e-mail/order.txt:6
+msgid "Hello"
+msgstr ""
+
+#: templates/accounts/e-mail/order.html:37
+#: templates/accounts/e-mail/order.txt:14 templates/accounts/order.html:23
+#: templates/accounts/order.html.py:156
+msgid "Total"
+msgstr ""
+
+#: templates/accounts/e-mail/order.html:44
+#: templates/accounts/e-mail/order.txt:16
+msgid "Content of order"
+msgstr ""
+
+#: templates/accounts/order.html:19
+msgid "Photo"
+msgstr ""
+
+#: templates/accounts/order.html:21
+msgid "Price"
+msgstr ""
+
+#: templates/accounts/order.html:24
+msgid "Delete"
+msgstr ""
+
+#: templates/accounts/order.html:143
+msgid "Bucket price"
+msgstr ""
+
+#: templates/accounts/order.html:147
+msgid "Bucket price with discount"
+msgstr ""
+
+#: templates/accounts/order.html:152
+msgid "Promo discount"
+msgstr ""
+
+#: templates/accounts/order.html:186
+msgid "Deactivate"
+msgstr ""
+
+#: templates/accounts/profile.html:10 views/base.py:62
+msgid "History"
+msgstr ""
+
+#: templates/accounts/singup.html:8 views/base.py:46
+msgid "Register"
+msgstr ""
+
+#: templates/accounts/singup.html:35
+msgid "Sign up"
+msgstr ""
+
+#: templates/registration/logged_out.html:4
+msgid "Home"
+msgstr ""
+
+#: templates/registration/logged_out.html:8
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr ""
+
+#: templates/registration/logged_out.html:10
+msgid "Log in again"
+msgstr ""
+
+#: templates/registration/login.html:8
+#: templates/registration/password_reset_complete.html:10
+msgid "Log in"
+msgstr ""
+
+#: templates/registration/login.html:34
+msgid "Login"
+msgstr ""
+
+#: templates/registration/password_change_form.html:9
+msgid "Password successfully received"
+msgstr ""
+
+#: templates/registration/password_change_form.html:43
+msgid "Change your password"
+msgstr ""
+
+#: templates/registration/password_reset_complete.html:9
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:7
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:13
+msgid "New password:"
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:15
+msgid "Confirm password:"
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:16
+msgid "Change my password"
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:21
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:9
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:11
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+
+#: templates/registration/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: templates/registration/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: templates/registration/password_reset_form.html:8
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+
+#: templates/registration/password_reset_form.html:14
+msgid "Email address"
+msgstr ""
+
+#: templates/registration/password_reset_form.html:16
+msgid "Reset my password"
+msgstr ""
+
+#: utils.py:45
+msgid "Promo code is not active"
+msgstr ""
+
+#: utils.py:48
+msgid "Promo code active from"
+msgstr ""
+
+#: utils.py:51
+msgid "Promo code active before"
+msgstr ""
+
+#: utils.py:54
+msgid "Promo Code  only for registered users"
+msgstr ""
+
+#: utils.py:57
+msgid "You have already used this promo code"
+msgstr ""
+
+#: utils.py:60
+msgid "Limit use this promo code exhausted"
+msgstr ""
+
+#: utils.py:63
+msgid "Promo code does not exist"
+msgstr ""
+
+#: views/base.py:205
+msgid "We recive your order!"
+msgstr ""
+
+#: views/payments/cash.py:12
+msgid "Cash payment"
+msgstr ""
+
+#: views/payments/mobilnik.py:17
+msgid "Pay"
+msgstr ""
