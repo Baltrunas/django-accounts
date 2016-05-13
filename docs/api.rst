@@ -290,13 +290,14 @@ POST
     {"auth": false}
 
 
-Удаление темы заказа
+Удаление товара с заказа
 ------------------------
 **/api/json/order/item/delete/$id/**
 
 $id - id тема заказа
 
 POST
+
     | username - логин для авторизации (requered)
     | password - пароль для авторизации (requered)
 
