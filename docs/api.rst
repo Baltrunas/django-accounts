@@ -176,6 +176,7 @@ $status - статусы заказа могут быть: 
 $id - id заказа
 
 POST
+
     | login - логин для авторизации (requered)
     | password - пароль для авторизации (requered)
 
@@ -210,14 +211,15 @@ POST
 $id - id заказа
 
 POST
-    | login - логин для авторизации
-    | password - пароль для авторизации
-    | name = name заказа
-    | email - email заказа
-    | address - address заказа
-    | phone - phone заказа
-    | comment - comment заказа
-    | payment_method - payment_method заказа
+
+    | login - логин для авторизации (requered)
+    | password - пароль для авторизации (requered)
+    | name - Имя заказчика (requered)
+    | email - email заказчика
+    | address - address заказчика (requered)
+    | phone - phone заказчика (requered)
+    | comment - комментарий заказчика
+    | payment_method - способ оплаты заказа (requered)
 
 Варианты ответа:
 
@@ -247,17 +249,18 @@ POST
     {"auth": false}
 
 
-Добавление темы заказа
+Добавление товара к заказу
 ------------------------
 **/api/json/order/item/add/$id/**
 
-$id - id темы заказа
+$id - id заказа
 
 POST
-    | login - логин для авторизации
-    | password - пароль для авторизации
-    | discount_price - цена
-    | count - количество
+
+    | login - логин для авторизации (requered)
+    | password - пароль для авторизации (requered)
+    | discount_price - цена товара со скидкой
+    | count - количество товара
 
 Варианты ответа:
 
@@ -293,8 +296,8 @@ POST
 $id - id тема заказа
 
 POST
-    login - логин для авторизации
-    password - пароль для авторизации
+    | login - логин для авторизации (requered)
+    | password - пароль для авторизации (requered)
 
 Варианты ответа:
 
