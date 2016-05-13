@@ -102,6 +102,7 @@ accounting - отправлено ли в 1с
 $id - id заказа
 
 POST
+
     | login - логин для авторизации (requered)
     | password - пароль для авторизации (requered)
 
@@ -131,8 +132,9 @@ POST
 $id - id заказа
 
 POST
-    | login - логин для авторизации
-    | password - пароль для авторизации
+
+    | login - логин для авторизации (requered)
+    | password - пароль для авторизации (requered)
 Варианты ответа:
 
 Если успешно:
@@ -164,13 +166,18 @@ POST
 ------------------------
 **/api/json/order/status/$status/$id/**
 
-$status - статусы (processed, paid, success, canceled)
+$status - статусы заказа могут быть: 
+
+    | processed - обработанный
+    | paid - оплаченный
+    | success - завершенный
+    | canceled - отмененный
 
 $id - id заказа
 
 POST
-    | login - логин для авторизации
-    | password - пароль для авторизации
+    | login - логин для авторизации (requered)
+    | password - пароль для авторизации (requered)
 
 Варианты ответа:
 
