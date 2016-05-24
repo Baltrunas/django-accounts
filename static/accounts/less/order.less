@@ -91,7 +91,7 @@
 	width: 200px;
 	height: 40px;
 	font-size: 16px;
-	background: #3b5998;
+	background: @main-color;
 	border-radius: 2px;
 	outline: none;
 	border: none;
@@ -100,7 +100,7 @@
 }
 
 .m-order .b-button:hover {
- 	background: #2b416f; 
+ 	background: @main-color-hover; 
 }
 
 .m-status_ok p {
@@ -397,7 +397,7 @@ height: 50px; */
 	padding: 0 37px;
 	height: 31px;
 	margin-left: 5px;
-	background-color: #3b5998;
+	background-color: @main-color;
 	color: #fff;
 	border: none;
 	border-radius: 2px;
@@ -428,7 +428,7 @@ height: 50px; */
 }
 
 .b-promo .b-button:hover {
-	background-color: #2b416f;
+	background-color: @main-color-hover;
 }
 
 .b-promo .m-button__deactivate:hover {
@@ -453,7 +453,7 @@ height: 50px; */
 	margin-top: 4.5px;
 	margin-right: 7px;
 	font-size: 12px;
-	background: #3b5998 url(../img/icons/add_bucket.png) no-repeat 10px 3px;
+	background: @main-color url('@{static_url}/img/icons/add_bucket.png') no-repeat 10px 3px;
 	background-size: 17%;
 	color: #fff;
 	border-radius: 2px;
@@ -462,7 +462,7 @@ height: 50px; */
 }
 
 .b-bucket-widget__add:hover {
-	background: #2b416f url(../img/icons/add_bucket.png) no-repeat 10px 3px;
+	background: @main-color-hover url('@{static_url}/img/icons/add_bucket.png') no-repeat 10px 3px;
 	background-size: 17%;
 }
 
@@ -495,7 +495,7 @@ height: 50px; */
 	margin-top: 4.5px;
 	margin-right: 7px;
 	font-size: 12px;
-	background: #aaa url(../img/icons/add_bucket.png) no-repeat 10px 3px;
+	background: #aaa url('@{static_url}/img/icons/add_bucket.png') no-repeat 10px 3px;
 	background-size: 17%;
 	color: #fff;
 	border-radius: 2px;
@@ -515,7 +515,7 @@ height: 50px; */
 	padding: 10px 0px 10px 10px;
 	margin: 0;
 	font-size: 18px;
-	background-color: #3b5998;
+	background-color: @main-color;
 	color: #fff;
 }
 
