@@ -35,7 +35,7 @@
 		</tr>
 		<tr>
 			<td class="b-table_key">{% trans "Total" %}</td>
-			<td class="b-table_value">{{ new_order.retail_price_with_discount|floatformat:-0 }}</td>
+			<td class="b-table_value">{{ new_order.discount_price|floatformat:-0 }}</td>
 		</tr>
 	</tbody>
 </table>
@@ -63,7 +63,7 @@
 			</td>
 			<td class='b-bucket-item__count'>{{ item.count }}</td>
 			<td class = 'b-bucket-item__total_price'>
-				= {{ item.get_total_retail_price_with_discount|floatformat:0 }}
+				= {{ item.total_discount_price|floatformat:0 }}
 			</td>
 		</tr>
 	{% endfor %}
