@@ -6,7 +6,29 @@ AUTH_USER_MODEL = 'accounts.User'
 AUTHENTICATION_BACKENDS = ('apps.accounts.auth.EmailOrUsernameModelBackend',)
 
 
+ACCOUNTS_PAYMENTS = [
+    ('cash', 'Cash'),
+    ('robox', 'Robokassa'),
+    ('mobilnik', 'Mobilnik'),
+    ('demirbank', 'DemirBank'),
+]
+
+DEFAULT_VALUTE = 'usd'
+
+
+---	
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
+SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
+
+SOCIAL_AUTH_USER_MODEL = 'accounts.User'
+
+
 разобраться с apps.py и __init__.py
+
+
+
 
 
 bucket.html
@@ -73,5 +95,10 @@ accounts.css полностью забить стили
 	телефон
 	цена
 	ид заказа
+
+
+
+
+seo
 
 
