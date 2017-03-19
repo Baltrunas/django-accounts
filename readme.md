@@ -25,6 +25,8 @@ SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
 SOCIAL_AUTH_USER_MODEL = 'accounts.User'
 
 
+SMS_TO = ''
+
 разобраться с apps.py и __init__.py
 
 
