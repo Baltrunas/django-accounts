@@ -1,10 +1,12 @@
 from django.conf import settings
 
-if 'cash' in settings.ACCOUNTS_PAYMENTS:
+payments = [payment[0] for payment in settings.ACCOUNTS_PAYMENTS]
+
+if 'cash' in payments:
 	from . import cash
-if 'mobilnik' in settings.ACCOUNTS_PAYMENTS:
+if 'mobilnik' in payments:
 	from . import mobilnik
-if 'robox' in settings.ACCOUNTS_PAYMENTS:
+if 'robox' in payments:
 	from . import robox
-if 'demirbank' in settings.ACCOUNTS_PAYMENTS:
+if 'demirbank' in payments:
 	from . import demirbank

@@ -202,18 +202,18 @@ def order(request):
 
 		context['new_order'] = new_order
 
-		# Notification E-Mail
-		try:
-			order_email_from = settings.ORDER_EMAIL_FROM
-			subject = _('We recive your order!')
-			template = 'accounts/e-mail/order'
-			mail(subject, context, template, order_email_from, [new_order.email, order_email_from])
-		except:
-			pass
+		# # Notification E-Mail
+		# try:
+		# 	order_email_from = settings.ORDER_EMAIL_FROM
+		# 	subject = _('We recive your order!')
+		# 	template = 'accounts/e-mail/order'
+		# 	mail(subject, context, template, order_email_from, [new_order.email, order_email_from])
+		# except:
+		# 	pass
 
-		# Notification SMS
-		if settings.SMS_SEND:
-			send_sms('New order: %s\n%s\n%s' % (new_order.id, new_order.name, new_order.phone))
+		# # Notification SMS
+		# if settings.SMS_SEND:
+		# 	send_sms('New order: %s\n%s\n%s' % (new_order.id, new_order.name, new_order.phone))
 
 		# Pay with selected payment method
 		payment = getattr(payments, new_order.payment_method)

@@ -9,33 +9,34 @@
 
 <h1>{% trans "We have received your order" %}</h1>
 
-<h2>{% trans "Hello" %} <b>{{ new_order.name }}</b>.</h2>
-
+<h2>{% trans "Hello" %} <b>{{ instance.name }}</b>.</h2>
+{{ instance }}
+{{ context }}
 <table class="b-table">
 	<tbody>
 		<tr>
 			<td class="b-table_key">{% trans "Name" %}</td>
-			<td class="b-table_value">{{ new_order.name }}</td>
+			<td class="b-table_value">{{ instance.name }}</td>
 		</tr>
 		<tr>
 			<td class="b-table_key">{% trans "E-Mail" %}</td>
-			<td class="b-table_value">{{ new_order.email }}</td>
+			<td class="b-table_value">{{ instance.email }}</td>
 		</tr>
 		<tr>
 			<td class="b-table_key">{% trans "Phone" %}</td>
-			<td class="b-table_value">{{ new_order.phone }}</td>
+			<td class="b-table_value">{{ instance.phone }}</td>
 		</tr>
 		<tr>
 			<td class="b-table_key">{% trans "Address" %}</td>
-			<td class="b-table_value">{{ new_order.address }}</td>
+			<td class="b-table_value">{{ instance.address }}</td>
 		</tr>
 		<tr>
 			<td class="b-table_key">{% trans "Comment" %}</td>
-			<td class="b-table_value">{{ new_order.comment }}</td>
+			<td class="b-table_value">{{ instance.comment }}</td>
 		</tr>
 		<tr>
 			<td class="b-table_key">{% trans "Total" %}</td>
-			<td class="b-table_value">{{ new_order.discount_price|floatformat:-0 }}</td>
+			<td class="b-table_value">{{ instance.discount_price|floatformat:-0 }}</td>
 		</tr>
 	</tbody>
 </table>
@@ -44,7 +45,7 @@
 <h3>{% trans "Content of order" %}</h3>
 
 <table class='b-bucket'>
-	{% for item in new_order.items.all %}
+	{% for item in instance.items.all %}
 		<tr class='b-bucket-item'>
 			<td>
 				{% if item.content_object.cover %}

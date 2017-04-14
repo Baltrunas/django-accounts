@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load thumbnail %}
+{% load static %}
+{% load bucket %}
+
+
+{% block content %}
+
+<div class='b-wrapper m-app_accounts m-template_bucket
+	{% if not bucket %}m-bucket_empty{% endif %}'>
+	<h1>{% trans "Order" %}</h1>
+
+
+	<table class='b-bucket'>
+		<thead>
+			<tr class='b-bucket__head'>
+				<td>{% trans "Photo" %}</td>
+				<td>{% trans "Name" %}</td>
+				<td>{% trans "Price" %}</td>
+				<td>{% trans "Count" %}</td>
+				<td>{% trans "Total" %}</td>
+				<td>{% trans "Delete" %}</td>
+			</tr>
+		</thead>
+
+		<!-- template -->
+		<tr class='b-bucket-item b-bucket-widget m-in-bucket_False'
+			data-csrf='{{ csrf_token }}'
+			data-content_type=''
+			data-object_id=''
+			data-price=''
+			data-count=''
+			>
+			<td class='b-bucket-item__photo'><img class='b-bucket-item__cover' src='' alt=''></td>
+			<td class='b-bucket-item__name'><a href='' class='b-bucket-item__name_link'></a></td>
+			<td class='b-bucket-item__price m-valute'></td>
+			<td class='b-bucket-item__count'>
+				<div class='b-bucket-widget_counter'>
+					<button class='b-bucket-widget__down'>–</button>
+					<span class='b-bucket-widget__count' contenteditable='true'></span>
+					<button class='b-bucket-widget__up'>+</button>
+				</div>
+			</td>
+			<td class='b-bucket-item__total b-bucket-widget__total_price m-valute'></td>
+			<td class='b-bucket-item__delete'><button class='b-bucket-widget__delete'>×</button></td>
+		</tr><!-- b-bucket-item -->
+
+
+		{% for item in bucket %}
+			{% in_bucket item.content_object as products_in_bucked %}
+
+			<tr class='
+					b-bucket-item
+					m-widget-{{ item.content_object.id }}
+					{% if products_in_bucked %}m-in-bucket_True{% endif %}
+					b-bucket-widget
+				'
+
+			data-csrf='{{ csrf_token }}'
+			data-content_type='{{ item.content_object.get_content_type.id }}'
+			data-object_id='{{ item.content_object.id }}'
+			data-price='{{ item.content_object.retail_price_with_discount }}'
+			data-count='{{ products_in_bucked }}'
+			>
+
+			<td class='b-bucket-item__photo'>
+				{% thumbnail item.content_object.cover "100x100" padding=True as im %}
+					<img class='b-bucket-item__cover' src='{{ im.url }}' alt='{{ item.content_object.name }}'>
+				{% empty %}
+					<img class='b-bucket-item__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ item.content_object.name }}'>
+				{% endthumbnail %}
+			</td>
+
+			<td class='b-bucket-item__name'>
+				<a href='{{ item.content_object.get_absolute_url }}' class='b-bucket-item__name_link'>
+					{{ item.content_object.name }}
+				</a>
+			</td>
+
+			<td class='b-bucket-item__price m-valute'>
+				{{ item.content_object.retail_price_with_discount|floatformat:0 }}
+			</td>
+
+			<td class='b-bucket-item__count'>
+				<div class='b-bucket-widget_counter'>
+					<button class='b-bucket-widget__down' data-widget='{{ item.content_object.id }}'>–</button>
+					<span class='b-bucket-widget__count' data-widget='{{ item.content_object.id }}' contenteditable='true'>
+						{{ products_in_bucked }}
+					</span>
+					<button class='b-bucket-widget__up' data-widget='{{ item.content_object.id }}'>+</button>
+				</div>
+			</td>
+
+			<td class='b-bucket-item__total b-bucket-widget__total_price m-valute'>
+				{{ item.total_discount_price|floatformat:0 }}
+			</td>
+
+			<td class='b-bucket-item__delete'>
+				<button class='b-bucket-widget__delete' data-widget='{{ item.content_object.id }}'>×</button>
+			</td>
+
+			</tr><!-- b-bucket-item -->
+
+			{% endfor %}
+		</table><!-- b-bucket -->
+
+	<div class='b-bucket-empty'>
+		<h2 class='b-bucket__empty'>Ваша корзина пуста!</h2>
+		<h3 class='b-bucket__empty'>Самые популярные продукты:</h3>
+
+		<div class='b-related'>
+			{% for product in related %}
+				<div class='b-product m-product_{{ product.id }}'
+				data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
+				data-created='{{ product.created_at|date:"U" }}'>
+					{% thumbnail product.cover "600x400" padding=True as im %}
+						<img class='b-product__cover' src='{{ im.url }}' alt='{{ product.name }}'>
+					{% empty %}
+						<img class='b-product__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'>
+					{% endthumbnail %}
+					<div class='b-product_bottom'>
+						<a href='{{ product.get_absolute_url }}' class='b-product__name'>{{ product.name }}</a>
+						<div class='b-product__price'>
+							{{ product.retail_price_with_discount|floatformat:0 }}
+						</div>
+						{% include "accounts/bucket__widget.html" with obj=product %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+
+	<div class='b-promo-totals'>
+		<dl class='b-totals'>
+			<dt class='b-totals_key'>bucket_item_count:</dt>
+			<dd class='b-totals_value b-bucket_item_count'>{{ request.bucket_item_count }}</dd>
+			<dt class='b-totals_key'>bucket_total_count:</dt>
+			<dd class='b-totals_value b-bucket_total_count'>{{ request.bucket_total_count }}</dd>
+
+			<dt class='b-totals_key'>{% trans "Bucket price" %}:</dt>
+			<dd class='b-totals_value b-bucket_total_retail_price'>{{ bucket_total_retail_price|floatformat:decimal_places }}</dd>
+
+			{% if bucket_total_discount_price < bucket_total_retail_price %}
+				<dt class='b-totals_key'>{% trans "Bucket price with discount" %}:</dt>
+				<dd class='b-totals_value'>{{ request.bucket_total_discount_price|floatformat:decimal_places }}</dd>
+			{% endif %}
+
+			{% if request.promo_discount %}
+				<dt class='b-totals_key'>{% trans "Promo discount" %}:</dt>
+				<dd class='b-totals_value b-promo_discount'>{{ request.promo_discount|floatformat:decimal_places }}</dd>
+			{% endif %}
+
+			<dt class='b-totals_key m-totals_total'>{% trans "Total" %}:</dt>
+			<dd class='b-totals_value m-totals_total b-order_price'>{{ order_price|floatformat:decimal_places }}</dd>
+		</dl> <!-- b-totals -->
+
+
+		<div class='b-promo'>
+			{% if promocode and not promocode_errors %}
+				<div class='b-promo-info'>
+					<big class='b-promo-info__title'>
+						Активирован промо-код:
+						<b>{{ promocode.code }}</b>
+					</big>
+
+					<div class='b-promo-info__info'>
+						<b>{{ promocode.name }}</b> -
+						{{ promocode.description }}
+
+						{% if promocode.sum_up %}
+							<p class='b-promo-info__info__text'>Скидка по промокоду <b>суммируется</b> с другими скидками.</p>
+						{% else %}
+							<p class='b-promo-info__info__text'>Скидка по промокоду <b>не суммируется</b> с другими скидками.</p>
+						{% endif %}
+
+						{% if promocode.one_per_user %}
+							<p class='b-promo-info__info__text'>Промокод может быть использован только один раз.</p>
+						{% endif %}
+					</div>
+
+					<form method='POST' action='{% url "accounts_promo" %}'>
+						{% csrf_token %}
+						<input class='b-button m-button__promo m-button__deactivate' type='submit' name='deactivate' value='{% trans "Deactivate" %}'>
+					</form>
+				</div><!-- b-promo-info -->
+			{% endif %}
+
+			{% if promocode_errors %}
+				<div class='b-promo-errors'>
+					<h3 class='b-promo-errors__title'>Промокод не верный или не может быть применён:</h3>
+
+					<form class='b-promo-errors__form' method='POST' action='{% url "accounts_promo" %}'>
+						{% csrf_token %}
+						<input class='b-button m-button__close_error' type='submit' name='deactivate' value='×'>
+					</form>
+
+					<ul class='b-promo-errors__list'>
+						{% for promo_error in  promocode_errors %}
+							<li class='b-promo-errors__list_item'>{{ promo_error }}</li>
+						{% endfor %}
+					</ul>
+				</div><!-- b-promo-errors -->
+			{% endif %}
+
+			{% if not promocode or promocode_errors %}
+				<form class='b-promo-form' method='POST' action='{% url "accounts_promo" %}'>
+					{% csrf_token %}
+					<h3 class='b-promo-form__title'>Есть промо-код?</h3>
+					<input class='b-promo-form__field' maxlength='100' name='promocode' placeholder='Введите его здесь'>
+					<input class='b-button m-button__promo' type='submit' value='Применить'>
+				</form><!-- b-promo-form -->
+			{% endif %}
+		</div><!-- b-promo -->
+	</div> <!-- b-promo-totals -->
+
+	<div class='b-products-order'>
+		<div class='b-products'>
+			<h3 class='b-order-panel__title m-products__title'>С этими товарами покупают</h3>
+			{% for product in related %}
+				<div class='b-product m-product_{{ product.id }}'
+				data-price='{{ product.retail_price_with_discount|floatformat:0 }}'
+				data-created='{{ product.created_at|date:"U" }}'>
+					{% thumbnail product.cover "600x400" padding=True as im %}
+						<img class='b-product__cover' src='{{ im.url }}' alt='{{ product.name }}'>
+					{% empty %}
+						<img class='b-product__cover' src='{% static "catalog/img/cover-picture.png" %}' alt='{{ product.name }}'>
+					{% endthumbnail %}
+					<div class='b-product_bottom'>
+						<a href='{{ product.get_absolute_url }}' class='b-product__name'>{{ product.name }}</a>
+						<div class='b-product__price'>
+							{{ product.retail_price_with_discount|floatformat:0 }}
+						</div>
+						{% include "accounts/bucket__widget.html" with obj=product %}
+					</div>
+				</div>
+			{% endfor %}
+		</div> <!-- b-products -->
+
+
+		<div class='b-order-panel'>
+			<h3 class='b-order-panel__title'>Оформление заказа</h3>
+			<form class='b-form-order m-order' method='POST' action=''>
+				{% csrf_token %}
+				<div class='b-form-order_left'>
+					<ul class='b-field
+								m-field_{{ order_form.name.name }}
+								{% if order_form.name.errors %}m-field_error{% endif %}
+								{% if order_form.name.required %}m-field_required{% endif %}'>
+						{% if order_form.name.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.name.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
+						<li class='b-field__label'>{{ order_form.name.label }}</li>
+						<li class='b-field__element'><input type='text' name='{{ order_form.name.name }}' class='b-field_{{ order_form.name.name }}'></li>
+					</ul>
+					<ul class='b-field
+								m-field_{{ order_form.email.name }}
+								{% if order_form.email.errors %}m-field_error{% endif %}
+								{% if order_form.email.required %}m-field_required{% endif %}'>
+						{% if order_form.email.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.email.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
+						<li class='b-field__label'>{{ order_form.email.label }}</li>
+						<li class='b-field__element'><input type='email' name='{{ order_form.email.name }}' class='b-field_{{ order_form.email.name }}'></li>
+					</ul>
+					<ul class='b-field
+								m-field_{{ order_form.address.name }}
+								{% if order_form.address.errors %}m-field_error{% endif %}
+								{% if order_form.address.required %}m-field_required{% endif %}'>
+						{% if order_form.address.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.address.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
+						<li class='b-field__label'>{{ order_form.address.label }}</li>
+						<li class='b-field__element'><input type='text' name='{{ order_form.address.name }}' class='b-field_{{ order_form.address.name }}'></li>
+					</ul>
+					<ul class='b-field
+								m-field_{{ order_form.phone.name }}
+								{% if order_form.phone.errors %}m-field_error{% endif %}
+								{% if order_form.phone.required %}m-field_required{% endif %}'>
+						{% if order_form.phone.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.phone.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
+						<li class='b-field__label'>{{ order_form.phone.label }}</li>
+						<li class='b-field__element'><input type='text' name='{{ order_form.phone.name }}' class='b-field_{{ order_form.phone.name }}'></li>
+					</ul>
+					<ul class='b-field
+								m-field_{{ order_form.comment.name }}
+								{% if order_form.comment.errors %}m-field_error{% endif %}
+								{% if order_form.comment.required %}m-field_required{% endif %}'>
+						{% if order_form.comment.errors %}
+							<li class='b-field__errors'>
+								<ul class='b-field__errors_list'>
+									{% for error in order_form.comment.errors %}
+										<li class='b-field__errors_list_item'>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</li>
+						{% endif %}
+						<li class='b-field__label'>{{ order_form.comment.label }}</li>
+						<li class='b-field__element'><textarea name='{{ order_form.comment.name }}' class='b-field_{{ order_form.comment.name }}'></textarea></li>
+					</ul>
+				</div>
+				<div class='b-form-order_right'>
+					<ul class='b-field
+								m-field_payment_method
+								m-field_required
+							'>
+								<li class='b-field__label'><label for='id_payment_method_{{ forloop.counter0 }}'>{{ order_form.payment_method.label }}</label></li>
+						<li class='b-field__element'>
+							<ul class='b-form-order__list' id='id_payment_method'>
+								{% for choise in order_form.payment_method %}
+									<li class='b-form-order__item'>
+										<label for='id_payment_method_{{ forloop.counter0}}'>
+											<input class='b-form-order__input' type='radio' name='{{ order_form.payment_method.name }}' value='{{ choise.choice_value }}'>
+												<img class='b-form-order__image' src='/static/accounts/img/icons/payments/{{ choise.choice_value }}.png' alt='{{ choise.choice_label }}'>
+												{{ choise.choice_label }}
+										</label>
+									</li>
+								{% endfor %}
+							</ul>
+						</li>
+					</ul>
+					<p class='b-field__info'></p>
+				</div>
+			<input class='b-button m-button__order' type='submit' value='{% trans "Order" %}'>
+			</form> <!-- b-form-order -->
+		</div><!-- b-order -->
+	</div>
+</div>
+
+
+<script type='text/javascript'>
+
+
+function add_to_bucket (widget, create) {
+	// var widget = $('.m-widget-' + $(this).data('widget'));
+
+	if (create) {
+		$('.b-bucket tbody').children().first().clone().appendTo('.b-bucket');
+		var new_item = $('.b-bucket tbody').children().last();
+
+		new_item.removeClass('m-in-bucket_False');
+		new_item.addClass('m-in-bucket_True');
+		new_item.addClass('m-widget-' + widget.data('object_id'));
+
+		new_item.data('content_type', widget.data('content_type'));
+		new_item.data('object_id', widget.data('object_id'));
+		new_item.data('price', widget.data('price'));
+		new_item.data('count', widget.data('count'));
+
+		title = widget.parent().children('.b-product__name').first().text();
+		href = widget.parent().children('.b-product__name').attr('href');
+		src = widget.parent().parent().find('.b-product__cover').attr('src');
+
+		new_item.find('.b-bucket-item__cover').attr('alt', title);
+		new_item.find('.b-bucket-item__cover').attr('src', src);
+
+		new_item.find('.b-bucket-item__name_link').text(title);
+		new_item.find('.b-bucket-item__name_link').attr('href', href);
+
+
+		price = widget.parent().find('.b-product__price').first().text();
+		new_item.find('.b-bucket-item__price').text(price);
+
+		new_item.find('.b-bucket-item__total').text(price);
+
+
+		new_item.find('.b-bucket-widget__down').data('widget', widget.data('object_id'));
+		new_item.find('.b-bucket-widget__count').data('widget', widget.data('object_id'));
+		new_item.find('.b-bucket-widget__count').text('1');
+		new_item.find('.b-bucket-widget__up').data('widget', widget.data('object_id'));
+
+
+		new_item.find('.b-bucket-widget__delete').data('widget', widget.data('object_id'));
+	}
+	product = $('.m-product_' + widget.data('object_id'));
+	product.hide();
+}
+
+
+function restore_on_relative(widget) {
+	product = $('.m-product_' + widget.data('object_id'));
+	product.show();
+
+};
+
+</script>
+
+
+{% endblock content %}

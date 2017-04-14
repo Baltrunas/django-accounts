@@ -4,72 +4,63 @@
  **************************
 */
 
-.m-template_order {
-	background: #fff;
-	box-shadow: 1200px 0 0 0 #fff, -1199px 0 0 0 #fff;
-	padding-top: 20px;
-	padding-bottom: 40px;
-}
-
-.m-template_order h1 {
-	color: #666;
-	font-weight: bold!important;
-	text-transform: uppercase;
-	margin: 0;
-	text-align: center;
-}
-
-.m-template_order h1:after {
-	display: block;
-	content: " ";
-	background: #666;
-	background-size: 100%;
-	width: 100px;
-	height: 2px;
-	margin: 10px auto 30px auto;
-}
-
-.m-template_order .b-bucket_total{
-	display: none;
-}
 
 .m-order {
 	padding: 35px 40px 35px 40px;
 	background-color: rgba(59, 89, 152, 0.02);
 	border: 1px solid #e6e6e6;
 	height: 471px;
-}
 
-.m-order .b-field {
-	padding: 0;
-	list-style: none;
-	width: 400px; /*   */
-	display: inline-block;
-	margin: 0 0 20px 0;
-}
+	.b-field {
+		padding: 0;
+		list-style: none;
+		width: 400px; /*   */
+		display: inline-block;
+		margin: 0 0 20px 0;
 
-.m-order .b-field__label {
-	margin-bottom: 5px;
-	font-size: 16px;
-}
+		&__label {
+			margin-bottom: 5px;
+			font-size: 16px;
+		}
+	}
 
-.m-order input {
-	width: 100%;
-	height: 34px;
-	border: 1px solid silver;
-	padding-left: 5px;
-	box-sizing: border-box;
-	outline: none;
-}
+	input {
+		width: 100%;
+		height: 34px;
+		border: 1px solid silver;
+		padding-left: 5px;
+		box-sizing: border-box;
+		outline: none;
+	}
 
-.m-order textarea {
-	height: 115px!important;
-	width: 100%!important;
-	resize: none;
-	box-sizing: border-box;
-	outline: none;
-	padding-left: 5px;
-	border: 1px solid silver;
+	textarea {
+		height: 115px!important;
+		width: 100%!important;
+		resize: none;
+		box-sizing: border-box;
+		outline: none;
+		padding-left: 5px;
+		border: 1px solid silver;
+	}
+
+	.b-button {
+		display: block;
+		margin: 15px auto 10px auto;
+		width: 200px;
+		height: 40px;
+		font-size: 16px;
+		background: @c-main;
+		border-radius: 2px;
+		outline: none;
+		border: none;
+		cursor: pointer;
+		color: #fff;
+
+		&:hover {
+		 	background: @c-main__hover; 
+		}
+	}
+
 }
 
 #id_payment_method {
@@ -79,28 +70,6 @@
 	box-sizing: border-box;
 	border-radius: 0px;
 	font-size: 14px;
-}
-
-.m-order .b-button.m-go_bucket {
-	display: none;
-}
-
-.m-order .b-button {
-	display: block;
-	margin: 15px auto 10px auto;
-	width: 200px;
-	height: 40px;
-	font-size: 16px;
-	background: @main-color;
-	border-radius: 2px;
-	outline: none;
-	border: none;
-	cursor: pointer;
-	color: #fff;
-}
-
-.m-order .b-button:hover {
- 	background: @main-color-hover; 
 }
 
 .m-status_ok p {
@@ -115,50 +84,6 @@
  **************************
 */
 
- .b-bucket_total  {
-/*  	margin-top: 30px;
-height: 50px; */
- }
-
-.b-bucket_total .b-button {
-	display: block;
-	height: 30px;
-	width: 250px;
-	background: #70bb58;
-	text-align: center;
-	line-height: 2;
-	color: #fff;
-	font-size: 14px;
-	float: right;
-	text-decoration: none;
-	clear: both;
-}
-
-.b-bucket_total span {
-	float: right;
-	font-size: 25px;
-	margin-bottom: 20px;
-	clear: both;
-	text-align: right;
-	
-}
-
-.m-go_bucket.b-button {
-	display: inline-block;
-	margin: 0;
-	width: 340px;
-	height: 30px;
-	background: #70bb58;
- 	color: #fff;
- 	text-align: center;
- 	text-decoration: none;
- 	font-size: 14px;
- 	line-height: 2;
- 	border: none;
- 	margin: 45px 0 10px 0;
- 	clear: right;
- 	outline: none;
-}
 
 .b-button {
 	margin: 0;
@@ -175,102 +100,91 @@ height: 50px; */
 	margin: 0 auto;
 	overflow: hidden;
 	padding-top: 20px;
-}
 
-.m-template_succes h1 {
-	color: #666;
-	font-weight: bold!important;
-	text-transform: uppercase;
-	margin: 0;
-	text-align: center;
-}
+	h1 {
+		color: #666;
+		font-weight: bold!important;
+		text-transform: uppercase;
+		margin: 0;
+		text-align: center;
 
-.m-template_succes h1:after {
-	display: block;
-	content: " ";
-	background: #666;
-	background-size: 100%;
-	width: 100px;
-	height: 2px;
-	margin: 10px auto 30px auto;
-}
+		&:after {
+			display: block;
+			content: " ";
+			background: #666;
+			background-size: 100%;
+			width: 100px;
+			height: 2px;
+			margin: 10px auto 30px auto;
+		}
+	}
 
-.m-template_succes h3 {
-	text-align: center;
-	margin-bottom: 170px;
+	h3 {
+		text-align: center;
+		margin-bottom: 170px;
+	}
 }
-
-/**
- **************************
- Order error
- **************************
-*/
 
 .m-template_error {
 	width: 1200px;
 	margin: 0 auto;
 	overflow: hidden;
 	padding-top: 20px;
-}
 
-.m-template_error h1 {
-	color: #666;
-	font-weight: bold!important;
-	text-transform: uppercase;
-	margin: 0;
-	text-align: center;
-}
+	h1 {
+		color: #666;
+		font-weight: bold!important;
+		text-transform: uppercase;
+		margin: 0;
+		text-align: center;
 
-.m-template_error h1:after {
-	display: block;
-	content: " ";
-	background: #666;
-	background-size: 100%;
-	width: 100px;
-	height: 2px;
-	margin: 10px auto 30px auto;
-}
+		:after {
+			display: block;
+			content: " ";
+			background: #666;
+			background-size: 100%;
+			width: 100px;
+			height: 2px;
+			margin: 10px auto 30px auto;
+		}
+	}
 
-.m-template_error h3 {
-	text-align: center;
-	margin-bottom: 170px;
+	h3 {
+		text-align: center;
+		margin-bottom: 170px;
+	}
 }
-
-/**
- **************************
- Order succes
- **************************
-*/
 
 .m-template_fail {
 	width: 1200px;
 	margin: 0 auto;
 	overflow: hidden;
 	padding-top: 20px;
+
+	h1 {
+		color: #666;
+		font-weight: bold!important;
+		text-transform: uppercase;
+		margin: 0;
+		text-align: center;
+
+		&:after {
+			display: block;
+			content: " ";
+			background: #666;
+			background-size: 100%;
+			width: 100px;
+			height: 2px;
+			margin: 10px auto 30px auto;
+		}
+	}
+
+	h3 {
+		text-align: center;
+		margin-bottom: 170px;
+	}
 }
 
-.m-template_fail h1 {
-	color: #666;
-	font-weight: bold!important;
-	text-transform: uppercase;
-	margin: 0;
-	text-align: center;
-}
-
-.m-template_fail h1:after {
-	display: block;
-	content: " ";
-	background: #666;
-	background-size: 100%;
-	width: 100px;
-	height: 2px;
-	margin: 10px auto 30px auto;
-}
-
-.m-template_fail h3 {
-	text-align: center;
-	margin-bottom: 170px;
-}
 
 
 /**
@@ -278,126 +192,132 @@ height: 50px; */
  Totals
  **************************
 */
-
-
-.b-promo-totals{
+.b-promo-totals {
 	width: 100%;
 	border: 1px solid #e6e6e6;
 	border-top: none;
 	display: inline-block;
 	margin-bottom: 15px;
 	box-sizing: border-box;
+
+	.b-totals {
+		float: right;
+		width: 46.95%;
+		display: block;
+		position: relative;
+		border-left: 1px solid #e6e6e6;
+		margin: 0;
+		padding: 10px 0;
+
+		&_key,
+		&_value {
+			display: inline-block;
+		}
+
+		&_key {
+			text-align: right;
+			padding-left: 34px;
+			width: 50%;
+		}
+
+		&_value {
+			-webkit-margin-start: 3px;
+			font-weight: bold;
+		}
+
+		.m-totals_total {
+			font-size: 25px;
+		}
+	}
+
+
+
+	.b-promo {
+		font-size: 13px;
+		border-right: 1px solid #e6e6e6;
+		width: 53%;
+		display: block;
+		position: relative;
+
+		&-info {
+			padding: 10px;
+
+			&__info {
+				margin-top: 7px;
+
+				&__text {
+					margin: 2px 0;
+				}
+			}
+		} // -info
+
+		&-errors {
+			display: block;
+			border: 1px solid #b94947;
+			padding: 10px;
+			background-color: #f2dedf; 
+
+			&__title {
+				color: #b94947;
+				margin: 0;
+				display: inline-block;
+				font-size: 16px;
+			}
+
+			&__form {
+				float: right;
+				margin: -8px -6px 0 0;
+			}
+
+			&__list {
+				padding-left: 20px;
+				display: inline-block;
+				color: #bf5958;
+				font-size: 14px;
+				margin: 5px 0 0 0;
+			}
+		} // -errors
+
+		&-form {
+			text-align: center;
+
+			&__title {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+			&__field {
+				width: 250px;
+				height: 27px;
+				border: 1px solid #e6e6e6;
+				margin: 0 5px;
+				border-radius: 2px;
+				outline: none;
+				vertical-align: middle;
+				font-size: 15px;
+			}
+		} // -form
+	}
+
 }
 
-.b-totals {
-	float: right;
-	width: 46.95%;
-	display: block;
-	position: relative;
-	border-left: 1px solid #e6e6e6;
-	margin: 0;
-	padding: 10px 0;
+
+
+
+.b-promo .b-button:hover {
+	background-color: @c-main__hover;
 }
 
-.b-totals_key,
-.b-totals_value {
-	display: inline-block;
+.b-promo .m-button__deactivate:hover {
+	background-color: #b93d31;
 }
 
-.b-totals_key {
-	text-align: right;
-	padding-left: 34px;
-	width: 50%;
-}
-
-.b-totals_value {
-	-webkit-margin-start: 3px;
-	font-weight: bold;
-}
-
-.m-totals_total {
-	font-size: 25px;
-}
-
-
-/**
- **************************
- Promo
- **************************
-*/
-
-.b-promo {
-	font-size: 13px;
-	border-right: 1px solid #e6e6e6;
-	width: 53%;
-	display: block;
-	position: relative;
-}
-
-.b-promo-info {
-	padding: 10px;
-}
-
-.b-promo-info__info {
-	margin-top: 7px;
-}
-
-.b-promo-info__info__text {
-	margin: 2px 0;
-}
-
-.b-promo-errors {
-	display: block;
-	border: 1px solid #b94947;
-	padding: 10px;
-	background-color: #f2dedf; 
-}
-
-.b-promo-errors__title {
-	color: #b94947;
-	margin: 0;
-	display: inline-block;
-	font-size: 16px;
-}
-
-.b-promo-errors__form {
-	float: right;
-	margin: -8px -6px 0 0;
-}
-
-.b-promo-errors__list {
-	padding-left: 20px;
-	display: inline-block;
-	color: #bf5958;
-	font-size: 14px;
-	margin: 5px 0 0 0;
-}
-
-.b-promo-form {
-	text-align: center;
-}
-
-.b-promo-form__title {
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.b-promo-form__field {
-	width: 250px;
-	height: 27px;
-	border: 1px solid #e6e6e6;
-	margin: 0 5px;
-	border-radius: 2px;
-	outline: none;
-	vertical-align: middle;
-	font-size: 15px;
-}
 
 .m-button__promo {
 	padding: 0 37px;
 	height: 31px;
 	margin-left: 5px;
-	background-color: @main-color;
+	background-color: @c-main;
 	color: #fff;
 	border: none;
 	border-radius: 2px;
@@ -427,14 +347,6 @@ height: 50px; */
 	outline: none;
 }
 
-.b-promo .b-button:hover {
-	background-color: @main-color-hover;
-}
-
-.b-promo .m-button__deactivate:hover {
-	background-color: #b93d31;
-}
-
 
 /**
  **************************
@@ -453,7 +365,7 @@ height: 50px; */
 	margin-top: 4.5px;
 	margin-right: 7px;
 	font-size: 12px;
-	background: @main-color url('@{static_url}/img/icons/add_bucket.png') no-repeat 10px 3px;
+	background: @c-main url('@{static_url}/img/icons/add_bucket.png') no-repeat 10px 3px;
 	background-size: 17%;
 	color: #fff;
 	border-radius: 2px;
@@ -462,7 +374,7 @@ height: 50px; */
 }
 
 .b-bucket-widget__add:hover {
-	background: @main-color-hover url('@{static_url}/img/icons/add_bucket.png') no-repeat 10px 3px;
+	background: @c-main__hover url('@{static_url}/img/icons/add_bucket.png') no-repeat 10px 3px;
 	background-size: 17%;
 }
 
@@ -515,7 +427,7 @@ height: 50px; */
 	padding: 10px 0px 10px 10px;
 	margin: 0;
 	font-size: 18px;
-	background-color: @main-color;
+	background-color: @c-main;
 	color: #fff;
 }
 
