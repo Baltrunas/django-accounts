@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-22 10:12+0600\n"
+"POT-Creation-Date: 2017-04-20 13:12+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: apps.py:8
+msgid "Accounts"
+msgstr "Пользователи"
 
 #: forms.py:12
 msgid "Login or E-Mail"
@@ -57,98 +61,217 @@ msgstr "Новый пароль"
 msgid "New password (again)"
 msgstr "Новый пароль (еще раз)"
 
-#: models.py:16 models.py:36 templates/accounts/e-mail/order.html:25
-#: templates/accounts/e-mail/order.txt:11 templates/accounts/profile.html:25
+#: models.py:22 models.py:78 templates/accounts/e-mail/order.html:26
+#: templates/accounts/e-mail/order.txt:11
 msgid "Phone"
 msgstr "Телефон"
 
-#: models.py:17 models.py:35
+#: models.py:23 models.py:77 templates/accounts/e-mail/order.html:30
+#: templates/accounts/e-mail/order.txt:12
 msgid "Address"
 msgstr "Адрес"
 
-#: models.py:33 templates/accounts/e-mail/order.html:17
-#: templates/accounts/e-mail/order.txt:9 templates/accounts/profile.html:23
+#: models.py:36
+msgid "Code"
+msgstr "Код"
+
+#: models.py:37 models.py:75 models.py:162
+#: templates/accounts/e-mail/order.html:18
+#: templates/accounts/e-mail/order.txt:9 templates/accounts/old_order.html:20
+#: templates/accounts/order.html:20
 msgid "Name"
 msgstr "Имя"
 
-#: models.py:34 templates/accounts/e-mail/order.html:21
-#: templates/accounts/e-mail/order.txt:10 templates/accounts/profile.html:24
+#: models.py:38
+msgid "Description"
+msgstr "Описание"
+
+#: models.py:41
+msgid "Interest"
+msgstr "Фиксированная"
+
+#: models.py:42
+msgid "Percent"
+msgstr "Процент"
+
+#: models.py:44
+msgid "Discout type"
+msgstr "Тип скидки"
+
+#: models.py:45
+msgid "Discout value"
+msgstr "Значение скидки"
+
+#: models.py:47
+msgid "Limit"
+msgstr "Ограничение"
+
+#: models.py:49
+msgid "Active"
+msgstr "Актвно"
+
+#: models.py:50
+msgid "Active from"
+msgstr "Активно с"
+
+#: models.py:51
+msgid "Active before"
+msgstr "Активно до"
+
+#: models.py:53
+msgid "Sum up"
+msgstr "Сумируется"
+
+#: models.py:54
+msgid "Only registered"
+msgstr "Только зарегистрированные"
+
+#: models.py:55
+msgid "One per user"
+msgstr "Один раз на пользователя"
+
+#: models.py:67 models.py:80
+msgid "Promo Code"
+msgstr "Промо код"
+
+#: models.py:68
+msgid "Promo Codes"
+msgstr "Промо коды"
+
+#: models.py:73
+msgid "GUID"
+msgstr ""
+
+#: models.py:76 templates/accounts/e-mail/order.html:22
+#: templates/accounts/e-mail/order.txt:10
 msgid "E-Mail"
 msgstr ""
 
-#: models.py:37 templates/accounts/e-mail/order.html:29
-#: templates/accounts/e-mail/order.txt:12 templates/accounts/profile.html:26
+#: models.py:82 templates/accounts/e-mail/order.html:34
+#: templates/accounts/e-mail/order.txt:13
 msgid "Comment"
 msgstr "Комментарий"
 
-#: models.py:39 models.py:73
+#: models.py:84
 msgid "Retail Price"
 msgstr "Старая цена"
 
-#: models.py:40 models.py:74
-msgid "Wholesale Price"
-msgstr "Цена склада"
+#: models.py:85 models.py:132
+msgid "Discount price"
+msgstr "Цена со скидкой"
 
-#: models.py:41 models.py:75
-msgid "Retail Price With Discount"
-msgstr "Цена"
+#: models.py:88
+msgid "New"
+msgstr "Новый"
 
-#: models.py:44
-msgid "Created"
-msgstr "Создан"
+#: models.py:89
+msgid "Accept by:"
+msgstr "Принято пользователем"
 
-#: models.py:45
-msgid "Processed"
-msgstr "В процессе"
+#: models.py:90
+msgid "Processed (1c)"
+msgstr "В процессе (1c)"
 
-#: models.py:46
-msgid "Canceled"
-msgstr "Отменён"
+#: models.py:91
+msgid "Paid"
+msgstr "Оплаченно"
 
-#: models.py:47
+#: models.py:92 models.py:102
 msgid "Success"
 msgstr "Принят"
 
-#: models.py:49 templates/accounts/profile.html:28
+#: models.py:93 models.py:103
+msgid "Canceled"
+msgstr "Отменён"
+
+#: models.py:96
 msgid "Status"
 msgstr "Статус"
 
-#: models.py:51 models.py:79 templates/accounts/profile.html:29
+#: models.py:99
+msgid "Created"
+msgstr "Создан"
+
+#: models.py:100
+msgid "Failed"
+msgstr "Не удачно"
+
+#: models.py:101
+msgid "Processed"
+msgstr "В процессе"
+
+#: models.py:104
+msgid "Error"
+msgstr "Ошибка"
+
+#: models.py:106
+msgid "Payment status"
+msgstr "Статус платежа"
+
+#: models.py:108
+msgid "Payment method"
+msgstr "Способ оплаты"
+
+#: models.py:110
+msgid "Accounting"
+msgstr ""
+
+#: models.py:114 models.py:136
 msgid "Created at"
 msgstr "Создано"
 
-#: models.py:52 models.py:80
+#: models.py:115 models.py:137
 msgid "Updated at"
 msgstr "Изменено"
 
-#: models.py:66
+#: models.py:124
 msgid "User"
 msgstr "Пользователь"
 
-#: models.py:67 templates/accounts/order.html:15
-#: templates/accounts/order.html.py:45 views.py:249
+#: models.py:125 templates/accounts/old_order.html:13
+#: templates/accounts/old_order.html:351 templates/accounts/order.html:13
+#: templates/accounts/order.html:351 views/base.py:166
 msgid "Order"
 msgstr "Заказать"
 
-#: models.py:69
+#: models.py:127
 msgid "Content Type"
 msgstr ""
 
-#: models.py:70
+#: models.py:128
 msgid "Object ID"
 msgstr ""
 
-#: models.py:77
+#: models.py:131
+msgid "Retail price"
+msgstr "Старая цена"
+
+#: models.py:134 templates/accounts/old_order.html:22
+#: templates/accounts/order.html:22
 msgid "Count"
 msgstr "Количество"
 
-#: templates/accounts/bucket.html:11 views.py:193
-msgid "Bucket"
-msgstr "Корзина"
+#: models.py:163
+msgid "Slug"
+msgstr "Ярлык"
 
-#: templates/accounts/bucket.html:89 templates/accounts/order.html:17
-msgid "Total price"
-msgstr "Итого"
+#: models.py:163
+msgid ""
+"A slug is the part of a URL which identifies a page using human-readable "
+"keywords"
+msgstr ""
+
+#: models.py:164 models.py:169
+msgid "Currency rate"
+msgstr "Курс валюты"
+
+#: models.py:165
+msgid "Decimal places"
+msgstr "Количество точек после запятой"
+
+#: models.py:170
+msgid "Currency rates"
+msgstr "Курсы валют"
 
 #: templates/accounts/e-mail/order.html:10
 #: templates/accounts/e-mail/order.txt:4
@@ -160,107 +283,51 @@ msgstr "Мы получили Ваш заказ"
 msgid "Hello"
 msgstr "Здравствуйте"
 
-#: templates/accounts/e-mail/order.html:33
-#: templates/accounts/e-mail/order.txt:13
+#: templates/accounts/e-mail/order.html:38
+#: templates/accounts/e-mail/order.txt:14 templates/accounts/old_order.html:23
+#: templates/accounts/old_order.html:156 templates/accounts/order.html:23
+#: templates/accounts/order.html:156
 msgid "Total"
 msgstr "Итого"
 
-#: templates/accounts/e-mail/order.html:40
-#: templates/accounts/e-mail/order.txt:15
+#: templates/accounts/e-mail/order.html:45
+#: templates/accounts/e-mail/order.txt:16
 msgid "Content of order"
 msgstr "Содержимое заказа"
 
-#: templates/accounts/login.html:8
-#: templates/accounts/password_reset_complete.html:10
-msgid "Log in"
-msgstr "Войти"
+#: templates/accounts/old_order.html:19 templates/accounts/order.html:19
+msgid "Photo"
+msgstr "Фото"
 
-#: templates/accounts/login.html:35 urls.py:17
-msgid "Login"
-msgstr "Войти"
-
-#: templates/accounts/password_change.html:6
-#: templates/accounts/password_change.html:42
-msgid "Change your password"
-msgstr "Изменить пароль"
-
-#: templates/accounts/password_change.html:8
-msgid "Password successfully received"
-msgstr "Пароль успешно принят"
-
-#: templates/accounts/password_reset.html:8
-msgid ""
-"Forgotten your password? Enter your email address below, and we'll email "
-"instructions for setting a new one."
-msgstr ""
-
-#: templates/accounts/password_reset.html:14
-#, fuzzy
-#| msgid "Address"
-msgid "Email address"
-msgstr "Адрес"
-
-#: templates/accounts/password_reset.html:16
-#, fuzzy
-#| msgid "New password"
-msgid "Reset my password"
-msgstr "Новый пароль"
-
-#: templates/accounts/password_reset_complete.html:8
-msgid "Your password has been set.  You may go ahead and log in now."
-msgstr ""
-
-#: templates/accounts/password_reset_confirm.html:10
-msgid ""
-"Please enter your new password twice so we can verify you typed it in "
-"correctly."
-msgstr ""
-
-#: templates/accounts/password_reset_confirm.html:14
-#, fuzzy
-#| msgid "New password"
-msgid "New password:"
-msgstr "Новый пароль"
-
-#: templates/accounts/password_reset_confirm.html:16
-#, fuzzy
-#| msgid "Change your password"
-msgid "Confirm password:"
-msgstr "Изменить пароль"
-
-#: templates/accounts/password_reset_confirm.html:17
-#, fuzzy
-#| msgid "Change your password"
-msgid "Change my password"
-msgstr "Изменить пароль"
-
-#: templates/accounts/password_reset_confirm.html:22
-msgid ""
-"The password reset link was invalid, possibly because it has already been "
-"used.  Please request a new password reset."
-msgstr ""
-
-#: templates/accounts/password_reset_done.html:8
-msgid ""
-"We've emailed you instructions for setting your password, if an account "
-"exists with the email you entered. You should receive them shortly."
-msgstr ""
-
-#: templates/accounts/password_reset_done.html:10
-msgid ""
-"If you don't receive an email, please make sure you've entered the address "
-"you registered with, and check your spam folder."
-msgstr ""
-
-#: templates/accounts/profile.html:7 views.py:37
-msgid "History"
-msgstr "История"
-
-#: templates/accounts/profile.html:27
+#: templates/accounts/old_order.html:21 templates/accounts/order.html:21
 msgid "Price"
 msgstr "Цена"
 
-#: templates/accounts/singup.html:8 views.py:21
+#: templates/accounts/old_order.html:24 templates/accounts/order.html:24
+msgid "Delete"
+msgstr "Удалить"
+
+#: templates/accounts/old_order.html:143 templates/accounts/order.html:143
+msgid "Bucket price"
+msgstr "Корзина"
+
+#: templates/accounts/old_order.html:147 templates/accounts/order.html:147
+msgid "Bucket price with discount"
+msgstr "Цена со скидкой"
+
+#: templates/accounts/old_order.html:152 templates/accounts/order.html:152
+msgid "Promo discount"
+msgstr "Скидка по промокоду"
+
+#: templates/accounts/old_order.html:186 templates/accounts/order.html:186
+msgid "Deactivate"
+msgstr "Деактивировать"
+
+#: templates/accounts/profile.html:10 views/base.py:65
+msgid "History"
+msgstr "История"
+
+#: templates/accounts/singup.html:8 views/base.py:49
 msgid "Register"
 msgstr "Регистрация"
 
@@ -268,12 +335,175 @@ msgstr "Регистрация"
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
-#: urls.py:30 urls.py:40
-#, fuzzy
-#| msgid "Change your password"
-msgid "Change password"
+#: templates/payments/cash.html:6
+msgid "Thank you!"
+msgstr "Спасибо!"
+
+#: templates/payments/cash.html:7
+msgid ""
+"Thank you for your booking, we will send the confirmation within an hour."
+msgstr "Спасибо за ваше бронирование, мы свяжемся с вами в самое ближайшее время!"
+
+#: templates/registration/logged_out.html:4
+msgid "Home"
+msgstr "Домой"
+
+#: templates/registration/logged_out.html:8
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr ""
+
+#: templates/registration/logged_out.html:10
+msgid "Log in again"
+msgstr "Войти снова"
+
+#: templates/registration/login.html:8
+#: templates/registration/password_reset_complete.html:10
+msgid "Log in"
+msgstr "Войти"
+
+#: templates/registration/login.html:34
+msgid "Login"
+msgstr "Войти"
+
+#: templates/registration/password_change_form.html:9
+msgid "Password successfully received"
+msgstr "Пароль успешно принят"
+
+#: templates/registration/password_change_form.html:43
+msgid "Change your password"
 msgstr "Изменить пароль"
 
-#: views.py:287
-msgid "We recive your order!"
-msgstr "Мы получили Ваш заказ!"
+#: templates/registration/password_reset_complete.html:9
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:7
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:13
+#, fuzzy
+#| msgid "New password"
+msgid "New password:"
+msgstr "Новый пароль"
+
+#: templates/registration/password_reset_confirm.html:15
+#, fuzzy
+#| msgid "Change your password"
+msgid "Confirm password:"
+msgstr "Изменить пароль"
+
+#: templates/registration/password_reset_confirm.html:16
+#, fuzzy
+#| msgid "Change your password"
+msgid "Change my password"
+msgstr "Изменить пароль"
+
+#: templates/registration/password_reset_confirm.html:21
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:9
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:11
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+
+#: templates/registration/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: templates/registration/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: templates/registration/password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: templates/registration/password_reset_form.html:8
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+
+#: templates/registration/password_reset_form.html:14
+#, fuzzy
+#| msgid "Address"
+msgid "Email address"
+msgstr "Адрес"
+
+#: templates/registration/password_reset_form.html:16
+#, fuzzy
+#| msgid "New password"
+msgid "Reset my password"
+msgstr "Новый пароль"
+
+#: utils.py:45
+msgid "Promo code is not active"
+msgstr ""
+
+#: utils.py:48
+msgid "Promo code active from"
+msgstr ""
+
+#: utils.py:51
+msgid "Promo code active before"
+msgstr ""
+
+#: utils.py:54
+msgid "Promo Code  only for registered users"
+msgstr ""
+
+#: utils.py:57
+msgid "You have already used this promo code"
+msgstr ""
+
+#: utils.py:60
+msgid "Limit use this promo code exhausted"
+msgstr ""
+
+#: utils.py:63
+msgid "Promo code does not exist"
+msgstr ""
+
+#: views/payments/cash.py:12
+msgid "Cash payment"
+msgstr ""
+
+#: views/payments/mobilnik.py:17
+msgid "Pay"
+msgstr ""
+
+#~ msgid "Wholesale Price"
+#~ msgstr "Цена склада"
+
+#, fuzzy
+#~| msgid "Change your password"
+#~ msgid "Change password"
+#~ msgstr "Изменить пароль"
+
+#~ msgid "We recive your order!"
+#~ msgstr "Мы получили Ваш заказ!"

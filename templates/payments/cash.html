@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 	<div class='b-wrapper m-app_accounts m-template_payments_cash'>
-		<h1>Спасибо!</h1>
-		<h3>Ваш заказ поступил в обработку!</h3>
+		<h1>{% trans "Thank you!" %}</h1>
+		<h3>{% trans "Thank you for your booking, we will send the confirmation within an hour." %}</h3>
 	</div>
 {% endblock %}
